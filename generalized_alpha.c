@@ -3,26 +3,18 @@
 #include <math.h>
 
 
-struct step {double u, v, a;};
-
-struct load {
-  int n;
-  double dt;
-  double p[];
-};
-
-struct model {
-  double time;
-  struct step *past, *pres; 
-} model;
+struct step {double t, u, v, a;};
 
 struct conf {
-  struct model* model;
   double alpha_m, alpha_f, beta, gamma;
-} conf = {&model, 1.0, 1.0, 1.0/6.0, 0.5};
+} conf = {1.0, 1.0, 1.0/6.0, 0.5};
 
 
-
+static void incr(int *past, int *pres)
+{
+  *past = !*past;
+  *pres = !*pres;
+}
 
 int generalized_alpha(struct conf* conf, 
     double M, double C, double K,
@@ -80,15 +72,15 @@ int generalized_alpha(struct conf* conf,
       //
       time += alpha_f*dt;
       double pi = (scale*p[i] - C*va - M*aa - K*u[pres]);
-      double dx = pi / ki;
+      double du = pi / ki;
 
       /*
-       * UPDATE(struct *model model, double dx)
+       * UPDATE(struct *model model, double du)
        */
       //  determine the response at t+dt
-      u[pres] += dx;
-      v[pres] += c2*dx;
-      a[pres] += c3*dx;
+      u[pres] += du;
+      v[pres] += c2*du;
+      a[pres] += c3*du;
 
       // determine displacement and velocity at t+alpha_f*dt
       ua = (1-alpha_f) * u[past] + alpha_f * u[pres];
@@ -119,7 +111,7 @@ int read_load(FILE* file, int n, double *p)
 void
 print_usage(void)
 {
-  printf(
+  puts(
       "usage: a.out <omega> <zeta> - <beta> <gamma> [alpha]...\n"
 
   );
