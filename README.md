@@ -45,20 +45,20 @@ which attempts to increase the amount of numerical damping present
 without degrading the order of accuracy. As with the HHT method, the
 following Newmark approximations are used:</p>
 <p><span class="math display">$$
-U_{t+\Delta t} = U_t + \Delta t \dot U_t + [(0.5 - \beta) \Delta t^2]
+U_{t+\Delta t} = U_t + \Delta t \dot u_t + [(0.5 - \beta) \Delta t^2]
 ü_t + [\beta \Delta t^2] ü_{t+\Delta t} \\
-\dot U_{t+\Delta t} = \dot U_t + [(1-\gamma)\Delta t] ü_t + [\gamma
+\dot u_{t+\Delta t} = \dot u_t + [(1-\gamma)\Delta t] ü_t + [\gamma
 \Delta t ] ü_{t+\Delta t}
 $$</span></p>
 <p>but the time-discrete momentum equation is modified:</p>
 <p><span
-class="math display"><em>R</em><sub><em>t</em> + <em>α</em><sub><em>M</em></sub><em>Δ</em><em>t</em></sub> = <em>F</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub><sup>ext</sup> − <em>M</em><em>ü</em><sub><em>t</em> + <em>α</em><sub><em>M</em></sub><em>Δ</em><em>t</em></sub> − <em>C</em><em>U̇</em><sub><em>t</em> + <em>α</em><sub><em>F</em></sub><em>Δ</em><em>t</em></sub> − <em>F</em><sup>int</sup>(<em>U</em><sub><em>t</em> + <em>α</em><sub><em>F</em></sub><em>Δ</em><em>t</em></sub>)</span></p>
+class="math display"><em>R</em><sub><em>t</em> + <em>α</em><sub><em>M</em></sub><em>Δ</em><em>t</em></sub> = <em>F</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub><sup>ext</sup> − <em>M</em><em>ü</em><sub><em>t</em> + <em>α</em><sub><em>M</em></sub><em>Δ</em><em>t</em></sub> − <em>C</em><em>u̇</em><sub><em>t</em> + <em>α</em><sub><em>F</em></sub><em>Δ</em><em>t</em></sub> − <em>F</em><sup>int</sup>(<em>U</em><sub><em>t</em> + <em>α</em><sub><em>F</em></sub><em>Δ</em><em>t</em></sub>)</span></p>
 <p>where the displacements and velocities at the intermediate point are
 given by:</p>
 <p><span class="math display">$$\mathbf{d}_{t+ \alpha_F \Delta t} = (1 -
 \alpha_F) U_t + \alpha_F U_{t + \Delta t} \\
-\mathbf{v}_{t+\alpha_F \Delta t} = (1-\alpha_F) \dot U_t + \alpha_F \dot
-U_{t + \Delta t} \\
+\mathbf{v}_{t+\alpha_F \Delta t} = (1-\alpha_F) \dot u_t + \alpha_F \dot
+u_{t + \Delta t} \\
 \mathbf{a}_{t+\alpha_M \Delta t} = (1-\alpha_M) ü_t + \alpha_M ü_{t +
 \Delta t}$$</span></p>
 <p>Following the methods outlined for Newmarks method, linearization of
@@ -71,9 +71,9 @@ class="math display"><em>K</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub>
 \frac{\alpha_F \gamma}{\beta \Delta t} C_t + \frac{\alpha_M}{\beta
 \Delta t^2} M$</span> and</p>
 <p><span
-class="math display"><em>R</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub><sup><em>i</em></sup> = <em>F</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub><sup>ext</sup> − <em>F</em>(<em>U</em><sub><em>t</em> + <em>α</em><em>F</em><em>Δ</em><em>t</em></sub><sup><em>i</em> − 1</sup>)<sup>int</sup> − <em>C</em><em>U̇</em><sub><em>t</em> + <em>α</em><em>F</em><em>Δ</em><em>t</em></sub><sup><em>i</em> − 1</sup> − <em>M</em><em>ü</em><sub><em>t</em> + <em>α</em><em>M</em><em>Δ</em><em>t</em></sub><sup><em>i</em> − 1</sup></span></p>
+class="math display"><em>R</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub><sup><em>i</em></sup> = <em>F</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub><sup>ext</sup> − <em>F</em>(<em>U</em><sub><em>t</em> + <em>α</em><em>F</em><em>Δ</em><em>t</em></sub><sup><em>i</em> − 1</sup>)<sup>int</sup> − <em>C</em><em>u̇</em><sub><em>t</em> + <em>α</em><em>F</em><em>Δ</em><em>t</em></sub><sup><em>i</em> − 1</sup> − <em>M</em><em>ü</em><sub><em>t</em> + <em>α</em><em>M</em><em>Δ</em><em>t</em></sub><sup><em>i</em> − 1</sup></span></p>
 <p>The linear equations are used to solve for <span
-class="math inline"><em>U</em><sub><em>t</em> + <em>α</em><em>F</em><em>Δ</em><em>t</em></sub>, <em>U̇</em><sub><em>t</em> + <em>α</em><em>F</em><em>Δ</em><em>t</em></sub><em>ü</em><sub><em>t</em> + <em>α</em><em>M</em><em>Δ</em><em>t</em></sub></span>.
+class="math inline"><em>U</em><sub><em>t</em> + <em>α</em><em>F</em><em>Δ</em><em>t</em></sub>, <em>u̇</em><sub><em>t</em> + <em>α</em><em>F</em><em>Δ</em><em>t</em></sub><em>ü</em><sub><em>t</em> + <em>α</em><em>M</em><em>Δ</em><em>t</em></sub></span>.
 Once convergence has been achieved the displacements, velocities and
 accelerations at time <span
 class="math inline"><em>t</em> + <em>Δ</em><em>t</em></span> can be
