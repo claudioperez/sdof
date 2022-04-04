@@ -42,7 +42,7 @@ struct hist {
   pthread_t thread_id;
 };
 
-void update(struct hist* hist)
+void commit(struct hist* hist)
 {
   if (abs(hist->v[*hist->pres]) > hist->u_max->u) {
     hist->u_max->u = hist->u[*hist->pres];
@@ -59,11 +59,12 @@ void update(struct hist* hist)
     hist->a_max->v = hist->v[*hist->pres];
     hist->a_max->a = hist->a[*hist->pres];
   }
+
+  hist->incr(hist);
 }
 
 void rha_incr(struct hist* hist)
 {
-  update(hist);
   ++hist->past;
   ++hist->pres;
 }
