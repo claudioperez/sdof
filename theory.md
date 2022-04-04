@@ -25,7 +25,10 @@ $$\beta = \tfrac{1}{4}(1 + \gamma_M - \gamma_F)^2$$
 The Generalized $\alpha$ method (sometimes called the $\alpha$ method) is a one step implicit method for solving the transient problem which attempts to increase the amount of numerical damping present without degrading the order of accuracy. As with the HHT method, the following Newmark approximations are used:
 
 $$
-U_{t+\Delta t} = U_t + \Delta t \dot U_t + [(0.5 - \beta) \Delta t^2] \ddot U_t + [\beta \Delta t^2] \ddot U_{t+\Delta t} \\
+U_{t+\Delta t} = U_t + \Delta t \dot U_t + [(0.5 - \beta) \Delta t^2] \ddot U_t + [\beta \Delta t^2] \ddot U_{t+\Delta t}
+$$
+
+$$
 \dot U_{t+\Delta t} = \dot U_t + [(1-\gamma)\Delta t] \ddot U_t + [\gamma \Delta t ] \ddot U_{t+\Delta t}
 $$
 
@@ -37,9 +40,17 @@ $$
 
 where the displacements and velocities at the intermediate point are given by:
 
-$$\mathbf{d}_{t+ \alpha_F \Delta t} = (1 - \alpha_F) U_t + \alpha_F U_{t + \Delta t} \\
-\mathbf{v}_{t+\alpha_F \Delta t} = (1-\alpha_F) \dot U_t + \alpha_F \dot U_{t + \Delta t} \\
-\mathbf{a}_{t+\alpha_M \Delta t} = (1-\alpha_M) \ddot U_t + \alpha_M \ddot U_{t + \Delta t}$$
+$$
+\mathbf{d}_{t+ \alpha_F \Delta t} = (1 - \alpha_F) U_t + \alpha_F U_{t + \Delta t}
+$$
+
+$$
+\mathbf{v}_{t+\alpha_F \Delta t} = (1-\alpha_F) \dot U_t + \alpha_F \dot U_{t + \Delta t}
+$$
+
+$$
+\mathbf{a}_{t+\alpha_M \Delta t} = (1-\alpha_M) \ddot U_t + \alpha_M \ddot U_{t + \Delta t}
+$$
 
 Following the methods outlined for Newmarks method, linearization of the nonlinear momentum equation results in the following linear equations:
 
@@ -47,7 +58,10 @@ $$K_{t+\Delta t}^{*i} d U_{t+\Delta t}^{i+1} = R_{t+\Delta t}^i$$
 
 where
 
-$K_{t+\Delta t}^{*i} = \alpha_F K_t + \frac{\alpha_F \gamma}{\beta \Delta t} C_t + \frac{\alpha_M}{\beta \Delta t^2} M$
+$$
+K_{t+\Delta t}^{*i} = \alpha_F K_t + \frac{\alpha_F \gamma}{\beta \Delta t} C_t + \frac{\alpha_M}{\beta \Delta t^2} M
+$$
+
 and
 
 $$
