@@ -2,9 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-
-struct step {double t, u, v, a;};
-
 struct conf {
   double alpha_m, alpha_f, beta, gamma;
 } conf = {1.0, 1.0, 1.0/6.0, 0.5};
@@ -29,7 +26,6 @@ int generalized_alpha(struct conf* conf,
     double c2 = gamma/(beta*dt);
     double c3 = 1.0/(beta*dt*dt);
 
-    // step coefficients
     double a1 =     (1.0 -     gamma/beta);
     double a2 =  dt*(1.0 - 0.5*gamma/beta);
     double a3 = -1.0/(beta*dt);
@@ -37,7 +33,7 @@ int generalized_alpha(struct conf* conf,
 
     double ki = alpha_f*c1*K + alpha_f*c2*C + alpha_m*c3*M;
 
-    double time = 0.0;
+    double time   = 0.0;
     double   ua   = 0.0,
              va   = 0.0,
              aa   = 0.0,
@@ -61,8 +57,6 @@ int generalized_alpha(struct conf* conf,
       v[pres] = a1*v[past] + a2*a[past];
       a[pres] = a4*a[past] + a3*v[past];
 
-      // determine the velocities at t+alpha_f*dt
-      // ua = 
       va = (1-alpha_f) * v[past] + alpha_f * v[pres];
       aa = (1-alpha_m) * a[past] + alpha_m * a[pres];
       
@@ -74,22 +68,17 @@ int generalized_alpha(struct conf* conf,
       double pi = (scale*p[i] - C*va - M*aa - K*u[pres]);
       double du = pi / ki;
 
-      /*
-       * UPDATE(struct *model model, double du)
-       */
-      //  determine the response at t+dt
+      //  
+      //  UPDATE(struct *model model, double du)
+      //  
       u[pres] += du;
       v[pres] += c2*du;
       a[pres] += c3*du;
 
-      // determine displacement and velocity at t+alpha_f*dt
-      ua = (1-alpha_f) * u[past] + alpha_f * u[pres];
-      va = (1-alpha_f) * v[past] + alpha_f * v[pres];
-      aa = (1-alpha_m) * a[past] + alpha_m * a[pres];
+      // ua = (1-alpha_f) * u[past] + alpha_f * u[pres];
+      // va = (1-alpha_f) * v[past] + alpha_f * v[pres];
+      // aa = (1-alpha_m) * a[past] + alpha_m * a[pres];
       
-      // update the response at the DOFs
-      // theModel->setResponse(*da[pres],*va,*a[pres]); 
-
       /* 
        * COMMIT(void)
        */
