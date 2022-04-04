@@ -46,24 +46,21 @@ without degrading the order of accuracy. As with the HHT method, the
 following Newmark approximations are used:</p>
 <p><span class="math display">$$
 U_{t+\Delta t} = U_t + \Delta t \dot U_t + [(0.5 - \beta) \Delta t^2]
-\ddot U_t + [\beta \Delta t^2] \ddot U_{t+\Delta t} \\
-\dot U_{t+\Delta t} = \dot U_t + [(1-\gamma)\Delta t] \ddot U_t +
-[\gamma \Delta t ] \ddot U_{t+\Delta t}
+a_t + [\beta \Delta t^2] a_{t+\Delta t} \\
+\dot U_{t+\Delta t} = \dot U_t + [(1-\gamma)\Delta t] a_t + [\gamma
+\Delta t ] a_{t+\Delta t}
 $$</span></p>
 <p>but the time-discrete momentum equation is modified:</p>
-<p><span class="math display">$$
-R_{t + \alpha_M \Delta t} = F_{t+\Delta t}^\text{ext} - M \ddot U_{t +
-\alpha_M \Delta t} - C \dot U_{t+\alpha_F \Delta t} - F^\text{int}(U_{t
-+ \alpha_F \Delta t})
-$$</span></p>
+<p><span
+class="math display"><em>R</em><sub><em>t</em> + <em>α</em><sub><em>M</em></sub><em>Δ</em><em>t</em></sub> = <em>F</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub><sup>ext</sup> − <em>M</em><em>a</em><sub><em>t</em> + <em>α</em><sub><em>M</em></sub><em>Δ</em><em>t</em></sub> − <em>C</em><em>U̇</em><sub><em>t</em> + <em>α</em><sub><em>F</em></sub><em>Δ</em><em>t</em></sub> − <em>F</em><sup>int</sup>(<em>U</em><sub><em>t</em> + <em>α</em><sub><em>F</em></sub><em>Δ</em><em>t</em></sub>)</span></p>
 <p>where the displacements and velocities at the intermediate point are
 given by:</p>
 <p><span class="math display">$$\mathbf{d}_{t+ \alpha_F \Delta t} = (1 -
 \alpha_F) U_t + \alpha_F U_{t + \Delta t} \\
 \mathbf{v}_{t+\alpha_F \Delta t} = (1-\alpha_F) \dot U_t + \alpha_F \dot
 U_{t + \Delta t} \\
-\mathbf{a}_{t+\alpha_M \Delta t} = (1-\alpha_M) \ddot U_t + \alpha_M
-\ddot U_{t + \Delta t}$$</span></p>
+\mathbf{a}_{t+\alpha_M \Delta t} = (1-\alpha_M) a_t + \alpha_M a_{t +
+\Delta t}$$</span></p>
 <p>Following the methods outlined for Newmarks method, linearization of
 the nonlinear momentum equation results in the following linear
 equations:</p>
@@ -73,17 +70,14 @@ class="math display"><em>K</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub>
 <p><span class="math inline">$K_{t+\Delta t}^{*i} = \alpha_F K_t +
 \frac{\alpha_F \gamma}{\beta \Delta t} C_t + \frac{\alpha_M}{\beta
 \Delta t^2} M$</span> and</p>
-<p><span class="math display">$$
-R_{t+\Delta t}^i = F_{t + \Delta t}^\text{ext} - F(U_{t + \alpha F
-\Delta t}^{i-1})^\text{int} - C \dot U_{t+\alpha F \Delta t}^{i-1} - M
-\ddot U_{t+ \alpha M \Delta t}^{i-1}
-$$</span></p>
+<p><span
+class="math display"><em>R</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub><sup><em>i</em></sup> = <em>F</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub><sup>ext</sup> − <em>F</em>(<em>U</em><sub><em>t</em> + <em>α</em><em>F</em><em>Δ</em><em>t</em></sub><sup><em>i</em> − 1</sup>)<sup>int</sup> − <em>C</em><em>U̇</em><sub><em>t</em> + <em>α</em><em>F</em><em>Δ</em><em>t</em></sub><sup><em>i</em> − 1</sup> − <em>M</em><em>a</em><sub><em>t</em> + <em>α</em><em>M</em><em>Δ</em><em>t</em></sub><sup><em>i</em> − 1</sup></span></p>
 <p>The linear equations are used to solve for <span
-class="math inline">$U_{t+\alpha F \Delta t}, \dot U_{t + \alpha F
-\Delta t} \ddot U_{t+ \alpha M \Delta t}$</span>. Once convergence has
-been achieved the displacements, velocities and accelerations at time
-<span class="math inline"><em>t</em> + <em>Δ</em><em>t</em></span> can
-be computed.</p>
+class="math inline"><em>U</em><sub><em>t</em> + <em>α</em><em>F</em><em>Δ</em><em>t</em></sub>, <em>U̇</em><sub><em>t</em> + <em>α</em><em>F</em><em>Δ</em><em>t</em></sub><em>a</em><sub><em>t</em> + <em>α</em><em>M</em><em>Δ</em><em>t</em></sub></span>.
+Once convergence has been achieved the displacements, velocities and
+accelerations at time <span
+class="math inline"><em>t</em> + <em>Δ</em><em>t</em></span> can be
+computed.</p>
 <h2 id="references">REFERENCES</h2>
 <p>J. Chung, G.M.Hubert. “A Time Integration Algorithm for Structural
 Dynamics with Improved Numerical Dissipation: The Generalized-<span
