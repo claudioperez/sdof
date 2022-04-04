@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-struct conf {
+struct generalized_alpha {
   double alpha_m, alpha_f, beta, gamma;
 } conf = {1.0, 1.0, 1.0/6.0, 0.5};
 
@@ -13,7 +13,7 @@ static void incr(int *past, int *pres)
   *pres = !*pres;
 }
 
-int generalized_alpha(struct conf* conf, 
+int generalized_alpha(struct generalized_alpha* conf, 
     double M, double C, double K,
     double scale, int n, double p[n], double dt)
 { 
@@ -34,12 +34,12 @@ int generalized_alpha(struct conf* conf,
     double ki = alpha_f*c1*K + alpha_f*c2*C + alpha_m*c3*M;
 
     double time   = 0.0;
-    double   ua   = 0.0,
-             va   = 0.0,
-             aa   = 0.0,
-             u[2] = {0.0, 0.0},
-             v[2] = {0.0, 0.0},
-             a[2] = {0.0, 0.0};
+    double   ua,
+             va,
+             aa,
+             u[2],
+             v[2],
+             a[2];
 
 
     int i = 0, past = 1, pres = 0;
@@ -47,6 +47,7 @@ int generalized_alpha(struct conf* conf,
     u[pres] = 0.0;
     v[pres] = 0.0;
     a[pres] = (p[i] - C*v[pres] - K*u[pres])/M;
+
     printf("%lf\t%lf\t%lf\t%lf\n", p[i], u[pres], v[pres], a[pres]);
 
     for (i = 1; i < n; i++) {
@@ -57,8 +58,8 @@ int generalized_alpha(struct conf* conf,
       v[pres] = a1*v[past] + a2*a[past];
       a[pres] = a4*a[past] + a3*v[past];
 
-      va = (1-alpha_f) * v[past] + alpha_f * v[pres];
-      aa = (1-alpha_m) * a[past] + alpha_m * a[pres];
+      va = (1-alpha_f)*v[past] + alpha_f*v[pres];
+      aa = (1-alpha_m)*a[past] + alpha_m*a[pres];
       
 
       //
@@ -89,7 +90,6 @@ int generalized_alpha(struct conf* conf,
 }
 
 
-
 int read_load(FILE* file, int n, double *p)
 {
   int i = 0;
@@ -109,22 +109,22 @@ print_usage(void)
 int
 main(int argc, char **argv)
 {
-  // a.out period damp - beta gamma alpha
-  double n = 6;
-  double p[6];
-  double dt = 0.1;
+  // a.out dt period damp <mass> - beta gamma alpha
+  double n = 2000;
+  double p[2000];
 
-  read_load(stdin, n, p);
+  n = read_load(stdin, n, p);
 
   int argi = 1;
-  double omega  = atof(argv[argi++]);
+  double dt     = atof(argv[argi++]);
+  double period = atof(argv[argi++]);
   double zeta   = atof(argv[argi++]);
   argi++;
   conf.beta     = atof(argv[argi++]);
   conf.gamma    = atof(argv[argi++]);
 
   double M = 0.2533;
-  double K = M*(omega*omega);
+  double K = 4.0*M_PI*M_PI*M/(period*period);
   // double C = 2.0*sqrt(K/M)*zeta;
   double C = 0.1592;
   double s = 1.0; // -386.4*M
