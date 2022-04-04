@@ -55,21 +55,22 @@ $$</span></p>
 class="math display"><em>R</em><sub><em>t</em> + <em>α</em><sub><em>M</em></sub><em>Δ</em><em>t</em></sub> = <em>F</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub><sup>ext</sup> − <em>M</em><em>ü</em><sub><em>t</em> + <em>α</em><sub><em>M</em></sub><em>Δ</em><em>t</em></sub> − <em>C</em><em>u̇</em><sub><em>t</em> + <em>α</em><sub><em>F</em></sub><em>Δ</em><em>t</em></sub> − <em>F</em><sup>int</sup>(<em>U</em><sub><em>t</em> + <em>α</em><sub><em>F</em></sub><em>Δ</em><em>t</em></sub>)</span></p>
 <p>where the displacements and velocities at the intermediate point are
 given by:</p>
-<p><span class="math display">$$\mathbf{d}_{t+ \alpha_F \Delta t} = (1 -
-\alpha_F) U_t + \alpha_F U_{t + \Delta t} \\
-\mathbf{v}_{t+\alpha_F \Delta t} = (1-\alpha_F) \dot u_t + \alpha_F \dot
-u_{t + \Delta t} \\
-\mathbf{a}_{t+\alpha_M \Delta t} = (1-\alpha_M) ü_t + \alpha_M ü_{t +
-\Delta t}$$</span></p>
+<p><span
+class="math display"><strong>d</strong><sub><em>t</em> + <em>α</em><sub><em>F</em></sub><em>Δ</em><em>t</em></sub> = (1−<em>α</em><sub><em>F</em></sub>)<em>U</em><sub><em>t</em></sub> + <em>α</em><sub><em>F</em></sub><em>U</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub></span></p>
+<p><span
+class="math display"><strong>v</strong><sub><em>t</em> + <em>α</em><sub><em>F</em></sub><em>Δ</em><em>t</em></sub> = (1−<em>α</em><sub><em>F</em></sub>)<em>u̇</em><sub><em>t</em></sub> + <em>α</em><sub><em>F</em></sub><em>u̇</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub></span></p>
+<p><span
+class="math display"><strong>a</strong><sub><em>t</em> + <em>α</em><sub><em>M</em></sub><em>Δ</em><em>t</em></sub> = (1−<em>α</em><sub><em>M</em></sub>)<em>ü</em><sub><em>t</em></sub> + <em>α</em><sub><em>M</em></sub><em>ü</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub></span></p>
 <p>Following the methods outlined for Newmarks method, linearization of
 the nonlinear momentum equation results in the following linear
 equations:</p>
 <p><span
 class="math display"><em>K</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub><sup>*<em>i</em></sup><em>d</em><em>U</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub><sup><em>i</em> + 1</sup> = <em>R</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub><sup><em>i</em></sup></span></p>
 <p>where</p>
-<p><span class="math inline">$K_{t+\Delta t}^{*i} = \alpha_F K_t +
-\frac{\alpha_F \gamma}{\beta \Delta t} C_t + \frac{\alpha_M}{\beta
-\Delta t^2} M$</span> and</p>
+<p><span class="math display">$$
+K_{t+\Delta t}^{*i} = \alpha_F K_t + \frac{\alpha_F \gamma}{\beta \Delta
+t} C_t + \frac{\alpha_M}{\beta \Delta t^2} M
+$$</span> and</p>
 <p><span
 class="math display"><em>R</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub><sup><em>i</em></sup> = <em>F</em><sub><em>t</em> + <em>Δ</em><em>t</em></sub><sup>ext</sup> − <em>F</em>(<em>U</em><sub><em>t</em> + <em>α</em><em>F</em><em>Δ</em><em>t</em></sub><sup><em>i</em> − 1</sup>)<sup>int</sup> − <em>C</em><em>u̇</em><sub><em>t</em> + <em>α</em><em>F</em><em>Δ</em><em>t</em></sub><sup><em>i</em> − 1</sup> − <em>M</em><em>ü</em><sub><em>t</em> + <em>α</em><em>M</em><em>Δ</em><em>t</em></sub><sup><em>i</em> − 1</sup></span></p>
 <p>The linear equations are used to solve for <span
