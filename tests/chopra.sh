@@ -16,7 +16,7 @@
 beta=0.25
 gamma=0.5
 #./a.out 0.1 6.283 0.05 - $beta $gamma <<EOF
-./a.out 0.1 1.0 0.05 - $beta $gamma <<EOF
+./alpha 0.1 1.0 0.05 - $beta $gamma <<EOF
  0.0000
  5.0000
  8.6603

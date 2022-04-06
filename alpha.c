@@ -13,7 +13,8 @@ static void incr(int *past, int *pres)
   *pres = !*pres;
 }
 
-int generalized_alpha(struct generalized_alpha* conf, 
+int
+generalized_alpha(struct generalized_alpha* conf, 
     double M, double C, double K,
     double scale, int n, double p[n], double dt)
 { 
