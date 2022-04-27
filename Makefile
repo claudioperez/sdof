@@ -1,6 +1,6 @@
 
 alpha: alpha.c
-	$(CC) $@ $< -lm -o alpha
+	$(CC) $< -lm -o $@
 
 alpha.js:
 	emcc alpha.c -lm -o dist/alpha.js -s EXPORTED_FUNCTIONS="['_generalized_alpha']"
