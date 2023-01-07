@@ -152,15 +152,15 @@ $$R_{t+\Delta t}^i = F_{t + \Delta t}^{ext} - F(U_{t + \alpha
 F \Delta t}^{i-1})^{int} - C \dot U_{t+\alpha F \Delta t}^{i-1} - M
 \ddot U_{t+ \alpha M \Delta t}^{i-1}$$
 
-<p>The linear equations are used to solve for 
+The linear equations are used to solve for 
 
-$$U_{t+\alpha F
-\Delta t}, \dot U_{t + \alpha F \Delta t} \ddot U_{t+ \alpha M \Delta
-t}$$
+$$U_{t+\alpha_F \Delta t}, \dot U_{t + \alpha_F \Delta t} \ddot U_{t+ \alpha M \Delta t}$$
+
 Once convergence has been achieved the displacements,
-velocities and accelerations at time $t + \Delta t$ can be computed.</p>
+velocities and accelerations at time $t + \Delta t$ can be computed.
 
 ## References
+
 <p>J. Chung, G.M.Hubert. "A Time Integration Algorithm for Structural
 Dynamics with Improved Numerical Dissipation: The
 Generalized-$\alpha$ Method" ASME Journal of
