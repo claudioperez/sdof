@@ -61,10 +61,8 @@ are those used in the paper.</li>
 <li>$\alpha_M = 1.0, \alpha_F = 1.0$ produces the Newmark Method.</li>
 <li>$\alpha_M = 1.0$ corresponds to the HHT method.</li>
 <li>The method is second-order accurate provided $\gamma = \dfrac{1}{2} + \alpha_M - \alpha_F$</li>
+<li>The method is unconditionally stable provided $\alpha_M \ge \alpha_F \ge \dfrac{1}{2}, \quad \beta \ge \dfrac{1}{4} +\dfrac{1}{2}(\gamma_M - \gamma_F)$</li>
 
-<li>The method is unconditionally stable provided $\alpha_M \ge \alpha_F \ge \dfrac{1}{2}, \beta \ge \dfrac{1}{4}
-  +\dfrac{1}{2}(\gamma_M - \gamma_F)$
-</li>
 <li>$\gamma$ and $\beta$
   are optional. The default values ensure the method is unconditionally
   stable, second order accurate and high frequency dissipation is
@@ -84,20 +82,20 @@ $$\gamma = \dfrac{1}{2} + \gamma_M - \gamma_F$$
 <dt></dt>
 <dd>
 
-$$\beta = \dfrac{1}{4}(1 + \gamma_M -
-\gamma_F)^2$$
+$$\beta = \dfrac{1}{4}(1 + \gamma_M - \gamma_F)^2$$
 
 </dd>
 </dl>
 
 ## Theory
 
-<p>The Generalized $\alpha$ method (sometimes
+The Generalized $\alpha$ method (sometimes
 called the $\alpha$ method) is a one step
 implicit method for solving the transient problem which attempts to
 increase the amount of numerical damping present without degrading the
 order of accuracy. In the HHT method, the same Newmark approximations
-are used:</p>
+are used:
+
 <dl>
 <dt></dt>
 <dd>
