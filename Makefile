@@ -1,3 +1,8 @@
+_fsdof.so:
+	 cc -shared -O3 fsdof.c -o _fsdof.so  -fPIC -lm \
+	    -fno-math-errno -fno-signaling-nans -fno-trapping-math \
+	    -fassociative-math -ffast-math
+
 
 alpha: alpha.c
 	$(CC) $@ $< -lm -o alpha

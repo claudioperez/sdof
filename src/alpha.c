@@ -1,3 +1,10 @@
+/*
+ * alpha(conf, inputs, outputs)
+ *
+ *
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -18,19 +25,19 @@ generalized_alpha(struct generalized_alpha* conf,
     double M, double C, double K,
     double scale, int n, double p[n], double dt)
 { 
-    double gamma   = conf->gamma;
-    double beta    = conf->beta;
-    double alpha_m = conf->alpha_m;
-    double alpha_f = conf->alpha_f;
+    const double gamma   = conf->gamma;
+    const double beta    = conf->beta;
+    const double alpha_m = conf->alpha_m;
+    const double alpha_f = conf->alpha_f;
 
     double c1 = 1.0;
     double c2 = gamma/(beta*dt);
     double c3 = 1.0/(beta*dt*dt);
 
-    double a1 =     (1.0 -     gamma/beta);
-    double a2 =  dt*(1.0 - 0.5*gamma/beta);
-    double a3 = -1.0/(beta*dt);
-    double a4 =  1.0 - 0.5/beta;
+    const double a1 =     (1.0 -     gamma/beta);
+    const double a2 =  dt*(1.0 - 0.5*gamma/beta);
+    const double a3 = -1.0/(beta*dt);
+    const double a4 =  1.0 - 0.5/beta;
 
     double ki = alpha_f*c1*K + alpha_f*c2*C + alpha_m*c3*M;
 
