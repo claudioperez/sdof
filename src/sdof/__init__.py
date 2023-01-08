@@ -19,7 +19,8 @@ class SDOF_Config(ctypes.Structure):
 
 
 try:
-    lib = ctypes.cdll.LoadLibrary(pathlib.Path(__file__).parents[0]/"_fsdof.so")
+    libfile = next(pathlib.Path(__file__).parents[0].glob("_fsdof.*.so"))
+    lib = ctypes.cdll.LoadLibrary(libfile)
     conf = lib.CONF
     _fsdof_peaks = lib.fsdof_peaks
     _fsdof_peaks.restype = c_int
@@ -35,8 +36,14 @@ try:
 except:
     raise
 
+#   elastic_sdof()
+#   plastic
 
-def peaks(m,c,k, dt,f):
+
+def sdof(m,c,k,f,dt):
+    pass
+
+def peaks(m,c,k, f, dt):
     response = SDOF_Peaks()
     _fsdof_peaks(CONFIG, m, c, k, 1.0, len(f), f.ctypes.data_as(POINTER(c_double)), dt, response)
     return response
@@ -46,39 +53,5 @@ def peaks(m,c,k, dt,f):
 # import numpy as np
 # r = fsdof(1.,1.,1., 0.01, np.sin(np.linspace(0, 5, 100)))
 # print(r.max_displ)
-
-def install_me(install_opt=None):
-    import os
-    import sys
-    import subprocess
-    if install_opt == "dependencies":
-        subprocess.check_call([
-            sys.executable, "-m", "pip", "install", *REQUIREMENTS.strip().split("\n")
-        ])
-        sys.exit()
-    try:
-        from setuptools import setup
-    except ImportError:
-        from distutils.core import setup
-
-#   sys.argv = sys.argv[:1] + sys.argv[2:]
-
-    setup(name = "sdof",
-          version = "0.0.1",
-          description = "Fast SDOF Solver",
-          long_description = "",
-          author = "",
-          author_email = "",
-          url = "",
-          py_modules = ["sdof"],
-          scripts = ["sdof.py"],
-          license = "",
-          install_requires = [] #*REQUIREMENTS.strip().split("\n")],
-    )
-
-if __name__ == "__main__":
-    install_me()
-
-
 
 
