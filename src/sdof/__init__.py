@@ -1,6 +1,13 @@
 import pathlib
 import ctypes
 from ctypes import c_double, c_int, c_bool, CFUNCTYPE, POINTER
+import os
+
+if os.name == 'nt':
+    so_ext = ".pyd"
+else:
+    import distutils.compiler
+    so_ext = distutils.ccompiler.new_compiler().shared_lib_extension
 
 class SDOF_Peaks(ctypes.Structure):
     _fields_ = [
@@ -19,9 +26,9 @@ class SDOF_Config(ctypes.Structure):
 
 
 try:
-    libfile = next(pathlib.Path(__file__).parents[0].glob("_fsdof.*.so"))
+    libfile = str(next(pathlib.Path(__file__).parents[0].glob("_fsdof.*"+so_ext)))
     lib = ctypes.cdll.LoadLibrary(libfile)
-    conf = lib.CONF
+    # conf = lib.CONF
     _fsdof_peaks = lib.fsdof_peaks
     _fsdof_peaks.restype = c_int
     _fsdof_peaks.argtypes = (

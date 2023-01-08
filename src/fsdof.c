@@ -2,6 +2,14 @@
  * alpha(conf, inputs, outputs)
  */
 
+#if defined(_WIN32)
+#include <Python.h>
+PyMODINIT_FUNC PyInit__fsdof(void) {}
+#define EXPORT __declspec(dllexport)
+#else
+#define EXPORT
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -28,7 +36,7 @@ struct SDOF_Response {
 
 
 
-int
+EXPORT int
 fsdof_peaks(struct generalized_alpha* conf,
     double M, double C, double K,
     double scale, int n, double *p, double dt,
