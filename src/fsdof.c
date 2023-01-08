@@ -31,7 +31,7 @@ struct SDOF_Response {
 int
 fsdof_peaks(struct generalized_alpha* conf,
     double M, double C, double K,
-    double scale, int n, double p[n], double dt,
+    double scale, int n, double *p, double dt,
     struct SDOF_Peaks *response)
 { 
     conf = &CONF;
