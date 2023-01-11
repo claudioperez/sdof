@@ -149,7 +149,7 @@ fsdof_integrate(struct generalized_alpha* conf,
     u[pres] = 0.0;
     v[pres] = 0.0;
     a[pres] = (p[i] - C*v[pres] - K*u[pres])/M;
-    printf("%lf\t%lf\t%lf\t%lf\n", 0.0, u[pres], v[pres], a[pres]);
+//  printf("%lf\t%lf\t%lf\t%lf\n", 0.0, u[pres], v[pres], a[pres]);
 
     for (i = 1; i < n; i++) {
       ++past;
@@ -184,7 +184,7 @@ fsdof_integrate(struct generalized_alpha* conf,
       // 
       // COMMIT
       //
-      printf("%lf\t%lf\t%lf\t%lf\n", pi, u[pres], v[pres], a[pres]);
+//    printf("%lf\t%lf\t%lf\t%lf\n", pi, u[pres], v[pres], a[pres]);
 //    time += (1.0-alpha_f)*dt;
     }
     return 1;
