@@ -1,6 +1,4 @@
-/*
- * alpha(conf, inputs, outputs)
- */
+#include <math.h>
 
 #if defined(_WIN32)
 #include <Python.h>
@@ -10,15 +8,13 @@ PyMODINIT_FUNC PyInit__fsdof(void) {}
 #define EXPORT
 #endif
 
-#include <stdio.h>
-#include <math.h>
 
 struct generalized_alpha {
   double alpha_m,
          alpha_f,
          beta,
          gamma;
-} CONF = {1.0, 1.0, 1.0/6.0, 0.5};
+} CONF = {1.0, 1.0, 0.25, 0.5};
 
 struct SDOF_Peaks {
     double max_displ,
@@ -76,27 +72,16 @@ fsdof_peaks(struct generalized_alpha* conf,
       va = (1-alpha_f)*v[past] + alpha_f*v[pres];
       aa = (1-alpha_m)*a[past] + alpha_m*a[pres];      
 
-      //
       // SOLVE
-      //
-//    time += alpha_f*dt;
       double pi = (scale*p[i] - C*va - M*aa - K*u[pres]);
       double du = pi / ki;
 
-      //  
       //  UPDATE(struct *model model, double du)
-      //  
       u[pres] += du;
       v[pres] += c2*du;
       a[pres] += c3*du;
-
-      // ua = (1-alpha_f) * u[past] + alpha_f * u[pres];
-      // va = (1-alpha_f) * v[past] + alpha_f * v[pres];
-      // aa = (1-alpha_m) * a[past] + alpha_m * a[pres];
       
-      // 
       // COMMIT
-      //
       if (fabs(u[pres]) > response->max_displ) {
           response->max_displ = fabs(u[pres]);
       }
@@ -104,7 +89,6 @@ fsdof_peaks(struct generalized_alpha* conf,
           response->max_accel = fabs(a[pres]);
           response->time_max_accel = i*dt;
       }
-//    time += (1.0-alpha_f)*dt;
     }
     return 1;
 }
@@ -146,10 +130,9 @@ fsdof_integrate(struct generalized_alpha* conf,
         past = -1,
         pres =  0;
 
-    u[pres] = 0.0;
-    v[pres] = 0.0;
+//  u[pres] = 0.0;
+//  v[pres] = 0.0;
     a[pres] = (p[i] - C*v[pres] - K*u[pres])/M;
-//  printf("%lf\t%lf\t%lf\t%lf\n", 0.0, u[pres], v[pres], a[pres]);
 
     for (i = 1; i < n; i++) {
       ++past;
@@ -184,11 +167,8 @@ fsdof_integrate(struct generalized_alpha* conf,
       // 
       // COMMIT
       //
-//    printf("%lf\t%lf\t%lf\t%lf\n", pi, u[pres], v[pres], a[pres]);
 //    time += (1.0-alpha_f)*dt;
     }
     return 1;
 }
-
-
 

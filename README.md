@@ -10,11 +10,15 @@ $$
 
 Integration is carried out using the Generalized - $\alpha$ method. This is an
 implicit method that like the HHT method allows for high frequency energy
-dissipation and second order accuracy. Depending on choices
-of input parameters, the method can be unconditionally stable.
-
+dissipation and second order accuracy.
 
 <hr />
+
+## API
+
+```python
+def peaks(m, c, k, f, dt): ...
+```
 
 ## Integration
 
@@ -83,9 +87,9 @@ $$\beta = \dfrac{1}{4}(1 + \gamma_M - \gamma_F)^2$$
 </dd>
 </dl>
 
-## Theory
+### Theory
 
-The Generalized $\alpha$ method (sometimes called the $\alpha$ method) is a one
+The generalized $\alpha$ method is a one
 step implicit method for solving the transient problem which attempts to
 increase the amount of numerical damping present without degrading the order of
 accuracy. In the HHT method, the same Newmark approximations are used:

@@ -8,7 +8,7 @@ from numpy.ctypeslib import ndpointer
 if os.name == 'nt':
     so_ext = ".pyd"
 else:
-    import distutils.compiler
+    import distutils.ccompiler
     so_ext = distutils.ccompiler.new_compiler().shared_lib_extension
 
 class SDOF_Peaks(ctypes.Structure):
@@ -58,12 +58,11 @@ except:
 #   plastic
 
 
-def integrate(m,c,k,f,dt):
+def integrate(m,c,k,f,dt, u0=0.0, v0=0.0):
     import numpy as np
     output = np.empty((3,len(f)))
-    print(output)
+    output[:2,0] = u0, v0
     _fsdof_integrate(CONFIG, m, c, k, 1.0, len(f), f.ctypes.data_as(POINTER(c_double)), dt, output)
-    print(output)
     return output
 
 
@@ -71,11 +70,5 @@ def peaks(m,c,k, f, dt):
     response = SDOF_Peaks()
     _fsdof_peaks(CONFIG, m, c, k, 1.0, len(f), f.ctypes.data_as(POINTER(c_double)), dt, response)
     return response
-
-
-
-# import numpy as np
-# r = fsdof(1.,1.,1., 0.01, np.sin(np.linspace(0, 5, 100)))
-# print(r.max_displ)
 
 
