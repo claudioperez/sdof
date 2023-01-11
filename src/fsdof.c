@@ -11,7 +11,6 @@ PyMODINIT_FUNC PyInit__fsdof(void) {}
 #endif
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
 
 struct generalized_alpha {
@@ -26,14 +25,6 @@ struct SDOF_Peaks {
            max_accel,
            time_max_accel;
 };
-
-struct SDOF_Response {
-    double max_displ,
-           max_accel,
-           time_max_accel;
-};
-
-
 
 
 EXPORT int
@@ -118,11 +109,11 @@ fsdof_peaks(struct generalized_alpha* conf,
     return 1;
 }
 
-#if 0
-int
-fsdof_alpha(struct generalized_alpha* conf,
+
+EXPORT int
+fsdof_integrate(struct generalized_alpha* conf,
     double M, double C, double K,
-    double scale, int n, double p[n], double dt,
+    double scale, int n, double *p, double dt,
     double *response)
 { 
     conf = &CONF;
@@ -143,35 +134,33 @@ fsdof_alpha(struct generalized_alpha* conf,
     const double ki = alpha_f*c1*K + alpha_f*c2*C + alpha_m*c3*M;
 
     double time   = 0.0;
-    double   ua,
-             va,
-             aa,
-            *u = response[0],
-            *v = response[1],
-            *a = response[2];
+    double  ua,
+            va,
+            aa,
+            *u = &response[0],
+            *v = &response[n],
+            *a = &response[2*n];
 
 
     int i = 0,
-        past = 1,
-        pres = 0;
+        past = -1,
+        pres =  0;
 
     u[pres] = 0.0;
     v[pres] = 0.0;
     a[pres] = (p[i] - C*v[pres] - K*u[pres])/M;
-
-//  printf("%lf\t%lf\t%lf\t%lf\n", p[i], u[pres], v[pres], a[pres]);
-
+    printf("%lf\t%lf\t%lf\t%lf\n", 0.0, u[pres], v[pres], a[pres]);
 
     for (i = 1; i < n; i++) {
-      past = !past;
-      pres = !pres;
+      ++past;
+      ++pres;
 
       u[pres] = u[past];
       v[pres] = a1*v[past] + a2*a[past];
       a[pres] = a4*a[past] + a3*v[past];
 
-      va = (1-alpha_f)*v[past] + alpha_f*v[pres];
-      aa = (1-alpha_m)*a[past] + alpha_m*a[pres];
+      va = (1.0 - alpha_f)*v[past] + alpha_f*v[pres];
+      aa = (1.0 - alpha_m)*a[past] + alpha_m*a[pres];
       
 
       //
@@ -195,18 +184,11 @@ fsdof_alpha(struct generalized_alpha* conf,
       // 
       // COMMIT
       //
-      if (fabs(u[pres]) > response->max_displ) {
-          response->max_displ = fabs(u[pres]);
-      }
-      if (fabs(a[pres]) > response->max_accel) {
-          response->max_accel = fabs(a[pres]);
-          response->time_max_accel = i*dt;
-      }
-      // printf("%lf\t%lf\t%lf\t%lf\n", pi, u[pres], v[pres], a[pres]);
+      printf("%lf\t%lf\t%lf\t%lf\n", pi, u[pres], v[pres], a[pres]);
 //    time += (1.0-alpha_f)*dt;
     }
     return 1;
 }
-#endif
+
 
 

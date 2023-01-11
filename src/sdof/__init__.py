@@ -47,7 +47,7 @@ except:
 #   plastic
 
 
-def sdof(m,c,k,f,dt):
+def integrate(m,c,k,f,dt):
     pass
 
 def peaks(m,c,k, f, dt):
