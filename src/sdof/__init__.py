@@ -3,6 +3,8 @@ import ctypes
 from ctypes import c_double, c_int, c_bool, CFUNCTYPE, POINTER
 import os
 
+from numpy.ctypeslib import ndpointer
+
 if os.name == 'nt':
     so_ext = ".pyd"
 else:
@@ -38,6 +40,15 @@ try:
         POINTER(SDOF_Peaks)
     )
 
+    _fsdof_integrate = lib.fsdof_integrate
+    _fsdof_integrate.restype = c_int
+    _fsdof_integrate.argtypes = (
+        POINTER(SDOF_Config),
+        c_double,  c_double,  c_double,
+        c_double, c_int, POINTER(c_double), c_double,
+        ndpointer(c_double, flags="C_CONTIGUOUS")
+    )
+
     CONFIG = SDOF_Config()
 
 except:
@@ -48,7 +59,13 @@ except:
 
 
 def integrate(m,c,k,f,dt):
-    pass
+    import numpy as np
+    output = np.empty((3,len(f)))
+    print(output)
+    _fsdof_integrate(CONFIG, m, c, k, 1.0, len(f), f.ctypes.data_as(POINTER(c_double)), dt, output)
+    print(output)
+    return output
+
 
 def peaks(m,c,k, f, dt):
     response = SDOF_Peaks()
