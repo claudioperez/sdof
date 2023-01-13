@@ -49,6 +49,15 @@ try:
         ndpointer(c_double, flags="C_CONTIGUOUS")
     )
 
+    _fsdof_integrate2 = lib.fsdof_integrate2
+    _fsdof_integrate2.restype = c_int
+    _fsdof_integrate2.argtypes = (
+        POINTER(SDOF_Config),
+        c_double,  c_double,  c_double,
+        c_double, c_int, POINTER(c_double), c_double,
+        ndpointer(c_double, flags="C_CONTIGUOUS")
+    )
+
     CONFIG = SDOF_Config()
 
 except:
@@ -64,6 +73,13 @@ def integrate(m,c,k,f,dt, u0=0.0, v0=0.0):
     output[:2,0] = u0, v0
     _fsdof_integrate(CONFIG, m, c, k, 1.0, len(f), f.ctypes.data_as(POINTER(c_double)), dt, output)
     return output
+
+def integrate2(m,c,k,f,dt, u0=0.0, v0=0.0):
+    import numpy as np
+    output = np.empty((len(f),3))
+    output[0,:2] = u0, v0
+    _fsdof_integrate2(CONFIG, m, c, k, 1.0, len(f), f.ctypes.data_as(POINTER(c_double)), dt, output)
+    return output.T
 
 
 def peaks(m,c,k, f, dt):
