@@ -14,13 +14,31 @@ dissipation and second order accuracy.
 
 <hr />
 
-## API
+## Compile
+
+### Python
+
+```
+pip install .
+```
+
+### Javascript
+
+- Install `emscripten` from [here](https://emscripten.org/)
+- run `make`
+- to test, you can use Python to start an HTTP server in the current directory
+  as follows:
+  ```shell
+  python -m http.server .
+  ```
+
+## Python API
 
 ```python
 def peaks(m, c, k, f, dt): ...
 ```
 
-## Integration
+## Integrator (Reproduced from OpenSees docs)
 
 <table>
 <tbody>
