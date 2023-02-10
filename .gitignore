@@ -1,4 +1,5 @@
 *.out
+*.so
 
 build/
 dist/
