@@ -7,6 +7,10 @@ fsdof.js:
 		-s EXPORTED_FUNCTIONS="['_fsdof_integrate2','_malloc']" \
 		-sEXPORTED_RUNTIME_METHODS="['cwrap','getValue','setValue']"
 
+pypa:
+	python -m build
+
+
 _fsdof.so:
 	 cc -std=c99 -pedantic -Wall -Wextra -shared -O3 src/fsdof.c -o _fsdof.so  -fPIC -lm \
 	    -fno-math-errno -fno-signaling-nans -fno-trapping-math \

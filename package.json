@@ -1,0 +1,26 @@
+{
+  "name": "sdof",
+  "version": "0.1.0",
+  "description": "A WASM-backed SDOF integrator.",
+  "main": "wasm/index.js",
+  "files": ["wasm/*"],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sdof"
+  ],
+  "author": "Claudio Perez",
+  "license": "BSD-3-Clause",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/claudioperez/sdof.git"
+  },
+  "bugs": {
+    "url": "https://github.com/claudioperez/sdof/issues"
+  },
+  "homepage": "https://github.com/claudioperez/sdof#readme"
+}
