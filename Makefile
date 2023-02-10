@@ -1,5 +1,13 @@
+
+
+fsdof.js:
+	emcc src/fsdof.c -lm -o dist/fsdof.js \
+		-s WASM=1 -s ALLOW_MEMORY_GROWTH=1 \
+		-s EXPORTED_FUNCTIONS="['_fsdof_integrate2','_malloc']" \
+		-sEXPORTED_RUNTIME_METHODS="['cwrap','getValue','setValue']"
+
 _fsdof.so:
-	 cc -shared -O3 fsdof.c -o _fsdof.so  -fPIC -lm \
+	 cc -std=c99 -pedantic -Wall -Wextra -shared -O3 src/fsdof.c -o _fsdof.so  -fPIC -lm \
 	    -fno-math-errno -fno-signaling-nans -fno-trapping-math \
 	    -fassociative-math -ffast-math
 
@@ -7,10 +15,3 @@ _fsdof.so:
 alpha: alpha.c
 	$(CC) $@ $< -lm -o alpha
 
-alpha.js:
-	emcc alpha.c -lm -o dist/alpha.js -s EXPORTED_FUNCTIONS="['_generalized_alpha']"
-
-readme: FORCE
-	cat theory.md | sed 's/\\ddot U/ü/g' | sed 's/\\dot U/\\dot u/g' | pandoc -o README.md -t html
-
-FORCE:
