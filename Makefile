@@ -1,6 +1,7 @@
 
 
 fsdof.js:
+	mkdir -p dist/
 	emcc src/fsdof.c -lm -o dist/fsdof.js \
 		-s WASM=1 -s ALLOW_MEMORY_GROWTH=1 \
 		-s EXPORTED_FUNCTIONS="['_fsdof_integrate2','_malloc']" \

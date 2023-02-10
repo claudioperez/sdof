@@ -1,7 +1,7 @@
+import os
 import pathlib
 import ctypes
 from ctypes import c_double, c_int, c_bool, CFUNCTYPE, POINTER
-import os
 
 from numpy.ctypeslib import ndpointer
 

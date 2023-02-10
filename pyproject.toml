@@ -13,7 +13,6 @@ keywords = [
 ] 
 
 [options]
-#packages = find
 install_requires = [
   "numpy",
   "quakeio",

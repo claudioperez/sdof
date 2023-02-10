@@ -1,10 +1,14 @@
+// "declare" c function
+const fsdof = Module.cwrap('fsdof_integrate2', 
+  'number', ['number', 
+             'number', 'number', 'number',
+             'number', 'number', 'array', 'number', 'number']);
 
+// Some test values from Chopra
 var M = 0.2533;
 var C = 0.1592;
 var K = 10.0;
 var dt = 0.1;
-
-
 var f  =[
          0.0000,
          5.0000,
@@ -19,20 +23,12 @@ var f  =[
          0.0000];
 
 
-var p1 = new Float64Array(f);
-// change the view to Uint8
-var p  = new Uint8Array(p1.buffer);
-
-
-const fsdof = Module.cwrap('fsdof_integrate2', 
-  'number', ['number', 
-             'number', 'number', 'number',
-             'number', 'number', 'array', 'number', 'number']);
-
 function RunFSDOF(M,C,K, f,dt) {
   var n = f.length;
 
   var _f = new Float64Array(f);
+  // change the view to Uint8, there isnt an ABI for
+  // c double arrays
   var p = new Uint8Array(_f.buffer);
 
   // TODO: FREE!!!
