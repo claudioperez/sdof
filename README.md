@@ -14,6 +14,10 @@ dissipation and second order accuracy.
 
 <hr />
 
+<span class="badge-npmversion"><a href="https://npmjs.org/package/sdof" title="View this project on NPM"><img src="https://img.shields.io/npm/v/sdof.svg" alt="NPM version" /></a></span>
+<span class="badge-npmdownloads"><a href="https://npmjs.org/package/sdof" title="View this project on NPM"><img src="https://img.shields.io/npm/dm/sdof.svg" alt="NPM downloads" /></a></span>
+
+
 ## Compile
 
 ### Python
