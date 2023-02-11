@@ -2,10 +2,11 @@
 
 fsdof.js:
 	mkdir -p dist/
-	emcc src/fsdof.c -lm -o dist/fsdof.js \
-		-s WASM=1 -s ALLOW_MEMORY_GROWTH=1 \
-		-s EXPORTED_FUNCTIONS="['_fsdof_integrate2','_malloc']" \
-		-sEXPORTED_RUNTIME_METHODS="['cwrap','getValue','setValue']"
+	emcc src/fsdof.c -O3 -lm -o wasm/fsdof.js \
+		-s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -s SINGLE_FILE=1 \
+		-s EXPORTED_FUNCTIONS="['_fsdof_integrate2','_malloc','_free']" \
+		-sINCOMING_MODULE_JS_API="['onRuntimeInitialized']" \
+		-s EXPORTED_RUNTIME_METHODS="['cwrap','getValue','setValue']" 
 
 pypa:
 	python -m build
