@@ -1,6 +1,6 @@
 {
   "name": "sdof",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A WASM-backed SDOF integrator.",
   "main": "wasm/index.js",
   "files": ["wasm/*"],

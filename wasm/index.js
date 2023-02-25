@@ -34,7 +34,7 @@ function Newmark(M,C,K,U0,V0,dt,Pt, gamma, beta, outptr) {
 
     if (outptr === undefined)
       ptr = Module._malloc(_f.byteLength*n*3);
-      else
+    else
       ptr = outptr;
 
     // Initialize displacement and velocity
