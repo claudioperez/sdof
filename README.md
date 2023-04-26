@@ -19,6 +19,9 @@ dissipation and second order accuracy.
 
 ## Compile
 
+The main integrator is implemented in standard C and can be compiled
+as either a Python extension, or Javascript library (via WASM).
+
 ### Python
 
 ```
@@ -42,6 +45,10 @@ pip install .
 
 ```python
 def peaks(m, c, k, f, dt): ...
+
+def integrate(m, c, k, f, dt): ...
+
+def spectrum(t, f): ...
 ```
 
 ## Integrator (Reproduced from OpenSees docs)
