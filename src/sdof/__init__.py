@@ -2,7 +2,7 @@ import os
 import pathlib
 import ctypes
 from ctypes import c_double, c_int, c_bool, CFUNCTYPE, POINTER
-
+import numpy as np
 from numpy.ctypeslib import ndpointer
 
 if os.name == 'nt':
@@ -67,24 +67,79 @@ except:
 #   plastic
 
 
-def integrate(m,c,k,f,dt, u0=0.0, v0=0.0):
+def integrate(m,c,k,f,dt, u0=0.0, v0=0.0, out=None):
     import numpy as np
-    output = np.empty((3,len(f)))
+    if out is None:
+        output = np.empty((3,len(f)))
+    else:
+        output = out
     output[:2,0] = u0, v0
-    _fsdof_integrate(CONFIG, m, c, k, 1.0, len(f), f.ctypes.data_as(POINTER(c_double)), dt, output)
+
+    _fsdof_integrate(CONFIG, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     return output
 
-def integrate2(m,c,k,f,dt, u0=0.0, v0=0.0):
+def integrate2(m,c,k,f,dt, u0=0.0, v0=0.0, out=None):
     import numpy as np
-    output = np.empty((len(f),3))
+    if out is None:
+        output = np.empty((3,len(f)))
+    else:
+        output = out
     output[0,:2] = u0, v0
-    _fsdof_integrate2(CONFIG, m, c, k, 1.0, len(f), f.ctypes.data_as(POINTER(c_double)), dt, output)
+    _fsdof_integrate2(CONFIG, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     return output.T
+
+def spectrum(damping,per,dt,accel,interp=None):
+    if interp is None:
+        from scipy.interpolate import interp1d as interp
+    if isinstance(damping, float):
+        damping = [damping]
+    if per is None:
+        per = np.arange(0.02, 3.0, 0.03)
+
+    pi = np.pi
+    numper = len(per)
+    m = 1.0
+    numdata = len(accel)
+    t = np.arange(0,(numdata)*dt,dt)
+
+    u0,v0 = 0.0, 0.0
+
+    SA = np.zeros((1+len(damping), numper))
+    SA[0,:] = per[:]
+
+    for di,dmp in enumerate(damping):
+
+        for i in range(numper):
+            if dt/per[i]>0.02:
+                dtp = per[i]*0.02
+                dtpx = np.arange(0,max(t),dtp)
+                dtpx = dtpx
+                accfrni = interp(t, accel)(dtpx)
+                accfrn = accfrni[1:len(accfrni)-1]
+                numdatan = len(accfrn)
+            else:
+                dtp = dt
+                accfrn = accel
+                numdatan = numdata
+
+            p = -m*accfrn
+            k = 4*pi**2*m/per[i]**2
+            c = 2*dmp*np.sqrt(k/m)
+
+            *_, a = integrate(m, c, k, p, dt)
+
+            # resp = peaks(m, c, k, p, dt)
+            # resp.max_displ
+            # resp.max_accel
+
+            atot = a + accfrn
+            SA[1+di,i] = abs(max(atot, key=abs))
+    return SA
+
 
 
 def peaks(m,c,k, f, dt):
     response = SDOF_Peaks()
     _fsdof_peaks(CONFIG, m, c, k, 1.0, len(f), f.ctypes.data_as(POINTER(c_double)), dt, response)
     return response
-
 
