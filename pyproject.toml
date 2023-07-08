@@ -1,6 +1,6 @@
 [project]
 name = "sdof"
-version = "0.0.5"
+version = "0.0.6"
 authors = [
   {name="Claudio M. Perez", email="50180406+claudioperez@users.noreply.github.com"}
 ]
@@ -9,7 +9,7 @@ readme = "README.md"
 
 keywords = [
   "seismic",
-  "earthquake",
+  "earthquake-engineering",
 ] 
 
 [options]
@@ -29,6 +29,7 @@ documentation = "https://brace2.github.io/sdof"
 requires = [
   "setuptools >= 52.0.2",
 ]
+
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]

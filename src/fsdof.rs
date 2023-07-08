@@ -66,9 +66,7 @@ pub unsafe extern "C" fn fsdof_peaks(
     let mut pres: i32 = 0 as i32;
     u[pres as usize] = 0.0f64;
     v[pres as usize] = 0.0f64;
-    a[pres
-        as usize] = (*p.offset(i as isize) - C * v[pres as usize] - K * u[pres as usize])
-        / M;
+    a[pres as usize] = (*p.offset(i as isize) - C*v[pres as usize] - K*u[pres as usize])/M;
     i = 1 as i32;
     while i < n {
         past = (past == 0) as i32;

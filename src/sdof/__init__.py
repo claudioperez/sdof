@@ -88,31 +88,34 @@ def integrate2(m,c,k,f,dt, u0=0.0, v0=0.0, out=None):
     _fsdof_integrate2(CONFIG, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     return output.T
 
-def spectrum(damping,per,dt,accel,interp=None):
+def spectrum(accel, dt, damping, periods=None, interp=None):
     if interp is None:
         from scipy.interpolate import interp1d as interp
+
     if isinstance(damping, float):
         damping = [damping]
-    if per is None:
-        per = np.arange(0.02, 3.0, 0.03)
+
+    if periods is None:
+        periods = np.arange(0.02, 3.0, 0.03)
 
     pi = np.pi
-    numper = len(per)
-    m = 1.0
+    mass = 1.0
     numdata = len(accel)
-    t = np.arange(0,(numdata)*dt,dt)
+    t       = np.arange(0,(numdata)*dt,dt)
+    t_max   = max(t)
 
     u0,v0 = 0.0, 0.0
 
-    SA = np.zeros((1+len(damping), numper))
-    SA[0,:] = per[:]
+    Sd, Sv, Sa = np.zeros((3,1+len(damping), len(periods)))
+    Sd[0,:] = periods[:]
+    Sv[0,:] = periods[:]
+    Sa[0,:] = periods[:]
 
-    for di,dmp in enumerate(damping):
-
-        for i in range(numper):
-            if dt/per[i]>0.02:
-                dtp = per[i]*0.02
-                dtpx = np.arange(0,max(t),dtp)
+    for i,dmp in enumerate(damping):
+        for j,period in enumerate(periods):
+            if dt/period>0.02:
+                dtp = period*0.02
+                dtpx = np.arange(0,t_max,dtp)
                 dtpx = dtpx
                 accfrni = interp(t, accel)(dtpx)
                 accfrn = accfrni[1:len(accfrni)-1]
@@ -122,19 +125,20 @@ def spectrum(damping,per,dt,accel,interp=None):
                 accfrn = accel
                 numdatan = numdata
 
-            p = -m*accfrn
-            k = 4*pi**2*m/per[i]**2
-            c = 2*dmp*np.sqrt(k/m)
+            p = -mass*accfrn
+            k = 4*pi**2*mass/period**2
+            c = 2*dmp*np.sqrt(k/mass)
 
-            *_, a = integrate(m, c, k, p, dt)
+            d, v, a = integrate(mass, c, k, p, dt)
 
             # resp = peaks(m, c, k, p, dt)
             # resp.max_displ
             # resp.max_accel
 
-            atot = a + accfrn
-            SA[1+di,i] = abs(max(atot, key=abs))
-    return SA
+            Sd[1+i,j] = abs(max(d, key=abs))
+            Sv[1+i,j] = abs(max(v, key=abs))
+            Sa[1+i,j] = abs(max(a+accfrn, key=abs))
+    return Sd,Sv,Sa
 
 
 
