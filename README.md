@@ -1,45 +1,24 @@
 # `sdof`
 
-Fast integration of single degree-of-freedom systems.
+Lightning-fast integration of single degree-of-freedom systems.
 
-This package solves scalar problems of the form
+This package solves scalar differential equations of the form
 
 $$
 m \ddot{u} + c \dot{u} + k u = f(t)
 $$
 
-Integration is carried out using the Generalized - $\alpha$ method. This is an
-implicit method that like the HHT method allows for high frequency energy
-dissipation and second order accuracy.
+Integration is carried out using a Generalized - $\alpha$ integrator that
+is implemented under the hood in optimized C code. This is an
+implicit method that allows for high frequency energy
+dissipation and second order accuracy. With the right selection of parameters,
+the method can be specialized to the Hibert-Hughes-Taylor (HHT), or Newmark
+families of integration schemes.
 
 <hr />
 
 <span class="badge-npmversion"><a href="https://npmjs.org/package/sdof" title="View this project on NPM"><img src="https://img.shields.io/npm/v/sdof.svg" alt="NPM version" /></a></span>
 
-
-## Compile
-
-The main integrator is implemented in standard C and can be compiled
-as either a Python extension, or Javascript library (via WASM).
-
-### Python
-
-```
-pip install .
-```
-
-### Javascript
-
-- Install `emscripten` from [here](https://emscripten.org/)
-- run `make`. This creates the following files:
-  - `dist/fsdof.wasm` - Web assembly - compiled library,
-  - `dist/fsdof.js` - interface to binary `fsdof.wasm`
-
-- to test, you can use Python to start an HTTP server in the current directory
-  as follows:
-  ```shell
-  python -m http.server .
-  ```
 
 ## Python API
 
@@ -185,6 +164,31 @@ $$U_{t+\alpha_F \Delta t}, \dot U_{t + \alpha_F \Delta t} \ddot U_{t+ \alpha M \
 
 Once convergence has been achieved the displacements,
 velocities and accelerations at time $t + \Delta t$ can be computed.
+
+## Compiling
+
+The main integrator is implemented in standard C and can be compiled
+as either a Python extension, or Javascript library (via WASM).
+
+### Python
+
+```
+pip install .
+```
+
+### Javascript
+
+- Install `emscripten` from [here](https://emscripten.org/)
+- run `make`. This creates the following files:
+  - `dist/fsdof.wasm` - Web assembly - compiled library,
+  - `dist/fsdof.js` - interface to binary `fsdof.wasm`
+
+- to test, you can use Python to start an HTTP server in the current directory
+  as follows:
+  ```shell
+  python -m http.server .
+  ```
+
 
 ## References
 
