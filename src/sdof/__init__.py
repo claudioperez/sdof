@@ -88,7 +88,7 @@ def integrate2(m,c,k,f,dt, u0=0.0, v0=0.0, out=None):
     _fsdof_integrate2(CONFIG, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     return output.T
 
-def spectrum(accel, dt, damping, periods=None, interp=None):
+def spectrum(accel, dt, damping, periods=None, interp=None, **kwds):
     if interp is None:
         from scipy.interpolate import interp1d as interp
 
