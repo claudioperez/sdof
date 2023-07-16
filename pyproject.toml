@@ -20,8 +20,8 @@ install_requires = [
 ]
 
 [project.urls]
-repository = "http://github.com/BRACE2/sdof"
-documentation = "https://brace2.github.io/sdof"
+repository = "http://github.com/claudioperez/sdof"
+# documentation = "https://brace2.github.io/sdof"
 
 # [project.scripts]
 # ssid = "ssid.__main__:main"
