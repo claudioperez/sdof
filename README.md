@@ -9,8 +9,9 @@ m \ddot{u} + c \dot{u} + k u = f(t)
 $$
 
 Integration is carried out using a Generalized - $\alpha$ integrator that
-is implemented under the hood in optimized C code. This is an
-implicit method that allows for high frequency energy
+is implemented under the hood in highly optimized multi-threaded C code. 
+
+Generalized - $\alpha$ is an implicit method that allows for high frequency energy
 dissipation and second order accuracy. With the right selection of parameters,
 the method can be specialized to the Hibert-Hughes-Taylor (HHT), or Newmark
 families of integration schemes.
@@ -23,11 +24,19 @@ families of integration schemes.
 ## Python API
 
 ```python
-def peaks(m, c, k, f, dt): ...
+from sdof import integrate, peaks, spectrum
 
-def integrate(m, c, k, f, dt): ...
+m  = 1.0
+c  = 1.0
+k  = 2.0
+f  = np.sin(np.linspace(0, 5*np.pi, 100))
+dt = 5*np.pi/100
 
-def spectrum(t, f): ...
+u_max, v_max, a_max =  peaks(m, c, k, f, dt)
+
+u, v, a    = integrate(m, c, k, f, dt)
+
+Su, Sv, Sa =  spectrum(f, dt, damping=[0.02, 0.05], periods=(0.02, 3.0, 100))
 ```
 
 ## Integrator (Reproduced from OpenSees docs)

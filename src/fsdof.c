@@ -15,29 +15,29 @@
 #endif
 
 
-struct generalized_alpha {
+struct sdof_alpha {
   double alpha_m,
          alpha_f,
          beta,
          gamma;
 } CONF = {1.0, 1.0, 0.25, 0.5};
 
-struct SDOF_Peaks {
+struct sdof_peaks {
     double max_displ,
-           max_accel,
-           time_max_accel;
+           max_veloc,
+           max_accel;
 };
 
 
 // Main integrator. Same as fsdof_integrate, but operates on transposed data.
 // This is faster.
 EXPORT int
-fsdof_integrate2(struct generalized_alpha* conf,
+fsdof_integrate2(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, double *p, double dt,
     double *response)
 { 
-    conf = &CONF;
+//  conf = &CONF;
     const double gamma   = conf->gamma;
     const double beta    = conf->beta;
     const double alpha_m = conf->alpha_m;
@@ -98,12 +98,12 @@ fsdof_integrate2(struct generalized_alpha* conf,
 
 
 EXPORT int
-fsdof_peaks(struct generalized_alpha* conf,
+fsdof_peaks(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, double *p, double dt,
-    struct SDOF_Peaks *response)
+    struct sdof_peaks *response)
 { 
-    conf = &CONF;
+//  conf = &CONF;
     const double gamma   = conf->gamma;
     const double beta    = conf->beta;
     const double alpha_m = conf->alpha_m;
@@ -153,24 +153,28 @@ fsdof_peaks(struct generalized_alpha* conf,
       if (fabs(u[pres]) > response->max_displ) {
           response->max_displ = fabs(u[pres]);
       }
-      if (fabs(a[pres]) > response->max_accel) {
-          response->max_accel = fabs(a[pres]);
-          response->time_max_accel = i*dt;
+      if (fabs(v[pres]) > response->max_veloc) {
+          response->max_veloc = fabs(v[pres]);
+      }
+
+      double ar = fabs(a[pres] - p[i]/M);
+      if (ar > response->max_accel) {
+          response->max_accel = ar;
       }
     }
     return 1;
 }
 
-EXPORT struct SDOF_Peaks
-fsdof_peaks_2(struct generalized_alpha* conf,
+EXPORT struct sdof_peaks
+fsdof_peaks_2(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, double *p, double dt)
 { 
-    conf = &CONF;
-    struct SDOF_Peaks response = {
+//  conf = &CONF;
+    struct sdof_peaks response = {
               .max_displ      = 0.0,
+              .max_veloc      = 0.0,
               .max_accel      = 0.0,
-              .time_max_accel = 0.0
     };
     const double gamma   = conf->gamma;
     const double beta    = conf->beta;
@@ -221,24 +225,26 @@ fsdof_peaks_2(struct generalized_alpha* conf,
       if (fabs(u[pres]) > response.max_displ) {
           response.max_displ = fabs(u[pres]);
       }
-      if (fabs(a[pres]) > response.max_accel) {
-          response.max_accel = fabs(a[pres]);
-          response.time_max_accel = i*dt;
+      if (fabs(v[pres]) > response.max_veloc) {
+          response.max_veloc = fabs(v[pres]);
+      }
+
+      double ar = fabs(a[pres] - p[i]/M);
+      if (ar > response.max_accel) {
+          response.max_accel = ar;
       }
     }
     return response;
 }
 
-
-
 EXPORT int
-fsdof_integrate(struct generalized_alpha* conf,
+fsdof_integrate(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, double *p, double dt,
     double *response)
 { 
 
-    conf = &CONF;
+//  conf = &CONF;
     const double gamma   = conf->gamma;
     const double beta    = conf->beta;
     const double alpha_m = conf->alpha_m;

@@ -11,14 +11,14 @@ else:
     import distutils.ccompiler
     so_ext = distutils.ccompiler.new_compiler().shared_lib_extension
 
-class SDOF_Peaks(ctypes.Structure):
+class _sdof_peaks(ctypes.Structure):
     _fields_ = [
         ("max_displ",      c_double),
-        ("max_accel",      c_double),
-        ("time_max_accel", c_double)
+        ("max_veloc",      c_double),
+        ("max_accel",      c_double)
     ]
 
-class SDOF_Config(ctypes.Structure):
+class _sdof_config(ctypes.Structure):
     _fields_ = [
         ("alpha_m",      c_double),
         ("alpha_f",      c_double),
@@ -34,16 +34,16 @@ try:
     _fsdof_peaks = lib.fsdof_peaks
     _fsdof_peaks.restype = c_int
     _fsdof_peaks.argtypes = (
-        POINTER(SDOF_Config),
+        POINTER(_sdof_config),
         c_double,  c_double,  c_double,
         c_double, c_int, POINTER(c_double), c_double,
-        POINTER(SDOF_Peaks)
+        POINTER(_sdof_peaks)
     )
 
     _fsdof_integrate = lib.fsdof_integrate
     _fsdof_integrate.restype = c_int
     _fsdof_integrate.argtypes = (
-        POINTER(SDOF_Config),
+        POINTER(_sdof_config),
         c_double,  c_double,  c_double,
         c_double, c_int, POINTER(c_double), c_double,
         ndpointer(c_double, flags="C_CONTIGUOUS")
@@ -52,13 +52,13 @@ try:
     _fsdof_integrate2 = lib.fsdof_integrate2
     _fsdof_integrate2.restype = c_int
     _fsdof_integrate2.argtypes = (
-        POINTER(SDOF_Config),
+        POINTER(_sdof_config),
         c_double,  c_double,  c_double,
         c_double, c_int, POINTER(c_double), c_double,
         ndpointer(c_double, flags="C_CONTIGUOUS")
     )
 
-    CONFIG = SDOF_Config()
+    CONFIG = _sdof_config()
 
 except:
     raise
@@ -67,7 +67,14 @@ except:
 #   plastic
 
 
-def integrate(m,c,k,f,dt, u0=0.0, v0=0.0, out=None):
+def integrate(m,c,k,f,dt, u0=0.0, v0=0.0,
+              out  =  None,
+              alpha_m: float = 1.0,
+              alpha_f: float = 1.0,
+              beta   : float = 0.25,
+              gamma  : float = 0.50
+    ):
+
     import numpy as np
     if out is None:
         output = np.empty((3,len(f)))
@@ -75,16 +82,37 @@ def integrate(m,c,k,f,dt, u0=0.0, v0=0.0, out=None):
         output = out
     output[:2,0] = u0, v0
 
-    _fsdof_integrate(CONFIG, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
+    config = _sdof_config(
+                alpha_m = alpha_m,
+                alpha_f = alpha_f,
+                beta    = beta,
+                gamma   = gamma
+    )
+
+    _fsdof_integrate(config, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     return output
 
-def integrate2(m,c,k,f,dt, u0=0.0, v0=0.0, out=None):
+def integrate2(m,c,k,f,dt, u0=0.0, v0=0.0,
+              out  =  None,
+              alpha_m: float = 1.0,
+              alpha_f: float = 1.0,
+              beta   : float = 0.25,
+              gamma  : float = 0.50
+    ):
     import numpy as np
     if out is None:
         output = np.empty((3,len(f)))
     else:
         output = out
     output[0,:2] = u0, v0
+
+    config = _sdof_config(
+                alpha_m=alpha_m,
+                alpha_f=alpha_f,
+                beta   =beta,
+                gamma  =gamma
+    )
+
     _fsdof_integrate2(CONFIG, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     return output.T
 
@@ -96,7 +124,9 @@ def spectrum(accel, dt, damping, periods=None, interp=None):
         damping = [damping]
 
     if periods is None:
-        periods = np.arange(0.02, 3.0, 0.03)
+        # periods = np.arange(0.02, 3.0, 0.03)
+        periods = np.linspace(0.02, 3.0, 200)
+
 
     pi = np.pi
     mass = 1.0
@@ -104,7 +134,7 @@ def spectrum(accel, dt, damping, periods=None, interp=None):
     t       = np.arange(0,(numdata)*dt,dt)
     t_max   = max(t)
 
-    u0,v0 = 0.0, 0.0
+    u0, v0 = 0.0, 0.0
 
     Sd, Sv, Sa = np.zeros((3,1+len(damping), len(periods)))
     Sd[0,:] = periods[:]
@@ -138,12 +168,13 @@ def spectrum(accel, dt, damping, periods=None, interp=None):
             Sd[1+i,j] = abs(max(d, key=abs))
             Sv[1+i,j] = abs(max(v, key=abs))
             Sa[1+i,j] = abs(max(a+accfrn, key=abs))
+
     return Sd,Sv,Sa
 
 
 
 def peaks(m,c,k, f, dt):
-    response = SDOF_Peaks()
+    response = _sdof_peaks()
     _fsdof_peaks(CONFIG, m, c, k, 1.0, len(f), f.ctypes.data_as(POINTER(c_double)), dt, response)
     return response
 
