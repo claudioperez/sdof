@@ -116,6 +116,23 @@ def integrate2(m,c,k,f,dt, u0=0.0, v0=0.0,
     _fsdof_integrate2(CONFIG, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     return output.T
 
+
+def _thread_spectrum(n_threads=1):
+    import threading
+    threads = []
+    for i in range(n_threads):
+        threads.append(
+                threading.Thread(
+                    target=some_ctypes_func, args=(arg, )
+                )
+        )
+
+    for thread in threads:
+        thread.start()
+
+    for thread in threads:
+        thread.join()
+
 def spectrum(accel, dt, damping, periods=None, interp=None):
     if interp is None:
         from scipy.interpolate import interp1d as interp
@@ -124,8 +141,11 @@ def spectrum(accel, dt, damping, periods=None, interp=None):
         damping = [damping]
 
     if periods is None:
-        # periods = np.arange(0.02, 3.0, 0.03)
         periods = np.linspace(0.02, 3.0, 200)
+    elif isinstance(periods, tuple):
+        periods = np.linspace(*periods)
+    elif isinstance(periods, list):
+        periods = np.array(periods)
 
 
     pi = np.pi
@@ -143,7 +163,7 @@ def spectrum(accel, dt, damping, periods=None, interp=None):
 
     for i,dmp in enumerate(damping):
         for j,period in enumerate(periods):
-            if dt/period>0.02:
+            if dt/period > 0.02:
                 dtp = period*0.02
                 dtpx = np.arange(0,t_max,dtp)
                 dtpx = dtpx
