@@ -145,9 +145,9 @@ u_t + [\gamma \Delta t ] \ddot u_{t+\Delta t} $$
 </dl>
 <p>but the time-discrete momentum equation is modified:</p>
 
-$$R_{t + \alpha_M \Delta t} = F_{t+\Delta t}^{ext} - M \ddot
+$$R_{t + \alpha_M \Delta t} = F_{t+\Delta t}^{\mathrm{ext}} - M \ddot
 u_{t + \alpha_M \Delta t} - C \dot u_{t+\alpha_F \Delta t} -
-F^{int}(u_{t + \alpha_F \Delta t})
+F^{\mathrm{int}}(u_{t + \alpha_F \Delta t})
 $$
 
 where the displacements and velocities at the intermediate point are
@@ -169,14 +169,12 @@ equations:</p>
 $$K_{t+\Delta t}^{*i} d u_{t+\Delta t}^{i+1} = R_{t+\Delta
 t}^i$$
 
-$$K_{t+\Delta t}^{*i} = \alpha_F K_t + \frac{\alpha_F
-\gamma}{\beta \Delta t} C_t + \frac{\alpha_M}{\beta \Delta t^2}
-M$$
+$$K_{t+\Delta t}^{*i} = \alpha_F K_t + \alpha_F \frac{\gamma}{\beta \Delta t} C_t + \alpha_M\frac{1}{\beta \Delta t^2}M$$
 
 <p>and</p>
 
-$$R_{t+\Delta t}^i = F_{t + \Delta t}^{ext} - F(u_{t + \alpha
-F \Delta t}^{i-1})^{int} - C \dot u_{t+\alpha F \Delta t}^{i-1} - M
+$$R_{t+\Delta t}^i = F_{t + \Delta t}^{\mathrm{ext}} - F(u_{t + \alpha
+F \Delta t}^{i-1})^{\mathrm{int}} - C \dot u_{t+\alpha F \Delta t}^{i-1} - M
 \ddot u_{t+ \alpha M \Delta t}^{i-1}$$
 
 The linear equations are used to solve for 
