@@ -9,7 +9,7 @@ Lightning-fast integration of single degree-of-freedom systems.
 <div style="align:center">
 
 [![Latest PyPI version](https://img.shields.io/pypi/v/sdof?logo=pypi&style=for-the-badge)](https://pypi.python.org/pypi/sdof)
-<span class="badge-npmversion"><a href="https://npmjs.org/package/sdof" title="View this project on NPM"><img src="https://img.shields.io/npm/v/sdof.svg?style=for-the-badge" alt="NPM version" /></a></span>
+<span class="badge-npmversion"><a href="https://npmjs.org/package/sdof" title="View this project on NPM"><img src="https://img.shields.io/npm/v/sdof.svg?logo=npm&style=for-the-badge" alt="NPM version" /></a></span>
 
 </div>
 
