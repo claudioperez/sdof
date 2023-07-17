@@ -116,7 +116,7 @@ def integrate2(m,c,k,f,dt, u0=0.0, v0=0.0,
     _fsdof_integrate2(CONFIG, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     return output.T
 
-<<<<<<< HEAD
+
 
 def _thread_spectrum(n_threads=1):
     import threading

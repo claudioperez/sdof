@@ -14,7 +14,7 @@ sdof input.txt $dt $damp $period
 
 def parse_args(args):
     options = {
-        "include_columns": ("periods", "pseudo_accel"),
+        "include_columns": ("periods",  "accel"), #"pseudo_accel",
         "return_mode": "spectra"
     }
     return options
@@ -22,6 +22,7 @@ def parse_args(args):
 COLUMNS = {
     "periods":      lambda Sd, *_:  Sd[0,:][:,None],
     "pseudo_accel": lambda Sd, *_: (Sd[1:,:]*(2*np.pi/Sd[0,:])**2).T,
+    "accel":        lambda Sd, Sv, Sa: Sa[1:,:].T
 }
 
 
@@ -34,7 +35,7 @@ if __name__ == "__main__":
 
     # Response Spectra mode
 
-    Sd, Sv, Sa = spectrum(accel, dt, [0.02,0.05], None)
+    Sd, Sv, Sa = spectrum(accel, dt, [0.02, 0.05], None)
     stride = 2
     output = np.zeros((len(Sd[0,:]),stride*(len(options["include_columns"])-1)+1))
 
@@ -49,5 +50,4 @@ if __name__ == "__main__":
 
     np.savetxt(sys.stdout.buffer, output)
 
-    # u,v,a = integrate2(m, 0.01, k, data, 0.01)
-    # np.savetxt(sys.stdout.buffer, u)
+
