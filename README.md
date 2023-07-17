@@ -36,6 +36,7 @@ families of integration schemes.
 ## Python API
 
 ```python
+import numpy as np
 from sdof import integrate, peaks, spectrum
 
 m  = 1.0
