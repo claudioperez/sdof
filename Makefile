@@ -1,5 +1,4 @@
 
-
 fsdof.js:
 	mkdir -p dist/
 	emcc src/fsdof.c -O3 -lm -o wasm/fsdof.js \
@@ -20,4 +19,8 @@ _fsdof.so:
 
 alpha: alpha.c
 	$(CC) $@ $< -lm -o alpha
+
+thread: src/tsdof.c src/fsdof.c
+	# clang -DC11THREADS -std=c11 -O3 -o thread src/tsdof.c src/fsdof.c
+	gcc -std=c11 -O3 -o thread src/tsdof.c src/fsdof.c -lpthread
 
