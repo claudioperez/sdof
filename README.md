@@ -1,6 +1,6 @@
 # `sdof`
 
-<img align="left" src="https://raw.githubusercontent.com/BRACE2/OpenSeesRT/master/docs/figures/spectrum.svg" width="150px" alt="PEER Logo">
+<img align="left" src="https://raw.githubusercontent.com/BRACE2/OpenSeesRT/master/docs/figures/spectrum.svg" width="250px" alt="PEER Logo">
 
 Lightning-fast integration of single degree-of-freedom systems.
 
@@ -8,18 +8,12 @@ Lightning-fast integration of single degree-of-freedom systems.
 
 <div style="align:center">
 
-<!--
-[![Latest conda-forge version](https://img.shields.io/conda/vn/conda-forge/opensees?logo=conda-forge&style=for-the-badge)](https://anaconda.org/conda-forge/opensees)
--->
-
-<!-- [![PyPI Downloads][pypi-v-image]][pypi-v-link] -->
-
 [![Latest PyPI version](https://img.shields.io/pypi/v/sdof?logo=pypi&style=for-the-badge)](https://pypi.python.org/pypi/sdof)
-[![](https://img.shields.io/conda/v/sdof/sdof?color=%23660505&style=for-the-badge)](https://anaconda.org/sdof/sdof)
-[![PyPI Downloads](https://img.shields.io/pypi/dm/sdof?style=for-the-badge)](https://pypi.org/project/sdof)
 <span class="badge-npmversion"><a href="https://npmjs.org/package/sdof" title="View this project on NPM"><img src="https://img.shields.io/npm/v/sdof.svg" alt="NPM version" /></a></span>
 
 </div>
+
+-------------------------------------------------
 
 This package solves scalar differential equations of the form
 
