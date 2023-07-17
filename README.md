@@ -129,8 +129,8 @@ accuracy. In the HHT method, the same Newmark approximations are used:
 <dt></dt>
 <dd>
 
-$$U_{t+\Delta t} = U_t + \Delta t \dot U_t + [(0.5 - \beta)
-\Delta t^2] \ddot U_t + [\beta \Delta t^2] \ddot U_{t+\Delta t}$$
+$$u_{t+\Delta t} = u_t + \Delta t \dot u_t + [(0.5 - \beta)
+\Delta t^2] \ddot u_t + [\beta \Delta t^2] \ddot u_{t+\Delta t}$$
 
 </dd>
 </dl>
@@ -138,35 +138,35 @@ $$U_{t+\Delta t} = U_t + \Delta t \dot U_t + [(0.5 - \beta)
 <dt></dt>
 <dd>
 
-$$\dot U_{t+\Delta t} = \dot U_t + [(1-\gamma)\Delta t] \ddot
-U_t + [\gamma \Delta t ] \ddot U_{t+\Delta t} $$
+$$\dot u_{t+\Delta t} = \dot u_t + [(1-\gamma)\Delta t] \ddot
+u_t + [\gamma \Delta t ] \ddot u_{t+\Delta t} $$
 
 </dd>
 </dl>
 <p>but the time-discrete momentum equation is modified:</p>
 
 $$R_{t + \alpha_M \Delta t} = F_{t+\Delta t}^{ext} - M \ddot
-U_{t + \alpha_M \Delta t} - C \dot U_{t+\alpha_F \Delta t} -
-F^{int}(U_{t + \alpha_F \Delta t})
+u_{t + \alpha_M \Delta t} - C \dot u_{t+\alpha_F \Delta t} -
+F^{int}(u_{t + \alpha_F \Delta t})
 $$
 
 where the displacements and velocities at the intermediate point are
 given by:
 
-$$U_{t+ \alpha_F \Delta t} = (1 - \alpha_F) U_t + \alpha_F
-U_{t + \Delta t}$$
+$$u_{t+ \alpha_F \Delta t} = (1 - \alpha_F) u_t + \alpha_F
+u_{t + \Delta t}$$
 
-$$\dot U_{t+\alpha_F \Delta t} = (1-\alpha_F) \dot U_t +
-\alpha_F \dot U_{t + \Delta t}$$
+$$\dot u_{t+\alpha_F \Delta t} = (1-\alpha_F) \dot u_t +
+\alpha_F \dot u_{t + \Delta t}$$
 
-$$\ddot U_{t+\alpha_M \Delta t} = (1-\alpha_M) \ddot U_t +
-\alpha_M \ddot U_{t + \Delta t}$$
+$$\ddot u_{t+\alpha_M \Delta t} = (1-\alpha_M) \ddot u_t +
+\alpha_M \ddot u_{t + \Delta t}$$
 
 <p>Following the methods outlined for Newmarks method, linearization of
 the nonlinear momentum equation results in the following linear
 equations:</p>
 
-$$K_{t+\Delta t}^{*i} d U_{t+\Delta t}^{i+1} = R_{t+\Delta
+$$K_{t+\Delta t}^{*i} d u_{t+\Delta t}^{i+1} = R_{t+\Delta
 t}^i$$
 
 $$K_{t+\Delta t}^{*i} = \alpha_F K_t + \frac{\alpha_F
@@ -175,13 +175,13 @@ M$$
 
 <p>and</p>
 
-$$R_{t+\Delta t}^i = F_{t + \Delta t}^{ext} - F(U_{t + \alpha
-F \Delta t}^{i-1})^{int} - C \dot U_{t+\alpha F \Delta t}^{i-1} - M
-\ddot U_{t+ \alpha M \Delta t}^{i-1}$$
+$$R_{t+\Delta t}^i = F_{t + \Delta t}^{ext} - F(u_{t + \alpha
+F \Delta t}^{i-1})^{int} - C \dot u_{t+\alpha F \Delta t}^{i-1} - M
+\ddot u_{t+ \alpha M \Delta t}^{i-1}$$
 
 The linear equations are used to solve for 
 
-$$U_{t+\alpha_F \Delta t}, \dot U_{t + \alpha_F \Delta t} \ddot U_{t+ \alpha M \Delta t}$$
+$$u_{t+\alpha_F \Delta t}, \dot u_{t + \alpha_F \Delta t} \ddot u_{t+ \alpha M \Delta t}$$
 
 Once convergence has been achieved the displacements,
 velocities and accelerations at time $t + \Delta t$ can be computed.
