@@ -51,7 +51,7 @@ u, v, a    = integrate(m, c, k, f, dt)
 Su, Sv, Sa =  spectrum(f, dt, damping=[0.02, 0.05], periods=(0.02, 3.0, 100))
 ```
 
-## Integrator (Reproduced from OpenSees docs)
+## Integrator (Adapted from OpenSees docs)
 
 <table>
 <tbody>
