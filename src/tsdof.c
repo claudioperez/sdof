@@ -1,3 +1,4 @@
+// Claudio Perez
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -6,6 +7,7 @@
 #ifndef M_PI
 # define M_PI (3.14159265358979323846)
 #endif
+// Pre-define 2*pi
 #define PI_PI (9.869604401089358)
 
 #ifndef C11THREADS
@@ -38,7 +40,7 @@ extern struct sdof_alpha {
 } CONF;
 
 
-struct sdof_peaks
+extern struct sdof_peaks
 fsdof_peaks_2(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, const double *p, double dt);
@@ -95,6 +97,7 @@ int
 sdof_spectrum(const double* load, const int n, const double dt, 
               const double t_min, const double t_max, const int n_periods,
               const double damp,
+              int n_threads,
               struct sdof_peaks *response)
 {
   pthread_t threads[NUM_THREADS];
@@ -102,18 +105,18 @@ sdof_spectrum(const double* load, const int n, const double dt,
 
   double slope = (t_max - t_min)/((double)n_periods);
 
-  for (int i = 0; i < NUM_THREADS; i++) {
-    wkspace[i].damp   =  damp; //0.1592;
+  for (int i = 0; i < n_threads; i++) {
+    wkspace[i].damp   =  damp;
     wkspace[i].n      =     n;
     wkspace[i].dt     =    dt;
     wkspace[i].p      =  load;
     wkspace[i].conf   = &CONF;
-    wkspace[i].stride = n_periods/NUM_THREADS;
+    wkspace[i].stride = n_periods/n_threads;
 
-    wkspace[i].t_min  = t_min; // min. period
+    wkspace[i].t_min  = t_min;
     wkspace[i].t_slp  = slope;
     wkspace[i].response = response;
-    wkspace[i].thread_index = i*(n_periods/NUM_THREADS);
+    wkspace[i].thread_index = i*(n_periods/n_threads);
 
     pthread_create(&threads[i], NULL, &run_peaks, (void *)&wkspace[i]);
   }
@@ -136,10 +139,12 @@ int main(int argc, char const *argv[]) {
   n = read_load(f, n, &load[0]);
   double dt = 0.02;
 
+  int n_threads = NUM_THREADS;
+
   struct sdof_peaks *response =(struct sdof_peaks *)
                                calloc(sizeof(struct sdof_peaks),WORK_SIZE);
 
-  sdof_spectrum(load, n, dt, t_min, t_max, WORK_SIZE, damp, response);
+  sdof_spectrum(load, n, dt, t_min, t_max, WORK_SIZE, damp, n_threads, response);
   
   for (int i=0; i< WORK_SIZE; i++) {
     double period = t_min + (t_max - t_min)/((double)WORK_SIZE)*((double)i);
