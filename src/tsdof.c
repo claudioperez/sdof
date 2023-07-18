@@ -37,9 +37,9 @@
 
 #define WORK_SIZE 200
 
-#ifndef NUM_THREADS
-# define NUM_THREADS 8
-#endif
+// #ifndef NUM_THREADS
+// # define NUM_THREADS 8
+// #endif
 
 struct sdof_peaks {
     double max_displ,
@@ -156,7 +156,7 @@ int main(int argc, char const *argv[]) {
   n = read_load(f, n, &load[0]);
   double dt = 0.02;
 
-  int n_threads = NUM_THREADS;
+  const int n_threads = 8;
 
   struct sdof_peaks *response =(struct sdof_peaks *)
                                calloc(sizeof(struct sdof_peaks),WORK_SIZE);
