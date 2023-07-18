@@ -16,7 +16,7 @@ def parse_args(args):
     options = {
         "include_columns": ("periods",  "accel"), #"pseudo_accel",
         "return_mode": "spectra",
-        "num_threads": 8,
+        "num_threads": 4,
     }
     argi = iter(args)
     for arg in argi:

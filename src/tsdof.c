@@ -103,7 +103,7 @@ run_peaks(void *thread_data) {
                                      scale, td.n, td.p, td.dt);
   }
 
-//thrd_exit(EXIT_SUCCESS);
+  pthread_exit(EXIT_SUCCESS);
   return NULL;
 }
 
@@ -116,8 +116,8 @@ sdof_spectrum(struct sdof_alpha* conf,
               int n_threads,
               struct sdof_peaks *response)
 {
-  pthread_t threads[NUM_THREADS];
-  struct thread_data wkspace[NUM_THREADS];
+  pthread_t threads[n_threads];
+  struct thread_data wkspace[n_threads];
 
   double slope = (t_max - t_min)/((double)n_periods);
 
@@ -137,7 +137,7 @@ sdof_spectrum(struct sdof_alpha* conf,
     pthread_create(&threads[i], NULL, &run_peaks, (void *)&wkspace[i]);
   }
 
-  for(int i = 0; i < NUM_THREADS; i++)
+  for(int i = 0; i < n_threads; i++)
     pthread_join(threads[i], NULL);
 
   return 0;
