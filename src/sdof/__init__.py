@@ -201,6 +201,7 @@ def spectrum(accel, dt, damping, periods=None, interp=None, threads:int=None, **
     Sa[0,:] = periods[:]
 
     if threads is not None:
+        Sd[0,:] = Sv[0,:] = Sa[0,:] = np.linspace(periods[0], periods[-1], len(periods))
         _spectrum_cthreads((Sd[1:,:], Sv[1:,:], Sa[1:,:]), accel, dt, damping,
                            periods=(periods[0], periods[-1], len(periods)),
                            config=config, n_threads=threads)
