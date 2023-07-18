@@ -16,13 +16,26 @@ def parse_args(args):
     options = {
         "include_columns": ("periods",  "accel"), #"pseudo_accel",
         "return_mode": "spectra",
+        "time_step": None,
         "num_threads": 4,
+        "file": None
     }
     argi = iter(args)
     for arg in argi:
         if arg[:2] == "-j":
             options["num_threads"] = int(next(argi))
+
+        elif options["file"] is None:
+            options["file"] = arg
+
+        elif options["time_step"] is None:
+            options["time_step"] = float(arg)
+
+    if options["file"] is None:
+        options["file"] = sys.stdin
+
     return options
+
 
 COLUMNS = {
     "periods":      lambda Sd, *_:  Sd[0,:][:,None],
@@ -33,10 +46,10 @@ COLUMNS = {
 
 if __name__ == "__main__":
     import sys
-    options = parse_args(sys.argv)
+    options = parse_args(sys.argv[1:])
 
-    accel  = np.loadtxt(sys.argv[1]) if len(sys.argv) > 1 else np.loadtxt(sys.stdin)
-    dt     = float(sys.argv[-1])
+    accel  = np.loadtxt(options["file"])
+    dt     = options["time_step"]
 
     # Response Spectra mode
 
