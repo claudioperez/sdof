@@ -35,7 +35,7 @@
 # define pthread_join(a,b)       thrd_join(a,b)
 #endif
 
-#define WORK_SIZE 200
+#define WORK_SIZE 290
 
 // #ifndef NUM_THREADS
 // # define NUM_THREADS 8
@@ -75,6 +75,7 @@ struct thread_data {
          t_min;
 
   int stride;
+  int count;
 
   struct sdof_alpha* conf;
   double damp;
@@ -89,17 +90,18 @@ run_peaks(void *thread_data) {
   struct sdof_peaks *const resp = td.response;
   const int i = td.thread_index;
   const int stride   = td.stride;
+  const int count    = td.count;
 
   const double scale = 1.0,
                mass  = 1.0,
                damp  = td.damp;
 
-  for (int offset = 0 ; offset < stride; offset++) {
-    double period = td.t_min + td.t_slp*((double)(i+offset));
+  for (int offset = 0 ; offset < count; offset++) {
+    double period = td.t_min + td.t_slp*((double)(i*stride+offset));
     double K = 4.0*PI_PI*mass/(period*period);
     double C = 4.0*damp*M_PI/period;
 //  printf("%d\t%lf\t%lf\t%lf\n", i+offset, period, C, K);
-    resp[i + offset] = fsdof_peaks_2(td.conf,   mass, C, K,
+    resp[i*stride + offset] = fsdof_peaks_2(td.conf,   mass, C, K,
                                      scale, td.n, td.p, td.dt);
   }
 
@@ -121,21 +123,38 @@ sdof_spectrum(struct sdof_alpha* conf,
 
   double slope = (t_max - t_min)/((double)n_periods);
 
-  for (int i = 0; i < n_threads; i++) {
+  int i;
+  for (i = 0; i < n_threads-1; i++) {
     wkspace[i].damp   =  damp;
     wkspace[i].n      =     n;
     wkspace[i].dt     =    dt;
     wkspace[i].p      =  load;
     wkspace[i].conf   =  conf;
     wkspace[i].stride = n_periods/n_threads;
+    wkspace[i].count  = n_periods/n_threads;
 
     wkspace[i].t_min  = t_min;
     wkspace[i].t_slp  = slope;
     wkspace[i].response = response;
-    wkspace[i].thread_index = i*(n_periods/n_threads);
+    wkspace[i].thread_index = i;
 
     pthread_create(&threads[i], NULL, &run_peaks, (void *)&wkspace[i]);
   }
+
+  wkspace[i].damp   =  damp;
+  wkspace[i].n      =     n;
+  wkspace[i].dt     =    dt;
+  wkspace[i].p      =  load;
+  wkspace[i].conf   =  conf;
+  wkspace[i].stride = n_periods/n_threads;
+  wkspace[i].count  = n_periods/n_threads + n_periods%n_threads;
+
+  wkspace[i].t_min  = t_min;
+  wkspace[i].t_slp  = slope;
+  wkspace[i].response = response;
+  wkspace[i].thread_index = i;
+
+  pthread_create(&threads[i], NULL, &run_peaks, (void *)&wkspace[i]);
 
   for(int i = 0; i < n_threads; i++)
     pthread_join(threads[i], NULL);
