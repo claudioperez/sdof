@@ -1,0 +1,42 @@
+[project]
+name = "sdof"
+version = "0.0.7"
+authors = [
+  {name="Claudio M. Perez", email="50180406+claudioperez@users.noreply.github.com"},
+  {name="Chrystal Chern",   email="52893467+chrystalchern@users.noreply.github.com"}
+]
+
+description="Lightning-fast integration of single degree-of-freedom systems."
+readme = "README.md"
+
+keywords = [
+  "seismic",
+  "earthquake-engineering",
+] 
+
+[options]
+install_requires = [
+  "numpy",
+  "quakeio",
+]
+
+[project.urls]
+repository = "http://github.com/claudioperez/sdof"
+# documentation = "https://brace2.github.io/sdof"
+
+# [project.scripts]
+# ssid = "ssid.__main__:main"
+
+[build-system]
+requires = [
+  "setuptools >= 52.0.2",
+]
+
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
