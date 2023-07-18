@@ -1,4 +1,8 @@
 
+src/sdof/_tsdof.so: src/tsdof.c src/fsdof.c
+	# clang -DC11THREADS -std=c11 -O3 -o thread src/tsdof.c src/fsdof.c
+	gcc -std=c11 -fPIC -O3 -DNO_MAIN -shared -o src/sdof/_tsdof.so src/tsdof.c src/fsdof.c -lpthread
+
 fsdof.js:
 	mkdir -p dist/
 	emcc src/fsdof.c -O3 -lm -o wasm/fsdof.js \

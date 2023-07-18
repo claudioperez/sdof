@@ -15,8 +15,13 @@ sdof input.txt $dt $damp $period
 def parse_args(args):
     options = {
         "include_columns": ("periods",  "accel"), #"pseudo_accel",
-        "return_mode": "spectra"
+        "return_mode": "spectra",
+        "num_threads": 8,
     }
+    argi = iter(args)
+    for arg in argi:
+        if arg[:2] == "-j":
+            options["num_threads"] = int(next(argi))
     return options
 
 COLUMNS = {
@@ -35,8 +40,8 @@ if __name__ == "__main__":
 
     # Response Spectra mode
 
-    Sd, Sv, Sa = spectrum(accel, dt, [0.02, 0.05], None)
-    stride = 2
+    Sd, Sv, Sa = spectrum(accel, dt, [0.02], None, threads=options["num_threads"])
+    stride = 1
     output = np.zeros((len(Sd[0,:]),stride*(len(options["include_columns"])-1)+1))
 
     output[:,0] = Sd[0,:]

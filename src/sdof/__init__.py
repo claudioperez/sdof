@@ -8,7 +8,7 @@ from numpy.ctypeslib import ndpointer
 if os.name == 'nt':
     so_ext = ".pyd"
 else:
-    import distutils.ccompiler
+    import   distutils.ccompiler
     so_ext = distutils.ccompiler.new_compiler().shared_lib_extension
 
 class _sdof_peaks(ctypes.Structure):
@@ -26,42 +26,68 @@ class _sdof_config(ctypes.Structure):
         ("gamma",        c_double)
     ]
 
+libfile = str(next(pathlib.Path(__file__).parents[0].glob("_fsdof.*"+so_ext)))
+lib = ctypes.cdll.LoadLibrary(libfile)
+# conf = lib.CONF
+
+_fsdof_peaks = lib.fsdof_peaks
+_fsdof_peaks.restype = c_int
+_fsdof_peaks.argtypes = (
+    POINTER(_sdof_config),
+    c_double,  c_double,  c_double,
+    c_double, c_int, POINTER(c_double), c_double,
+    POINTER(_sdof_peaks)
+)
+
+_fsdof_peaks_2 = lib.fsdof_peaks_2
+_fsdof_peaks_2.restype  = c_int
+_fsdof_peaks_2.argtypes = (
+    POINTER(_sdof_config),
+    c_double,  c_double,  c_double,
+    c_double, c_int, POINTER(c_double), c_double,
+    POINTER(_sdof_peaks)
+)
+
+_fsdof_integrate = lib.fsdof_integrate
+_fsdof_integrate.restype  = c_int
+_fsdof_integrate.argtypes = (
+    POINTER(_sdof_config),
+    c_double,  c_double,  c_double,
+    c_double, c_int, POINTER(c_double), c_double,
+    ndpointer(c_double, flags="C_CONTIGUOUS")
+)
+
+_fsdof_integrate2 = lib.fsdof_integrate2
+_fsdof_integrate2.restype = c_int
+_fsdof_integrate2.argtypes = (
+    POINTER(_sdof_config),
+    c_double,  c_double,  c_double,
+    c_double, c_int, POINTER(c_double), c_double,
+    ndpointer(c_double, flags="C_CONTIGUOUS")
+)
+
+CONFIG = _sdof_config()
+# conf = lib.CONF
 
 try:
-    libfile = str(next(pathlib.Path(__file__).parents[0].glob("_fsdof.*"+so_ext)))
+    "a" + 3
+except:
+    libfile = str(next(pathlib.Path(__file__).parents[0].glob("_tsdof*"+so_ext)))
     lib = ctypes.cdll.LoadLibrary(libfile)
-    # conf = lib.CONF
-    _fsdof_peaks = lib.fsdof_peaks
-    _fsdof_peaks.restype = c_int
-    _fsdof_peaks.argtypes = (
+    _fsdof_spectrum = lib.sdof_spectrum
+    _fsdof_spectrum.restype  = c_int
+    _fsdof_spectrum.argtypes = (
         POINTER(_sdof_config),
-        c_double,  c_double,  c_double,
-        c_double, c_int, POINTER(c_double), c_double,
+        POINTER(c_double), c_int, c_double,
+        c_double,  c_double,  c_int, # p_min, p_max, np
+        c_double,                    # damping
+        c_int,
         POINTER(_sdof_peaks)
     )
 
-    _fsdof_integrate = lib.fsdof_integrate
-    _fsdof_integrate.restype = c_int
-    _fsdof_integrate.argtypes = (
-        POINTER(_sdof_config),
-        c_double,  c_double,  c_double,
-        c_double, c_int, POINTER(c_double), c_double,
-        ndpointer(c_double, flags="C_CONTIGUOUS")
-    )
-
-    _fsdof_integrate2 = lib.fsdof_integrate2
-    _fsdof_integrate2.restype = c_int
-    _fsdof_integrate2.argtypes = (
-        POINTER(_sdof_config),
-        c_double,  c_double,  c_double,
-        c_double, c_int, POINTER(c_double), c_double,
-        ndpointer(c_double, flags="C_CONTIGUOUS")
-    )
-
-    CONFIG = _sdof_config()
-
-except:
-    raise
+# except:
+#     import warnings
+#     warnings.warn("Failed to load threaded library")
 
 #   elastic_sdof()
 #   plastic
@@ -113,12 +139,12 @@ def integrate2(m,c,k,f,dt, u0=0.0, v0=0.0,
                 gamma  =gamma
     )
 
-    _fsdof_integrate2(CONFIG, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
+    _fsdof_integrate2(config, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     return output.T
 
 
 
-def _thread_spectrum(n_threads=1):
+def _spectrum_pythreads(n_threads=1):
     import threading
     threads = []
     for i in range(n_threads):
@@ -134,15 +160,27 @@ def _thread_spectrum(n_threads=1):
     for thread in threads:
         thread.join()
 
+def _spectrum_cthreads(response, accel, dt, damping, periods: tuple, config: _sdof_config, n_threads=8):
+    Sd, Sv, Sa = response
+    output = (_sdof_peaks * periods[2])()
+    for i,damp in enumerate(damping):
+        _fsdof_spectrum(config, np.asarray(accel).ctypes.data_as(POINTER(c_double)), len(accel), dt,
+                        periods[0], periods[1], periods[2],
+                        damp, n_threads, output)
 
-def spectrum(accel, dt, damping, periods=None, interp=None, **kwds):
+        for j in range(periods[2]):
+            Sd[i,j] = output[j].max_displ
+            Sv[i,j] = output[j].max_veloc
+            Sa[i,j] = output[j].max_accel
+
+
+def spectrum(accel, dt, damping, periods=None, interp=None, threads:int=None, **kwds):
 
     if interp is None:
         from scipy.interpolate import interp1d as interp
 
     if isinstance(damping, float):
         damping = [damping]
-
     if periods is None:
         periods = np.linspace(0.02, 3.0, 200)
     elif isinstance(periods, tuple):
@@ -150,6 +188,23 @@ def spectrum(accel, dt, damping, periods=None, interp=None, **kwds):
     elif isinstance(periods, list):
         periods = np.array(periods)
 
+    config = _sdof_config(
+                alpha_m = kwds.get("alpha_m", 1.00),
+                alpha_f = kwds.get("alpha_f", 1.00),
+                beta    = kwds.get("beta",    0.25),
+                gamma   = kwds.get("gamma",   0.50)
+    )
+
+    Sd, Sv, Sa = np.zeros((3,1+len(damping), len(periods)))
+    Sd[0,:] = periods[:]
+    Sv[0,:] = periods[:]
+    Sa[0,:] = periods[:]
+
+    if threads is not None:
+        _spectrum_cthreads((Sd[1:,:], Sv[1:,:], Sa[1:,:]), accel, dt, damping,
+                           periods=(periods[0], periods[-1], len(periods)),
+                           config=config, n_threads=threads)
+        return Sd,Sv,Sa
 
     pi = np.pi
     mass = 1.0
@@ -159,19 +214,15 @@ def spectrum(accel, dt, damping, periods=None, interp=None, **kwds):
 
     u0, v0 = 0.0, 0.0
 
-    Sd, Sv, Sa = np.zeros((3,1+len(damping), len(periods)))
-    Sd[0,:] = periods[:]
-    Sv[0,:] = periods[:]
-    Sa[0,:] = periods[:]
 
     for i,dmp in enumerate(damping):
         for j,period in enumerate(periods):
             if dt/period > 0.02:
-                dtp = period*0.02
+                dtp  = period*0.02
                 dtpx = np.arange(0,t_max,dtp)
                 dtpx = dtpx
                 accfrni = interp(t, accel)(dtpx)
-                accfrn = accfrni[1:len(accfrni)-1]
+                accfrn  = accfrni[1:len(accfrni)-1]
                 numdatan = len(accfrn)
             else:
                 dtp = dt

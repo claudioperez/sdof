@@ -4,6 +4,21 @@
 #include <stdlib.h>
 #include <math.h>
 
+#if defined(_WIN32)
+#  include <Python.h>
+   PyMODINIT_FUNC PyInit__tsdof(void) {}
+#  define EXPORT __declspec(dllexport)
+
+#elif defined(__EMSCRIPTEN__)
+#  include <stdlib.h>
+#  include <emscripten.h>
+#  define EXPORT EMSCRIPTEN_KEEPALIVE
+
+#else // *NIXs
+#  define EXPORT
+#endif
+
+
 #ifndef M_PI
 # define M_PI (3.14159265358979323846)
 #endif
@@ -93,8 +108,9 @@ run_peaks(void *thread_data) {
 }
 
 
-int
-sdof_spectrum(const double* load, const int n, const double dt, 
+EXPORT int
+sdof_spectrum(struct sdof_alpha* conf,
+              const double* load, const int n, const double dt, 
               const double t_min, const double t_max, const int n_periods,
               const double damp,
               int n_threads,
@@ -110,7 +126,7 @@ sdof_spectrum(const double* load, const int n, const double dt,
     wkspace[i].n      =     n;
     wkspace[i].dt     =    dt;
     wkspace[i].p      =  load;
-    wkspace[i].conf   = &CONF;
+    wkspace[i].conf   =  conf;
     wkspace[i].stride = n_periods/n_threads;
 
     wkspace[i].t_min  = t_min;
@@ -127,6 +143,7 @@ sdof_spectrum(const double* load, const int n, const double dt,
   return 0;
 }
 
+#ifndef NO_MAIN
 int main(int argc, char const *argv[]) {
   FILE* f = fopen("data/elCentro.txt", "r");
 
@@ -144,7 +161,7 @@ int main(int argc, char const *argv[]) {
   struct sdof_peaks *response =(struct sdof_peaks *)
                                calloc(sizeof(struct sdof_peaks),WORK_SIZE);
 
-  sdof_spectrum(load, n, dt, t_min, t_max, WORK_SIZE, damp, n_threads, response);
+  sdof_spectrum(&CONF, load, n, dt, t_min, t_max, WORK_SIZE, damp, n_threads, response);
   
   for (int i=0; i< WORK_SIZE; i++) {
     double period = t_min + (t_max - t_min)/((double)WORK_SIZE)*((double)i);
@@ -153,4 +170,5 @@ int main(int argc, char const *argv[]) {
 
   free(response);
 }
+#endif
 

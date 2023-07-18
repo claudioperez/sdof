@@ -7,5 +7,10 @@ setup(
             sources=["src/fsdof.c"],
             export_symbols=[]
         ),
+        Extension(
+            name="sdof._tsdof",
+            sources=["src/fsdof.c", "src/tsdof.c"],
+            export_symbols=[]
+        ),
     ]
 )
