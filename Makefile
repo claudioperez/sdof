@@ -1,7 +1,7 @@
 
 src/sdof/_tsdof.so: src/tsdof.c src/fsdof.c
 	# clang -DC11THREADS -std=c11 -O3 -o thread src/tsdof.c src/fsdof.c
-	gcc -std=c11 -fPIC -O3 -DNO_MAIN -shared -o src/sdof/_tsdof.so src/tsdof.c src/fsdof.c -lpthread
+	gcc -std=c11 -fPIC -O3 -shared -o src/sdof/_tsdof.so src/tsdof.c src/fsdof.c -lpthread
 
 fsdof.js:
 	mkdir -p dist/
@@ -26,5 +26,5 @@ alpha: alpha.c
 
 thread: src/tsdof.c src/fsdof.c
 	# clang -DC11THREADS -std=c11 -O3 -o thread src/tsdof.c src/fsdof.c
-	gcc -std=c11 -O3 -o thread src/tsdof.c src/fsdof.c -lpthread
+	gcc -std=c11 -DHAVE_MAIN -O3 -o thread src/tsdof.c src/fsdof.c -lpthread
 

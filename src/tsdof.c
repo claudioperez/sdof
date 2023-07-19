@@ -162,7 +162,7 @@ sdof_spectrum(struct sdof_alpha* conf,
   return 0;
 }
 
-#ifndef NO_MAIN
+#ifdef HAVE_MAIN
 int main(int argc, char const *argv[]) {
   FILE* f = fopen("data/elCentro.txt", "r");
 
