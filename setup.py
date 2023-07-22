@@ -9,7 +9,7 @@ setup(
             export_symbols=[]
         ),
         Extension(
-            name="sdof._tsdof",
+            name="sdof._spectrum",
             sources=["src/_integrate.c", "src/_spectrum.c"] + (
                 ["src/tinycthread.c"] if os.name == "nt" else []
             ),
