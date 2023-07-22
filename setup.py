@@ -4,13 +4,13 @@ from setuptools import Extension, setup
 setup(
     ext_modules=[
         Extension(
-            name="sdof._fsdof",
-            sources=["src/fsdof.c"],
+            name="sdof._integrate",
+            sources=["src/_integrate.c"],
             export_symbols=[]
         ),
         Extension(
             name="sdof._tsdof",
-            sources=["src/fsdof.c", "src/tsdof.c"] + (
+            sources=["src/_integrate.c", "src/_spectrum.c"] + (
                 ["src/tinycthread.c"] if os.name == "nt" else []
             ),
             export_symbols=[]

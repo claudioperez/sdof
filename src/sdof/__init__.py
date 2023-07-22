@@ -11,7 +11,7 @@ else:
     import   distutils.ccompiler
     so_ext = distutils.ccompiler.new_compiler().shared_lib_extension
 
-class _sdof_peaks(ctypes.Structure):
+class sdof_peaks_t(ctypes.Structure):
     _fields_ = [
         ("max_displ",      c_double),
         ("max_veloc",      c_double),
@@ -26,40 +26,39 @@ class _sdof_config(ctypes.Structure):
         ("gamma",        c_double)
     ]
 
-libfile = str(next(pathlib.Path(__file__).parents[0].glob("_fsdof.*"+so_ext)))
+libfile = str(next(pathlib.Path(__file__).parents[0].glob("_integrate.*"+so_ext)))
 lib = ctypes.cdll.LoadLibrary(libfile)
-# conf = lib.CONF
 
-_fsdof_peaks = lib.fsdof_peaks
-_fsdof_peaks.restype = c_int
-_fsdof_peaks.argtypes = (
+_sdof_integrate_peaks = lib.sdof_integrate_peaks
+_sdof_integrate_peaks.restype = c_int
+_sdof_integrate_peaks.argtypes = (
     POINTER(_sdof_config),
     c_double,  c_double,  c_double,
     c_double, c_int, POINTER(c_double), c_double,
-    POINTER(_sdof_peaks)
+    POINTER(sdof_peaks_t)
 )
 
-_fsdof_peaks_2 = lib.fsdof_peaks_2
-_fsdof_peaks_2.restype  = c_int
-_fsdof_peaks_2.argtypes = (
+_sdof_integrate_peaks_2 = lib.sdof_integrate_peaks_2
+_sdof_integrate_peaks_2.restype  = c_int
+_sdof_integrate_peaks_2.argtypes = (
     POINTER(_sdof_config),
     c_double,  c_double,  c_double,
     c_double, c_int, POINTER(c_double), c_double,
-    POINTER(_sdof_peaks)
+    POINTER(sdof_peaks_t)
 )
 
-_fsdof_integrate = lib.fsdof_integrate
-_fsdof_integrate.restype  = c_int
-_fsdof_integrate.argtypes = (
+_sdof_integrate = lib.sdof_integrate
+_sdof_integrate.restype  = c_int
+_sdof_integrate.argtypes = (
     POINTER(_sdof_config),
     c_double,  c_double,  c_double,
     c_double, c_int, POINTER(c_double), c_double,
     ndpointer(c_double, flags="C_CONTIGUOUS")
 )
 
-_fsdof_integrate2 = lib.fsdof_integrate2
-_fsdof_integrate2.restype = c_int
-_fsdof_integrate2.argtypes = (
+_sdof_integrate_0 = lib.sdof_integrate_0
+_sdof_integrate_0.restype = c_int
+_sdof_integrate_0.argtypes = (
     POINTER(_sdof_config),
     c_double,  c_double,  c_double,
     c_double, c_int, POINTER(c_double), c_double,
@@ -74,15 +73,15 @@ try:
 except:
     libfile = str(next(pathlib.Path(__file__).parents[0].glob("_tsdof*"+so_ext)))
     lib = ctypes.cdll.LoadLibrary(libfile)
-    _fsdof_spectrum = lib.sdof_spectrum
-    _fsdof_spectrum.restype  = c_int
-    _fsdof_spectrum.argtypes = (
+    _sdof_spectrum = lib.sdof_spectrum
+    _sdof_spectrum.restype  = c_int
+    _sdof_spectrum.argtypes = (
         POINTER(_sdof_config),
         POINTER(c_double), c_int, c_double,
         c_double,  c_double,  c_int, # p_min, p_max, np
         c_double,                    # damping
         c_int,
-        POINTER(_sdof_peaks)
+        POINTER(sdof_peaks_t)
     )
 
 # except:
@@ -93,7 +92,7 @@ except:
 #   plastic
 
 
-def integrate(m,c,k,f,dt, u0=0.0, v0=0.0,
+def integrate_0(m,c,k,f,dt, u0=0.0, v0=0.0,
               out  =  None,
               alpha_m: float = 1.0,
               alpha_f: float = 1.0,
@@ -101,7 +100,6 @@ def integrate(m,c,k,f,dt, u0=0.0, v0=0.0,
               gamma  : float = 0.50
     ):
 
-    import numpy as np
     if out is None:
         output = np.empty((3,len(f)))
     else:
@@ -115,33 +113,31 @@ def integrate(m,c,k,f,dt, u0=0.0, v0=0.0,
                 gamma   = gamma
     )
 
-    _fsdof_integrate(config, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
+    _sdof_integrate_0(config, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     return output
 
-def integrate2(m,c,k,f,dt, u0=0.0, v0=0.0,
+def integrate(m,c,k,f,dt, u0=0.0, v0=0.0,
               out  =  None,
               alpha_m: float = 1.0,
               alpha_f: float = 1.0,
               beta   : float = 0.25,
               gamma  : float = 0.50
     ):
-    import numpy as np
     if out is None:
-        output = np.empty((3,len(f)))
+        output = np.empty((len(f),3))
     else:
         output = out
     output[0,:2] = u0, v0
 
     config = _sdof_config(
-                alpha_m=alpha_m,
-                alpha_f=alpha_f,
-                beta   =beta,
-                gamma  =gamma
+                alpha_m = alpha_m,
+                alpha_f = alpha_f,
+                beta    = beta,
+                gamma   = gamma
     )
 
-    _fsdof_integrate2(config, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
+    _sdof_integrate(config, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     return output.T
-
 
 
 def _spectrum_pythreads(n_threads=1):
@@ -162,9 +158,9 @@ def _spectrum_pythreads(n_threads=1):
 
 def _spectrum_cthreads(response, accel, dt, damping, periods: tuple, config: _sdof_config, n_threads=8):
     Sd, Sv, Sa = response
-    output = (_sdof_peaks * periods[2])()
+    output = (sdof_peaks_t * periods[2])()
     for i,damp in enumerate(damping):
-        _fsdof_spectrum(config, np.asarray(accel).ctypes.data_as(POINTER(c_double)), len(accel), dt,
+        _sdof_spectrum(config, np.asarray(accel).ctypes.data_as(POINTER(c_double)), len(accel), dt,
                         periods[0], periods[1], periods[2],
                         damp, n_threads, output)
 
@@ -249,7 +245,7 @@ def spectrum(accel, dt, damping, periods=None, interp=None, threads:int=None, **
 
 
 def peaks(m,c,k, f, dt):
-    response = _sdof_peaks()
-    _fsdof_peaks(CONFIG, m, c, k, 1.0, len(f), f.ctypes.data_as(POINTER(c_double)), dt, response)
+    response = sdof_peaks_t()
+    _sdof_integrate_peaks(CONFIG, m, c, k, 1.0, len(f), f.ctypes.data_as(POINTER(c_double)), dt, response)
     return response
 

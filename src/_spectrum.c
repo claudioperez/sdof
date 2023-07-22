@@ -1,12 +1,12 @@
 // Claudio Perez
-#include <stdio.h>
-// #include <unistd.h>
-#include <stdlib.h>
+#include "sdof.h"
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #if defined(_WIN32)
 #  include <Python.h>
-   PyMODINIT_FUNC PyInit__tsdof(void) {}
+   PyMODINIT_FUNC PyInit__spectrum(void) {}
 #  define EXPORT __declspec(dllexport)
 #  define C11THREADS
 
@@ -18,7 +18,6 @@
 #else // *NIXs
 #  define EXPORT
 #endif
-
 
 #ifndef M_PI
 # define M_PI (3.14159265358979323846)
@@ -39,32 +38,6 @@
 # define pthread_exit(a)         thrd_exit(a)
 # define pthread_join(a,b)       thrd_join(a,b)
 #endif
-
-#define WORK_SIZE 290
-
-// #ifndef NUM_THREADS
-// # define NUM_THREADS 8
-// #endif
-
-struct sdof_peaks {
-    double max_displ,
-           max_veloc,
-           max_accel;
-};
-
-extern struct sdof_alpha {
-  double alpha_m,
-         alpha_f,
-         beta,
-         gamma;
-} CONF;
-
-
-extern struct sdof_peaks
-fsdof_peaks_2(struct sdof_alpha* conf,
-    double M, double C, double K,
-    double scale, int n, const double *p, double dt);
-
 
 struct thread_data {
   struct sdof_peaks *response;
@@ -99,7 +72,7 @@ run_peaks(void *thread_data) {
     double K = 4.0*PI_PI*mass/(period*period);
     double C = 4.0*damp*M_PI/period;
 //  printf("%d\t%lf\t%lf\t%lf\n", i+offset, period, C, K);
-    resp[i*stride + offset] = fsdof_peaks_2(td.conf,   mass, C, K,
+    resp[i*stride + offset] = sdof_integrate_peaks_2(td.conf,   mass, C, K,
                                      scale, td.n, td.p, td.dt);
   }
 
@@ -166,6 +139,9 @@ sdof_spectrum(struct sdof_alpha* conf,
 }
 
 #ifdef HAVE_MAIN
+#define WORK_SIZE 290
+extern struct sdof_alpha CONF;
+
 static int
 read_load(FILE* file, int n, double *p)
 {

@@ -1,8 +1,7 @@
-#include <math.h>
 
 #if defined(_WIN32)
 #  include <Python.h>
-   PyMODINIT_FUNC PyInit__fsdof(void) {}
+   PyMODINIT_FUNC PyInit__integrate(void) {}
 #  define EXPORT __declspec(dllexport)
 
 #elif defined(__EMSCRIPTEN__)
@@ -14,25 +13,15 @@
 #  define EXPORT
 #endif
 
-
-struct sdof_alpha {
-  double alpha_m,
-         alpha_f,
-         beta,
-         gamma;
-} CONF = {1.0, 1.0, 0.25, 0.5};
-
-struct sdof_peaks {
-    double max_displ,
-           max_veloc,
-           max_accel;
-};
+#include "sdof.h"
+#include <math.h>
+struct sdof_alpha CONF = {1.0, 1.0, 0.25, 0.5};
 
 
-// Main integrator. Same as fsdof_integrate, but operates on transposed data.
+// Main integrator. Same as sdof_integrate_0, but operates on transposed data.
 // This is faster.
 EXPORT int
-fsdof_integrate2(struct sdof_alpha* conf,
+sdof_integrate(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, double *p, double dt,
     double *response)
@@ -98,7 +87,7 @@ fsdof_integrate2(struct sdof_alpha* conf,
 
 
 EXPORT int
-fsdof_peaks(struct sdof_alpha* conf,
+sdof_integrate_peaks(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, double *p, double dt,
     struct sdof_peaks *response)
@@ -166,9 +155,9 @@ fsdof_peaks(struct sdof_alpha* conf,
 }
 
 EXPORT struct sdof_peaks
-fsdof_peaks_2(struct sdof_alpha* conf,
+sdof_integrate_peaks_2(struct sdof_alpha* conf,
     double M, double C, double K,
-    double scale, int n, double *p, double dt)
+    double scale, int n, const double *p, double dt)
 { 
 //  conf = &CONF;
     struct sdof_peaks response = {
@@ -238,7 +227,7 @@ fsdof_peaks_2(struct sdof_alpha* conf,
 }
 
 EXPORT int
-fsdof_integrate(struct sdof_alpha* conf,
+sdof_integrate_0(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, double *p, double dt,
     double *response)
