@@ -1,11 +1,6 @@
 /*
  * Copyright (c) 2022-2023 Claudio Perez
  */
-#include "sdof.h"
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 #if defined(_WIN32)
 #  include <Python.h>
    PyMODINIT_FUNC PyInit__spectrum(void) {}
@@ -20,6 +15,11 @@
 #else /* *NIXs */
 #  define EXPORT
 #endif
+
+#include "sdof.h"
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #ifndef M_PI
 # define M_PI (3.14159265358979323846)
