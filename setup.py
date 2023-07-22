@@ -1,3 +1,4 @@
+import os
 from setuptools import Extension, setup
 
 setup(
@@ -9,7 +10,9 @@ setup(
         ),
         Extension(
             name="sdof._tsdof",
-            sources=["src/fsdof.c", "src/tsdof.c"],
+            sources=["src/fsdof.c", "src/tsdof.c"] + (
+                ["src/tinycthread.c"] if os.name == "nt" else []
+            ),
             export_symbols=[]
         ),
     ]

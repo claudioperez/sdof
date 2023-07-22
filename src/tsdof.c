@@ -8,6 +8,7 @@
 #  include <Python.h>
    PyMODINIT_FUNC PyInit__tsdof(void) {}
 #  define EXPORT __declspec(dllexport)
+#  define C11THREADS
 
 #elif defined(__EMSCRIPTEN__)
 #  include <stdlib.h>
@@ -25,10 +26,14 @@
 // Pre-define 2*pi
 #define PI_PI (9.869604401089358)
 
-#ifndef C11THREADS
+#if !defined(C11THREADS)
 # include <pthread.h>
 #else
-#include <threads.h>
+ #ifdef _WIN32
+   #include "tinycthread.h"
+ #else
+   #include <threads.h>
+ #endif
 # define pthread_create(a,b,c,d) thrd_create(a, c, d)
 # define pthread_t               thrd_t
 # define pthread_exit(a)         thrd_exit(a)
@@ -60,13 +65,6 @@ fsdof_peaks_2(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, const double *p, double dt);
 
-static int
-read_load(FILE* file, int n, double *p)
-{
-  int i = 0;
-  while ((fscanf(file, "%lf", p) != EOF) && (++i < n)) p++;
-  return i;
-}
 
 struct thread_data {
   struct sdof_peaks *response;
@@ -118,8 +116,10 @@ sdof_spectrum(struct sdof_alpha* conf,
               int n_threads,
               struct sdof_peaks *response)
 {
-  pthread_t threads[n_threads];
-  struct thread_data wkspace[n_threads];
+//pthread_t threads[n_threads];
+//struct thread_data wkspace[n_threads];
+  pthread_t *threads = malloc(sizeof(pthread_t)*n_threads);
+  struct thread_data *wkspace = malloc(sizeof(struct thread_data)*n_threads);
 
   double slope = (t_max - t_min)/((double)n_periods);
 
@@ -159,10 +159,20 @@ sdof_spectrum(struct sdof_alpha* conf,
   for(int i = 0; i < n_threads; i++)
     pthread_join(threads[i], NULL);
 
+  free(threads);
+  free(wkspace);
+
   return 0;
 }
 
 #ifdef HAVE_MAIN
+static int
+read_load(FILE* file, int n, double *p)
+{
+  int i = 0;
+  while ((fscanf(file, "%lf", p) != EOF) && (++i < n)) p++;
+  return i;
+}
 int main(int argc, char const *argv[]) {
   FILE* f = fopen("data/elCentro.txt", "r");
 
