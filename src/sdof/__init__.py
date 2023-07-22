@@ -68,9 +68,8 @@ _sdof_integrate_0.argtypes = (
 CONFIG = _sdof_config()
 # conf = lib.CONF
 
+
 try:
-    "a" + 3
-except:
     libfile = str(next(pathlib.Path(__file__).parents[0].glob("_tsdof*"+so_ext)))
     lib = ctypes.cdll.LoadLibrary(libfile)
     _sdof_spectrum = lib.sdof_spectrum
@@ -84,12 +83,9 @@ except:
         POINTER(sdof_peaks_t)
     )
 
-# except:
-#     import warnings
-#     warnings.warn("Failed to load threaded library")
-
-#   elastic_sdof()
-#   plastic
+except:
+    import warnings
+    warnings.warn("Failed to load threaded library")
 
 
 def integrate_0(m,c,k,f,dt, u0=0.0, v0=0.0,
