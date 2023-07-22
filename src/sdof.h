@@ -17,8 +17,7 @@ struct sdof_peaks {
            max_accel;
 };
 
-EXTERN
-struct sdof_peaks
+EXPORT struct sdof_peaks
 sdof_integrate_peaks_2(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, const double *p, double dt);
