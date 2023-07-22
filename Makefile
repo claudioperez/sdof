@@ -5,9 +5,9 @@ src/sdof/_tsdof.so: src/tsdof.c src/fsdof.c
 
 fsdof.js:
 	mkdir -p dist/
-	emcc src/fsdof.c -O3 -lm -o wasm/fsdof.js \
+	emcc src/_integrate.c -O3 -lm -o wasm/fsdof.js \
 		-s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -s SINGLE_FILE=1 \
-		-s EXPORTED_FUNCTIONS="['_fsdof_integrate2','_malloc','_free']" \
+		-s EXPORTED_FUNCTIONS="['_sdof_integrate','_malloc','_free']" \
 		-sINCOMING_MODULE_JS_API="['onRuntimeInitialized']" \
 		-s EXPORTED_RUNTIME_METHODS="['cwrap','getValue','setValue']" 
 
@@ -16,15 +16,11 @@ pypa:
 
 
 _fsdof.so:
-	 cc -std=c99 -pedantic -Wall -Wextra -shared -O3 src/fsdof.c -o _fsdof.so  -fPIC -lm \
+	 cc -std=c99 -pedantic -Wall -Wextra -shared -O3 src/_integrate.c -o _fsdof.so  -fPIC -lm \
 	    -fno-math-errno -fno-signaling-nans -fno-trapping-math \
 	    -fassociative-math -ffast-math
 
-
-alpha: alpha.c
-	$(CC) $< -lm -o $@
-
-thread: src/tsdof.c src/fsdof.c
+thread: src/_spectrum.c src/_integrate.c
 	# clang -DC11THREADS -std=c11 -O3 -o thread src/tsdof.c src/fsdof.c
-	gcc -std=c11 -DHAVE_MAIN -O3 -o thread src/tsdof.c src/fsdof.c -lpthread
+	gcc -std=c11 -DHAVE_MAIN -O3 -o thread src/_spectrum.c src/_integrate.c -lpthread
 
