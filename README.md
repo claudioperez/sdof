@@ -49,7 +49,7 @@ u_max, v_max, a_max =  peaks(m, c, k, f, dt)
 
 u, v, a = integrate(m, c, k, f, dt)
 
-D, V, A =  spectrum(f, dt, damping=[0.02, 0.05], periods=(0.02, 3.0, 100))
+D, V, A = spectrum(f, dt, damping=[0.02, 0.05], periods=(0.02, 3.0, 100))
 ```
 
 ## Integrator (Adapted from OpenSees docs)
