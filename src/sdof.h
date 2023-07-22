@@ -1,5 +1,6 @@
-// Claudio Perez
-//
+/*
+ * Copyright (c) 2022-2023 Claudio Perez
+ */
 #ifndef SDOF_H
 #define SDOF_H
 

@@ -1,4 +1,6 @@
-// Claudio Perez
+/*
+ * Copyright (c) 2022-2023 Claudio Perez
+ */
 #include "sdof.h"
 #include <math.h>
 #include <stdio.h>
@@ -15,14 +17,14 @@
 #  include <emscripten.h>
 #  define EXPORT EMSCRIPTEN_KEEPALIVE
 
-#else // *NIXs
+#else /* *NIXs */
 #  define EXPORT
 #endif
 
 #ifndef M_PI
 # define M_PI (3.14159265358979323846)
 #endif
-// Pre-define 2*pi
+/* Pre-define 2*pi */
 #define PI_PI (9.869604401089358)
 
 #if !defined(C11THREADS)
@@ -71,7 +73,6 @@ run_peaks(void *thread_data) {
     double period = td.t_min + td.t_slp*((double)(i*stride+offset));
     double K = 4.0*PI_PI*mass/(period*period);
     double C = 4.0*damp*M_PI/period;
-//  printf("%d\t%lf\t%lf\t%lf\n", i+offset, period, C, K);
     resp[i*stride + offset] = sdof_integrate_peaks_2(td.conf,   mass, C, K,
                                      scale, td.n, td.p, td.dt);
   }
@@ -89,6 +90,7 @@ sdof_spectrum(struct sdof_alpha* conf,
               int n_threads,
               struct sdof_peaks *response)
 {
+
 //pthread_t threads[n_threads];
 //struct thread_data wkspace[n_threads];
   pthread_t *threads = malloc(sizeof(pthread_t)*n_threads);

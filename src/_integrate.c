@@ -1,4 +1,6 @@
-
+/*
+ * Copyright (c) 2022-2023 Claudio Perez
+ */
 #if defined(_WIN32)
 #  include <Python.h>
    PyMODINIT_FUNC PyInit__integrate(void) {}
@@ -18,15 +20,16 @@
 struct sdof_alpha CONF = {1.0, 1.0, 0.25, 0.5};
 
 
-// Main integrator. Same as sdof_integrate_0, but operates on transposed data.
-// This is faster.
+/* 
+ * Main integrator. Same as sdof_integrate_0, but operates on transposed data.
+ * This is better with the cache and faster.
+ */
 EXPORT int
 sdof_integrate(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, double *p, double dt,
     double *response)
 { 
-//  conf = &CONF;
     const double gamma   = conf->gamma;
     const double beta    = conf->beta;
     const double alpha_m = conf->alpha_m;
@@ -181,7 +184,6 @@ sdof_integrate_peaks_2(struct sdof_alpha* conf,
 
     const double ki = alpha_f*c1*K + alpha_f*c2*C + alpha_m*c3*M;
 
-    // double time   = 0.0;
     double       va,   aa,
            u[2], v[2], a[2];
 
@@ -250,7 +252,6 @@ sdof_integrate_0(struct sdof_alpha* conf,
 
     const double ki = alpha_f*c1*K + alpha_f*c2*C + alpha_m*c3*M;
 
-    // double time   = 0.0;
     double  va,
             aa,
             *u = &response[0],
@@ -268,8 +269,6 @@ sdof_integrate_0(struct sdof_alpha* conf,
 
     for (i = 1; i < n; i++) {
       ++u; ++v; ++a;
-//    ++past;
-//    ++pres;
 
       u[pres] = u[past];
       v[pres] = a1*v[past] + a2*a[past];
