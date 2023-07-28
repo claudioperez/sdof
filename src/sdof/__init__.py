@@ -70,7 +70,7 @@ CONFIG = _sdof_config()
 
 
 try:
-    libfile = str(next(pathlib.Path(__file__).parents[0].glob("_tsdof*"+so_ext)))
+    libfile = str(next(pathlib.Path(__file__).parents[0].glob("_spectrum*"+so_ext)))
     lib = ctypes.cdll.LoadLibrary(libfile)
     _sdof_spectrum = lib.sdof_spectrum
     _sdof_spectrum.restype  = c_int
@@ -83,9 +83,9 @@ try:
         POINTER(sdof_peaks_t)
     )
 
-except:
+except Exception as e:
     import warnings
-    warnings.warn("Failed to load threaded library")
+    warnings.warn(f"Failed to load threaded library: {e}")
 
 
 def integrate_0(m,c,k,f,dt, u0=0.0, v0=0.0,
