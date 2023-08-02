@@ -56,6 +56,15 @@ _sdof_integrate.argtypes = (
     ndpointer(c_double, flags="C_CONTIGUOUS")
 )
 
+_sdof_integrate_unrolled = lib.sdof_integrate_unrolled
+_sdof_integrate_unrolled.restype  = c_int
+_sdof_integrate_unrolled.argtypes = (
+    POINTER(_sdof_config),
+    c_double,  c_double,  c_double,
+    c_double, c_int, POINTER(c_double), c_double,
+    ndpointer(c_double, flags="C_CONTIGUOUS")
+)
+
 _sdof_integrate_0 = lib.sdof_integrate_0
 _sdof_integrate_0.restype = c_int
 _sdof_integrate_0.argtypes = (
@@ -132,7 +141,7 @@ def integrate(m,c,k,f,dt, u0=0.0, v0=0.0,
                 gamma   = gamma
     )
 
-    _sdof_integrate(config, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
+    _sdof_integrate_unrolled(config, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     return output.T
 
 
