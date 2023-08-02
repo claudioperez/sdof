@@ -15,6 +15,7 @@
 #  define EXPORT
 #endif
 
+
 #include "sdof.h"
 #include <math.h>
 struct sdof_alpha CONF = {1.0, 1.0, 0.25, 0.5};
@@ -87,6 +88,79 @@ sdof_integrate(struct sdof_alpha* conf,
     }
     return 1;
 }
+
+
+#define PAST -3
+#define PRES  0
+#define UR_STEP(index) do {\
+      u += 3; v += 3; a += 3; \
+      u[PRES] = u[PAST]; \
+      v[PRES] = a1*v[PAST] + a2*a[PAST];      \
+      a[PRES] = a4*a[PAST] + a3*v[PAST];      \
+      va = (1.0 - alpha_f)*v[PAST] + alpha_f*v[PRES]; \
+      aa = (1.0 - alpha_m)*a[PAST] + alpha_m*a[PRES]; \
+      /* SOLVE  */ \
+      double pi = (scale*p[(index)] - C*va - M*aa - K*u[PRES]);     \
+      double du = pi / ki;      \
+      /*  UPDATE */             \
+      u[PRES] += du;            \
+      v[PRES] += c2*du;         \
+      a[PRES] += c3*du;         \
+    } while (0);
+
+EXPORT int
+sdof_integrate_unrolled(struct sdof_alpha* conf,
+    const double M, const double C, const double K,
+    double scale, const int n, double *p, double dt,
+    double *response)
+{ 
+    const double gamma   = conf->gamma;
+    const double beta    = conf->beta;
+    const double alpha_m = conf->alpha_m;
+    const double alpha_f = conf->alpha_f;
+
+    const double c1 = 1.0;
+    const double c2 = gamma/(beta*dt);
+    const double c3 = 1.0/(beta*dt*dt);
+
+    const double a1 =     (1.0 -     gamma/beta);
+    const double a2 =  dt*(1.0 - 0.5*gamma/beta);
+    const double a3 = -1.0/(beta*dt);
+    const double a4 =  1.0 - 0.5/beta;
+
+    const double ki = alpha_f*c1*K + alpha_f*c2*C + alpha_m*c3*M;
+
+    double  va,
+            aa,
+            *u = &response[0],
+            *v = &response[1],
+            *a = &response[2];
+
+    int i = 0;
+
+    // NOTE: The first row of the response array
+    // is expected to be initialized!
+    //  u[pres] = 0.0;
+    //  v[pres] = 0.0;
+    a[PRES] = (p[i] - C*v[PRES] - K*u[PRES])/M;
+
+#define UR_INCR 8
+    for (i = 1; i < n-UR_INCR; i+=UR_INCR) {
+      UR_STEP(0+i);
+      UR_STEP(1+i);
+      UR_STEP(2+i);
+      UR_STEP(3+i);
+      UR_STEP(4+i);
+      UR_STEP(5+i);
+      UR_STEP(6+i);
+      UR_STEP(7+i);
+    }
+    for (; i < n; i++)
+      UR_STEP(0+i);
+
+    return 1;
+}
+
 
 
 EXPORT int

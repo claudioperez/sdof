@@ -1,7 +1,7 @@
 
-src/sdof/_tsdof.so: src/tsdof.c src/fsdof.c
-	# clang -DC11THREADS -std=c11 -O3 -o thread src/tsdof.c src/fsdof.c
-	gcc -std=c11 -fPIC -O3 -shared -o src/sdof/_tsdof.so src/tsdof.c src/fsdof.c -lpthread
+src/sdof/_spectrum.so: src/_spectrum.c src/_integrate.c
+	# clang -DC11THREADS -std=c11 -O3 -o thread src/spectrum.c src/_integrate.c
+	gcc -std=c11 -fPIC -O3 -shared -o src/sdof/_spectrum.so src/spectrum.c src/_integrate.c -lpthread
 
 fsdof.js:
 	mkdir -p dist/
@@ -14,11 +14,14 @@ fsdof.js:
 pypa:
 	python -m build
 
-
-_fsdof.so:
-	 cc -std=c99 -pedantic -Wall -Wextra -shared -O3 src/_integrate.c -o _fsdof.so  -fPIC -lm \
+src/sdof/_integrate.%.so: src/_integrate.c Makefile
+	 cc -std=c99 -pedantic -Wall -Wextra -shared -O3 src/_integrate.c -o $@  -fPIC -lm \
 	    -fno-math-errno -fno-signaling-nans -fno-trapping-math \
 	    -fassociative-math -ffast-math
+
+# src/sdof/_integrate.%.so: src/_integrate.c Makefile
+# 	 gcc -g -fsanitize=address -std=c99 -pedantic -Wall -Wextra -shared -Og src/_integrate.c -o $@  -fPIC -lm \
+		 
 
 thread: src/_spectrum.c src/_integrate.c
 	# clang -DC11THREADS -std=c11 -O3 -o thread src/tsdof.c src/fsdof.c
