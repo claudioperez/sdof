@@ -14,8 +14,7 @@ keywords = [
   "earthquake-engineering",
 ] 
 
-[options]
-install_requires = [
+dependencies = [
   "numpy",
   "quakeio",
 ]
