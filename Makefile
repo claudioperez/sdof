@@ -27,3 +27,20 @@ thread: src/_spectrum.c src/_integrate.c
 	# clang -DC11THREADS -std=c11 -O3 -o thread src/tsdof.c src/fsdof.c
 	gcc -std=c11 -DHAVE_MAIN -O3 -o thread src/_spectrum.c src/_integrate.c -lpthread
 
+
+SPHINXOPTS    ?=
+SPHINXBUILD   ?= sphinx-build
+SOURCEDIR     = docs
+BUILDDIR      = _build
+
+# Put it first so that "make" without argument is like "make help".
+help:
+	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+.PHONY: help Makefile
+
+# Catch-all target: route all unknown targets to Sphinx using the new
+# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
+%: Makefile
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
