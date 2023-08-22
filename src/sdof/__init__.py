@@ -129,7 +129,7 @@ def integrate(m,c,k,f,dt, u0=0.0, v0=0.0,
               gamma  : float = 0.50
     ):
     """
-    Wrapper around the C function ``sdof_integrate_unrolled``.
+    This function is a wrapper around the C function ``sdof_integrate_unrolled``.
     """
     if out is None:
         output = np.empty((len(f),3))

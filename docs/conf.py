@@ -2,6 +2,7 @@
 #
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 #
+from pathlib import Path
 project = 'sdof'
 copyright = '2023, Claudio M. Perez'
 author = 'Claudio M. Perez'
@@ -20,7 +21,6 @@ version = '0.0.0'
 release = '0.0.0'
 
 # -- General configuration ---------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
     'sphinx.ext.autodoc',
@@ -37,19 +37,17 @@ root_doc = 'index'
 language = 'en'
 
 # -- Options for HTML output -------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
+html_title = project
 html_theme = "pydata_sphinx_theme"
 html_static_path = ['_static']
 html_favicon = '_static/favicon.ico'
-from pathlib import Path
 html_css_files = [
     "css/peer.css",
 ] + [
     'css/css/'+str(file.name) for file in (Path(__file__).parents[0]/"_static/css/css/").glob("*.css")
 ]
-html_additional_pages = {'index': 'numpy.html'}
-html_title = project
+html_additional_pages = {'index': 'home.html'}
 html_context = {
     'description': description,
     **globals()
@@ -57,7 +55,6 @@ html_context = {
 html_show_sourcelink = False
 html_theme_options = {
     "github_url": f"https://github.com/BRACE2/{project}",
-    "pypi_url": ""
 }
 
 autodoc_member_order = 'bysource'
