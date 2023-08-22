@@ -51,6 +51,9 @@ html_css_files = [
 html_additional_pages = {'index': 'home.html'}
 html_context = {
     'description': description,
+    'highlights': {
+        "": "Because <code>sdof</code> is implemented in standard C, linking should never be a problem."
+    },
     **globals()
 }
 html_show_sourcelink = False
