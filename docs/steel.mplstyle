@@ -1,0 +1,51 @@
+# Matplotlib style for IEEE plots
+# This style should work for most two-column journals
+
+# Set color cycle
+# Set line style as well for black and white graphs
+axes.prop_cycle : (cycler('color', ['k',  'r', 'b',  'g', '0C5DA5', '00B945', 'FF9500', 'FF2C00', '845B97', '474747']) + cycler('ls',    ['-', '--', ':', '-.',   '-',      '--',     ':', '-.',  '-', '--']))
+
+# Set default figure size
+# figure.figsize : 3.3, 2.5
+figure.dpi : 400
+
+# Font sizes
+# font.size : 8
+# font.family : serif
+# font.serif : Times
+
+
+# Set line widths
+lines.linewidth : 0.5
+lines.markersize: 1
+axes.linewidth : 0.5
+grid.linewidth : 0.5
+
+
+
+font.serif : Computer Modern
+font.family : serif
+font.weight : light
+mathtext.fontset : cm
+
+# LaTeX 
+text.usetex : True
+text.latex.preamble : \usepackage{amsmath}
+
+# Set x axis
+xtick.direction : in
+xtick.major.size : 3
+xtick.major.width : 0.5
+xtick.minor.size : 1.5
+xtick.minor.width : 0.5
+xtick.minor.visible : True
+xtick.top : True
+
+# Set y axis
+ytick.direction : in
+ytick.major.size : 3
+ytick.major.width : 0.5
+ytick.minor.size : 1.5
+ytick.minor.width : 0.5
+ytick.minor.visible : True
+ytick.right : True
