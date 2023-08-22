@@ -128,7 +128,18 @@ def integrate(m,c,k,f,dt, u0=0.0, v0=0.0,
               beta   : float = 0.25,
               gamma  : float = 0.50
     ):
-    """
+    r"""
+    This function integrates scalar differential equations of the form
+
+    .. math::
+
+       m \ddot{u} + c \dot{u} + k u = f(t)
+
+    for constant coefficients :math:`m`, :math:`c` and :math:`k`.
+    Integration is carried out using a Generalized - :math:`\alpha`
+    integrator that is implemented under the hood in highly optimized
+    multi-threaded C code.
+
     This function is a wrapper around the C function ``sdof_integrate_unrolled``.
     """
     if out is None:
