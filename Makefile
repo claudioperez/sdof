@@ -1,7 +1,9 @@
 
-src/sdof/_spectrum.so: src/_spectrum.c src/_integrate.c
+src/sdof/_spectrum.so: src/_spectrum.c src/_integrate.c Makefile
 	# clang -DC11THREADS -std=c11 -O3 -o thread src/spectrum.c src/_integrate.c
-	gcc -std=c11 -fPIC -O3 -shared -o src/sdof/_spectrum.so src/spectrum.c src/_integrate.c -lpthread
+	gcc -std=c99 -fPIC -O3 -Wall -Wextra -pedantic \
+	    -shared -o src/sdof/_spectrum.so \
+	    src/_spectrum.c src/_integrate.c -lpthread
 
 fsdof.js:
 	mkdir -p dist/
