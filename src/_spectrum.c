@@ -29,24 +29,26 @@
 #include <math.h>
 
 #if defined(_WIN32)
+#  define C11THREADS
+   // Python header is only required if compiling
+   // into a dynamic library that will be loaded by
+   // Python on Windows. All we really need is the
+   // declaration of PyMODINIT_FUNC.
+   //
+   // Apart from the next two lines, this library has
+   // no connection to Python.
 #  include <Python.h>
    PyMODINIT_FUNC PyInit__spectrum(void) {}
-#  define EXPORT __declspec(dllexport)
-#  define C11THREADS
 
 #elif defined(__EMSCRIPTEN__)
 #  include <stdlib.h>
-#  include <emscripten.h>
-#  define EXPORT EMSCRIPTEN_KEEPALIVE
-
-#else /* *NIXs */
-#  define EXPORT
 #endif
 
 #ifndef M_PI
 # define M_PI (3.14159265358979323846)
 #endif
-/* Pre-define 2*pi */
+
+// Pre-compute 2*pi
 #define PI_PI (9.869604401089358)
 
 #if !defined(C11THREADS)
@@ -58,13 +60,15 @@
  #else
    #include <threads.h>
  #endif
+
+  // Translate some pthread functions to C11's thrd API
 # define pthread_create(a,b,c,d) thrd_create(a, c, d)
 # define pthread_t               thrd_t
 # define pthread_exit(a)         thrd_exit(a)
 # define pthread_join(a,b)       thrd_join(a,b)
 #endif
 
-struct thread_data {
+struct sdof_thread {
   struct sdof_peaks *response;
   int thread_index;
   double t_slp,
@@ -81,8 +85,8 @@ struct thread_data {
 };
 
 static void *
-run_peaks(void *thread_data) {
-  struct thread_data td = *((struct thread_data*) thread_data);
+run_peaks(void *sdof_thread) {
+  struct sdof_thread td = *((struct sdof_thread*) sdof_thread);
   struct sdof_peaks *const resp = td.response;
   const int i = td.thread_index;
   const int stride   = td.stride;
@@ -106,7 +110,7 @@ run_peaks(void *thread_data) {
 
 // Threaded response spectrum
 //
-EXPORT int
+SDOF_EXPORT int
 sdof_spectrum(struct sdof_alpha* conf,
               const double* load, const int n, const double dt, 
               const double t_min, const double t_max, const int n_periods,
@@ -115,7 +119,7 @@ sdof_spectrum(struct sdof_alpha* conf,
               struct sdof_peaks *response)
 {
   pthread_t *threads = malloc(sizeof(pthread_t)*n_threads);
-  struct thread_data *wkspace = malloc(sizeof(struct thread_data)*n_threads);
+  struct sdof_thread *wkspace = malloc(sizeof(struct sdof_thread)*n_threads);
 
   double slope = (t_max - t_min)/((double)n_periods);
 

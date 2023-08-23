@@ -1,5 +1,3 @@
-import numpy as np
-from sdof import spectrum
 """
 # Response Spectrum
 elceltro | sdof $dt
@@ -11,6 +9,9 @@ sdof input.txt $dt $damp $period
 
 # Response History
 """
+
+import numpy as np
+from sdof import spectrum
 
 def parse_args(args):
     options = {
@@ -67,5 +68,4 @@ if __name__ == "__main__":
 
 
     np.savetxt(sys.stdout.buffer, output)
-
 

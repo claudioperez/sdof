@@ -28,21 +28,14 @@
 #include "sdof.h"
 #include <math.h>
 
+
 #if defined(_WIN32)
-   // Python headers are only required if compiling
+   // Python header is only required if compiling
    // into a dynamic library that will be loaded by
-   // Python on Windows
+   // Python on Windows. All we really need is the
+   // declaration of PyMODINIT_FUNC
 #  include <Python.h>
    PyMODINIT_FUNC PyInit__integrate(void) {}
-#  define EXPORT __declspec(dllexport)
-
-#elif defined(__EMSCRIPTEN__)
-#  include <stdlib.h>
-#  include <emscripten.h>
-#  define EXPORT EMSCRIPTEN_KEEPALIVE
-
-#else // *NIXs
-#  define EXPORT
 #endif
 
 // Default parameters
@@ -51,7 +44,8 @@ struct sdof_alpha CONF = {1.0, 1.0, 0.25, 0.5};
 
 // Main linear integrator. Same as sdof_integrate_0, but operates on transposed
 // data. This is better with the cache and faster.
-EXPORT int
+//
+SDOF_EXPORT int
 sdof_integrate(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, double *p, double dt,
@@ -136,7 +130,7 @@ sdof_integrate(struct sdof_alpha* conf,
       a[PRES] += c3*du;         \
     } while (0);
 
-EXPORT int
+SDOF_EXPORT int
 sdof_integrate_unrolled(struct sdof_alpha* conf,
     const double M, const double C, const double K,
     double scale, const int n, double *p, double dt,
@@ -191,7 +185,7 @@ sdof_integrate_unrolled(struct sdof_alpha* conf,
 
 
 // Integrate a linear system, tracking only peak values.
-EXPORT int
+SDOF_EXPORT int
 sdof_integrate_peaks(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, double *p, double dt,
@@ -260,8 +254,9 @@ sdof_integrate_peaks(struct sdof_alpha* conf,
 
 // Alternative implementation to return an
 // sdof_peaks struct by value. This is
-// used in threading.
-EXPORT struct sdof_peaks
+// used in _spectrum.c .
+//
+SDOF_EXPORT struct sdof_peaks
 sdof_integrate_peaks_2(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, const double *p, double dt)
@@ -334,8 +329,9 @@ sdof_integrate_peaks_2(struct sdof_alpha* conf,
 // RETAINED FOR EDUCATIONAL PURPOSES ONLY
 // This implementation uses a slightly different memory layout
 // than sdof_integrate. As expected, this implementation is not
-// as cache friendly, and is generally inferior
-EXPORT int
+// as cache friendly, and is generally inferior.
+//
+SDOF_EXPORT int
 sdof_integrate_0(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, double *p, double dt,

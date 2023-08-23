@@ -28,6 +28,19 @@
 #ifndef SDOF_H
 #define SDOF_H
 
+#if defined(_WIN32)
+#  define SDOF_EXPORT __declspec(dllexport)
+
+#elif defined(__EMSCRIPTEN__)
+#  include <stdlib.h>
+#  include <emscripten.h>
+#  define SDOF_EXPORT EMSCRIPTEN_KEEPALIVE
+
+#else // *NIXs
+#  define SDOF_EXPORT
+#endif
+
+
 // Parameters for the generalized alpha method.
 struct sdof_alpha {
   double alpha_m,
@@ -42,7 +55,7 @@ struct sdof_peaks {
            max_accel;
 };
 
-EXPORT struct sdof_peaks
+SDOF_EXPORT struct sdof_peaks
 sdof_integrate_peaks_2(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, const double *p, double dt);

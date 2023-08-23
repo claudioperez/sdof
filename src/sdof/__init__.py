@@ -1,3 +1,29 @@
+#
+# BSD 2-Clause License
+#
+# Copyright (c) 2022-2023, Claudio M. Perez
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice, this
+#    list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+#    this list of conditions and the following disclaimer in the documentation
+#    and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
 import os
 import pathlib
 import ctypes
@@ -5,8 +31,9 @@ from ctypes import c_double, c_int, c_bool, CFUNCTYPE, POINTER
 import numpy as np
 from numpy.ctypeslib import ndpointer
 
-if os.name == 'nt':
+if os.name == "nt":
     so_ext = ".pyd"
+
 else:
     import   distutils.ccompiler
     so_ext = distutils.ccompiler.new_compiler().shared_lib_extension
@@ -26,6 +53,7 @@ class _sdof_config(ctypes.Structure):
         ("gamma",        c_double)
     ]
 
+# TODO
 libfile = str(next(pathlib.Path(__file__).parents[0].glob("_integrate.*"+so_ext)))
 lib = ctypes.cdll.LoadLibrary(libfile)
 
@@ -75,10 +103,12 @@ _sdof_integrate_0.argtypes = (
 )
 
 CONFIG = _sdof_config()
-# conf = lib.CONF
 
 
 try:
+    # Try importing the threaded _spectrum library
+
+    # TODO
     libfile = str(next(pathlib.Path(__file__).parents[0].glob("_spectrum*"+so_ext)))
     lib = ctypes.cdll.LoadLibrary(libfile)
     _sdof_spectrum = lib.sdof_spectrum
@@ -94,7 +124,7 @@ try:
 
 except Exception as e:
     import warnings
-    warnings.warn(f"Failed to load threaded library: {e}")
+    warnings.warn(f"Failed to load native library: {e}")
 
 
 def integrate_0(m,c,k,f,dt, u0=0.0, v0=0.0,
@@ -109,6 +139,7 @@ def integrate_0(m,c,k,f,dt, u0=0.0, v0=0.0,
         output = np.empty((3,len(f)))
     else:
         output = out
+
     output[:2,0] = u0, v0
 
     config = _sdof_config(
@@ -146,6 +177,8 @@ def integrate(m,c,k,f,dt, u0=0.0, v0=0.0,
         output = np.empty((len(f),3))
     else:
         output = out
+
+    # Store initial velocity and displacement
     output[0,:2] = u0, v0
 
     config = _sdof_config(
@@ -155,9 +188,24 @@ def integrate(m,c,k,f,dt, u0=0.0, v0=0.0,
                 gamma   = gamma
     )
 
-    _sdof_integrate_unrolled(config, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
+    _sdof_integrate_unrolled(config, m, c, k, 1.0, len(f),
+                             np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     return output.T
 
+
+
+def _spectrum_cthreads(response, accel, dt, damping, periods: tuple, config: _sdof_config, n_threads=8):
+    Sd, Sv, Sa = response
+    output = (sdof_peaks_t * periods[2])()
+    for i,damp in enumerate(damping):
+        _sdof_spectrum(config, np.asarray(accel).ctypes.data_as(POINTER(c_double)), len(accel), dt,
+                        periods[0], periods[1], periods[2],
+                        damp, n_threads, output)
+
+        for j in range(periods[2]):
+            Sd[i,j] = output[j].max_displ
+            Sv[i,j] = output[j].max_veloc
+            Sa[i,j] = output[j].max_accel
 
 def _spectrum_pythreads(n_threads=1):
     import threading
@@ -175,27 +223,14 @@ def _spectrum_pythreads(n_threads=1):
     for thread in threads:
         thread.join()
 
-def _spectrum_cthreads(response, accel, dt, damping, periods: tuple, config: _sdof_config, n_threads=8):
-    Sd, Sv, Sa = response
-    output = (sdof_peaks_t * periods[2])()
-    for i,damp in enumerate(damping):
-        _sdof_spectrum(config, np.asarray(accel).ctypes.data_as(POINTER(c_double)), len(accel), dt,
-                        periods[0], periods[1], periods[2],
-                        damp, n_threads, output)
-
-        for j in range(periods[2]):
-            Sd[i,j] = output[j].max_displ
-            Sv[i,j] = output[j].max_veloc
-            Sa[i,j] = output[j].max_accel
-
 
 def spectrum(accel, dt, damping, periods=None, interp=None, threads:int=None, **kwds):
 
-    if interp is None:
-        from scipy.interpolate import interp1d as interp
+    # Setup default parameters
 
     if isinstance(damping, float):
         damping = [damping]
+
     if periods is None:
         periods = np.linspace(0.02, 3.0, 200)
     elif isinstance(periods, tuple):
@@ -203,12 +238,17 @@ def spectrum(accel, dt, damping, periods=None, interp=None, threads:int=None, **
     elif isinstance(periods, list):
         periods = np.array(periods)
 
+    if interp is None:
+        from scipy.interpolate import interp1d as interp
+
     config = _sdof_config(
                 alpha_m = kwds.get("alpha_m", 1.00),
                 alpha_f = kwds.get("alpha_f", 1.00),
                 beta    = kwds.get("beta",    0.25),
                 gamma   = kwds.get("gamma",   0.50)
     )
+
+    # Initialize some memory
 
     Sd, Sv, Sa = np.zeros((3,1+len(damping), len(periods)))
     Sd[0,:] = periods[:]
@@ -229,7 +269,6 @@ def spectrum(accel, dt, damping, periods=None, interp=None, threads:int=None, **
     t_max   = max(t)
 
     u0, v0 = 0.0, 0.0
-
 
     for i,dmp in enumerate(damping):
         for j,period in enumerate(periods):
@@ -262,9 +301,15 @@ def spectrum(accel, dt, damping, periods=None, interp=None, threads:int=None, **
     return Sd,Sv,Sa
 
 
-
 def peaks(m,c,k, f, dt):
     response = sdof_peaks_t()
-    _sdof_integrate_peaks(CONFIG, m, c, k, 1.0, len(f), f.ctypes.data_as(POINTER(c_double)), dt, response)
+    config = _sdof_config(
+                alpha_m = kwds.get("alpha_m", 1.00),
+                alpha_f = kwds.get("alpha_f", 1.00),
+                beta    = kwds.get("beta",    0.25),
+                gamma   = kwds.get("gamma",   0.50)
+    )
+    _sdof_integrate_peaks(config, m, c, k, 1.0, len(f),
+                          f.ctypes.data_as(POINTER(c_double)), dt, response)
     return response
 
