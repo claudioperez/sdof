@@ -27,6 +27,7 @@
  */
 #include "sdof.h"
 #include <math.h>
+#include <stdlib.h>
 
 #if defined(_WIN32)
 #  define C11THREADS
@@ -39,9 +40,6 @@
    // no connection to Python.
 #  include <Python.h>
    PyMODINIT_FUNC PyInit__spectrum(void) {}
-
-#elif defined(__EMSCRIPTEN__)
-#  include <stdlib.h>
 #endif
 
 #ifndef M_PI
