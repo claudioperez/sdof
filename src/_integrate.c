@@ -64,8 +64,10 @@ sdof_integrate(struct sdof_alpha* conf,
     a[pres] = (p[i] - C*v[pres] - K*u[pres])/M;
 
     for (i = 1; i < n; i++) {
+      // Move current state pointers forward
       u += 3; v += 3; a += 3;
 
+      // Predictor
       u[pres] = u[past];
       v[pres] = a1*v[past] + a2*a[past];
       a[pres] = a4*a[past] + a3*v[past];
