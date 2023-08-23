@@ -4,6 +4,7 @@
 #ifndef SDOF_H
 #define SDOF_H
 
+// Parameters for the generalized alpha method.
 struct sdof_alpha {
   double alpha_m,
          alpha_f,

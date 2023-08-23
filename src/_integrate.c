@@ -1,7 +1,14 @@
 /*
  * Copyright (c) 2022-2023 Claudio Perez
  */
+
+#include "sdof.h"
+#include <math.h>
+
 #if defined(_WIN32)
+   // Python headers are only required if compiling
+   // into a dynamic library that will be loaded by
+   // Python on Windows
 #  include <Python.h>
    PyMODINIT_FUNC PyInit__integrate(void) {}
 #  define EXPORT __declspec(dllexport)
@@ -15,16 +22,12 @@
 #  define EXPORT
 #endif
 
-
-#include "sdof.h"
-#include <math.h>
+// Default parameters
 struct sdof_alpha CONF = {1.0, 1.0, 0.25, 0.5};
 
 
-/* 
- * Main integrator. Same as sdof_integrate_0, but operates on transposed data.
- * This is better with the cache and faster.
- */
+// Main linear integrator. Same as sdof_integrate_0, but operates on transposed
+// data. This is better with the cache and faster.
 EXPORT int
 sdof_integrate(struct sdof_alpha* conf,
     double M, double C, double K,
@@ -164,14 +167,13 @@ sdof_integrate_unrolled(struct sdof_alpha* conf,
 }
 
 
-
+// Integrate a linear system, tracking only peak values.
 EXPORT int
 sdof_integrate_peaks(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, double *p, double dt,
     struct sdof_peaks *response)
 { 
-//  conf = &CONF;
     const double gamma   = conf->gamma;
     const double beta    = conf->beta;
     const double alpha_m = conf->alpha_m;
@@ -233,12 +235,14 @@ sdof_integrate_peaks(struct sdof_alpha* conf,
     return 1;
 }
 
+// Alternative implementation to return an
+// sdof_peaks struct by value. This is
+// used in threading.
 EXPORT struct sdof_peaks
 sdof_integrate_peaks_2(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, const double *p, double dt)
 { 
-//  conf = &CONF;
     struct sdof_peaks response = {
               .max_displ      = 0.0,
               .max_veloc      = 0.0,
@@ -304,14 +308,16 @@ sdof_integrate_peaks_2(struct sdof_alpha* conf,
     return response;
 }
 
+// RETAINED FOR EDUCATIONAL PURPOSES ONLY
+// This implementation uses a slightly different memory layout
+// than sdof_integrate. As expected, this implementation is not
+// as cache friendly, and is generally inferior
 EXPORT int
 sdof_integrate_0(struct sdof_alpha* conf,
     double M, double C, double K,
     double scale, int n, double *p, double dt,
     double *response)
-{ 
-
-//  conf = &CONF;
+{
     const double gamma   = conf->gamma;
     const double beta    = conf->beta;
     const double alpha_m = conf->alpha_m;
@@ -344,6 +350,7 @@ sdof_integrate_0(struct sdof_alpha* conf,
     a[pres] = (p[i] - C*v[pres] - K*u[pres])/M;
 
     for (i = 1; i < n; i++) {
+      // Move current state pointers forward
       ++u; ++v; ++a;
 
       u[pres] = u[past];

@@ -1,6 +1,9 @@
 /*
  * Copyright (c) 2022-2023 Claudio Perez
  */
+#include "sdof.h"
+#include <math.h>
+
 #if defined(_WIN32)
 #  include <Python.h>
    PyMODINIT_FUNC PyInit__spectrum(void) {}
@@ -16,11 +19,6 @@
 #  define EXPORT
 #endif
 
-#include "sdof.h"
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 #ifndef M_PI
 # define M_PI (3.14159265358979323846)
 #endif
@@ -31,6 +29,7 @@
 # include <pthread.h>
 #else
  #ifdef _WIN32
+   // MSVC does not implement C11 threads
    #include "tinycthread.h"
  #else
    #include <threads.h>
@@ -54,7 +53,7 @@ struct thread_data {
   double damp;
   int n; 
   const double *p;
-  double dt; 
+  double dt;
 };
 
 static void *
@@ -142,6 +141,7 @@ sdof_spectrum(struct sdof_alpha* conf,
 
 #ifdef HAVE_MAIN
 #define WORK_SIZE 290
+#include <stdio.h>
 extern struct sdof_alpha CONF;
 
 static int
