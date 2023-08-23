@@ -1,5 +1,29 @@
 /*
- * Copyright (c) 2022-2023 Claudio Perez
+ * BSD 2-Clause License
+ *
+ * Copyright (c) 2022-2023, Claudio M. Perez
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
  */
 #include "sdof.h"
 #include <math.h>
@@ -80,7 +104,8 @@ run_peaks(void *thread_data) {
   return NULL;
 }
 
-
+// Threaded response spectrum
+//
 EXPORT int
 sdof_spectrum(struct sdof_alpha* conf,
               const double* load, const int n, const double dt, 
@@ -89,9 +114,6 @@ sdof_spectrum(struct sdof_alpha* conf,
               int n_threads,
               struct sdof_peaks *response)
 {
-
-//pthread_t threads[n_threads];
-//struct thread_data wkspace[n_threads];
   pthread_t *threads = malloc(sizeof(pthread_t)*n_threads);
   struct thread_data *wkspace = malloc(sizeof(struct thread_data)*n_threads);
 
@@ -138,44 +160,3 @@ sdof_spectrum(struct sdof_alpha* conf,
 
   return 0;
 }
-
-#ifdef HAVE_MAIN
-#define WORK_SIZE 290
-#include <stdio.h>
-extern struct sdof_alpha CONF;
-
-static int
-read_load(FILE* file, int n, double *p)
-{
-  int i = 0;
-  while ((fscanf(file, "%lf", p) != EOF) && (++i < n)) p++;
-  return i;
-}
-int main(int argc, char const *argv[]) {
-  FILE* f = fopen("data/elCentro.txt", "r");
-
-  double damp  = 0.02,
-         t_min = 0.02,
-         t_max = 3.00;
-
-  double load[5000];
-  int n = 1550;
-  n = read_load(f, n, &load[0]);
-  double dt = 0.02;
-
-  const int n_threads = 8;
-
-  struct sdof_peaks *response =(struct sdof_peaks *)
-                               calloc(sizeof(struct sdof_peaks),WORK_SIZE);
-
-  sdof_spectrum(&CONF, load, n, dt, t_min, t_max, WORK_SIZE, damp, n_threads, response);
-  
-  for (int i=0; i< WORK_SIZE; i++) {
-    double period = t_min + (t_max - t_min)/((double)WORK_SIZE)*((double)i);
-    printf("%lf\t%lf\n", period, response[i].max_accel);
-  }
-
-  free(response);
-}
-#endif
-

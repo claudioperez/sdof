@@ -7,7 +7,7 @@ project = 'sdof'
 copyright = '2023, Claudio M. Perez'
 author = 'Claudio M. Perez'
 description = "Lightning-fast integration for single-degree-of-freedom systems."
-abstract = """
+abstract = r"""
 This package solves scalar differential equations of the form
 
    $$m \ddot{u} + c \dot{u} + k u = f(t)$$
@@ -27,13 +27,20 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.githubpages',
     'nbsphinx',
-    'sphinx_design'
+    'sphinx_design',
+    'myst_parser',
 ]
+myst_enable_extensions = ["dollarmath", "amsmath"]
 
 templates_path   = ['_templates']
 exclude_patterns = []
 
 source_suffix = '.rst'
+from sphinxcontrib.pandoc_markdown import MarkdownParser
+source_suffix = [source_suffix, '.md']
+source_parsers = {
+   '.md': MarkdownParser,
+}
 root_doc = 'index'
 language = 'en'
 
@@ -55,6 +62,14 @@ html_context = {
         "": "Because <code>sdof</code> is implemented in standard C, linking should never be a problem.",
         ".": "Both C11 threads and Posix threading is supported"
     },
+    "examples": [
+        {"title": "Python Basics", "link": "examples/sdof-0001/index", "image": "sdof-0001.png",
+         "description": ""},
+        {"title": "Faster Spectra", "link": "examples/sdof-0001/index", "image": "sdof-0001.png",
+         "description": ""},
+        {"title": "Live App", "link": "examples/sdof-0001/index", "image": "sdof-0001.png",
+         "description": ""},
+    ],
     **globals()
 }
 html_show_sourcelink = False
