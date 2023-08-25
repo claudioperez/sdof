@@ -1,3 +1,0 @@
-[submodule "extern/threads"]
-	path = extern/threads
-	url = https://github.com/tinycthread/tinycthread.git
