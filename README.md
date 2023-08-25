@@ -52,6 +52,9 @@ u, v, a = integrate(m, c, k, f, dt)
 D, V, A = spectrum(f, dt, damping=[0.02, 0.05], periods=(0.02, 3.0, 100))
 ```
 
+<!--
+
+
 ## Integrator (Adapted from OpenSees docs)
 
 <table>
@@ -221,7 +224,10 @@ pip install .
 
 <p>Code Developed by: <span style="color:blue">fmk</span></p>
 
+-->
+
 ## See Also
 
+- [`mdof`](https://pypi.org/project/mdof)
 - [`opensees`](https://pypi.org/project/opensees)
 
