@@ -64,3 +64,6 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.cibuildwheel.linux]
+environment = {CFLAGS="-O3 -mtune=native"}
+
