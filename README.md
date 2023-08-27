@@ -39,18 +39,19 @@ families of integration schemes.
 import numpy as np
 from sdof import integrate, peaks, spectrum
 
-m  = 1.0
-c  = 1.0
-k  = 2.0
+c  = 0.1
+T  = 1.2
 f  = np.sin(np.linspace(0, 5*np.pi, 100))
 dt = 5*np.pi/100
 
-u_max, v_max, a_max =  peaks(m, c, k, f, dt)
 
-u, v, a = integrate(m, c, k, f, dt)
+u, v, a = integrate(f, dt, T, c)
 
-D, V, A = spectrum(f, dt, damping=[0.02, 0.05], periods=(0.02, 3.0, 100))
+D, V, A = spectrum(f, dt, periods=(0.02, 3.0, 100), damping=[0.02, 0.05])
 ```
+
+<!--
+
 
 ## Integrator (Adapted from OpenSees docs)
 
@@ -221,7 +222,10 @@ pip install .
 
 <p>Code Developed by: <span style="color:blue">fmk</span></p>
 
+-->
+
 ## See Also
 
+- [`mdof`](https://pypi.org/project/mdof)
 - [`opensees`](https://pypi.org/project/opensees)
 
