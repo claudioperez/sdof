@@ -1,3 +1,5 @@
+//
+
 /*
  * BSD 2-Clause License
  *
@@ -106,8 +108,9 @@ run_peaks(void *sdof_thread) {
   return NULL;
 }
 
-// Threaded response spectrum
-//
+/**
+ * Threaded response spectrum
+ */
 SDOF_EXPORT int
 sdof_spectrum(struct sdof_alpha* conf,
               const double* load, const int n, const double dt, 

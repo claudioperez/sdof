@@ -2,10 +2,6 @@ import sdof
 import numpy as np
 
 
-print(sdof.peaks(
-        1., 1., 0.,
-        np.loadtxt("data/elCentro.txt"), 0.01
-).max_accel)
 
 f =     np.array([
          0.0000,
@@ -24,6 +20,14 @@ from pandas import DataFrame
 U = sdof.integrate(0.2533, 0.1592, 10., f, 0.10)
 print(DataFrame(U.T))
 
+
+import sys
+sys.exit()
+
+print(sdof.peaks(
+        1., 1., 0.,
+        np.loadtxt("data/elCentro.txt"), 0.01
+).max_accel)
 import matplotlib.pyplot as plt
 
 u,v,a = sdof.integrate(0.2533, 0.0, 10., np.zeros(100), 0.01, u0=1.0)

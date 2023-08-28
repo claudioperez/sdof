@@ -1,5 +1,5 @@
 // "declare" c function
-const fsdof = Module.cwrap('fsdof_integrate2', 
+const fsdof = Module.cwrap('sdof_integrate',
   'number', ['number', 
              'number', 'number', 'number',
              'number', 'number', 'array', 'number', 'number']);

@@ -320,3 +320,8 @@ $$
 $$
 
 -->
+
+## References
+
+- J. Chung, G.M.Hubert. "A Time Integration Algorithm for Structural Dynamics with Improved Numerical Dissipation: The Generalized-$\alpha$ Method" ASME Journal of Applied Mechanics, 60, 371:375, 1993.
+

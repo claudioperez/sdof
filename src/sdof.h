@@ -1,3 +1,4 @@
+//
 /*
  * BSD 2-Clause License
  *
@@ -40,6 +41,23 @@
 #  define SDOF_EXPORT
 #endif
 
+#ifdef NEW_API
+
+  /* struct peak_value */
+  /* struct  */
+  struct sdof_elasticity {
+  };
+
+  sdof_peak(int n, double* p, double dt, sdof_elasticity, struct sdof_conf*);
+  sdof_hist(int n, double* p, double dt, sdof_elasticity, struct sdof_conf*);
+  sdof_accel_hist();
+  sdof_accel_peak();
+  sdof_veloc_hist();
+  sdof_veloc_peak();
+  sdof_displ_hist();
+  sdof_displ_peak();
+
+#endif
 
 // Parameters for the generalized alpha method.
 struct sdof_alpha {
@@ -49,11 +67,21 @@ struct sdof_alpha {
          gamma;
 };
 
+/**
+ * Struct to return peak response quantities by value.
+ *
+ * Members:
+ *     max_displ: Peak displacement
+ *     max_veloc: Peak velocity
+ *     max_accel: Peak acceleration
+ *
+ */
 struct sdof_peaks {
     double max_displ,
            max_veloc,
            max_accel;
 };
+
 
 SDOF_EXPORT struct sdof_peaks
 sdof_integrate_peaks_2(struct sdof_alpha* conf,
