@@ -93,14 +93,14 @@ _sdof_integrate_unrolled.argtypes = (
     ndpointer(c_double, flags="C_CONTIGUOUS")
 )
 
-_sdof_integrate_0 = lib.sdof_integrate_0
-_sdof_integrate_0.restype = c_int
-_sdof_integrate_0.argtypes = (
-    POINTER(_sdof_config),
-    c_double,  c_double,  c_double,
-    c_double, c_int, POINTER(c_double), c_double,
-    ndpointer(c_double, flags="C_CONTIGUOUS")
-)
+# _sdof_integrate_0 = lib.sdof_integrate_0
+# _sdof_integrate_0.restype = c_int
+# _sdof_integrate_0.argtypes = (
+#     POINTER(_sdof_config),
+#     c_double,  c_double,  c_double,
+#     c_double, c_int, POINTER(c_double), c_double,
+#     ndpointer(c_double, flags="C_CONTIGUOUS")
+# )
 
 CONFIG = _sdof_config()
 

@@ -29,7 +29,14 @@ extensions = [
     'nbsphinx',
     'sphinx_design',
     'myst_parser',
+    'sphinx_c_autodoc',
+    'sphinx_c_autodoc.napoleon'
 ]
+
+import clang.cindex
+clang.cindex.Config.set_library_file('/usr/lib/libclang.so')
+c_autodoc_roots = ['../src/']
+
 myst_enable_extensions = ["dollarmath", "amsmath"]
 
 templates_path   = ['_templates']
