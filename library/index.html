@@ -46,13 +46,11 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'library/index';</script>
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="sdof Python Package" href="sdof.html" />
+    <link rel="next" title="Python Package" href="sdof.html" />
     <link rel="prev" title="sdof" href="../index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -309,7 +307,8 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="sdof.html"><code class="docutils literal notranslate"><span class="pre">sdof</span></code> Python Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sdof.html">Python Package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="capi.html">C Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="javascript.html">Javascript</a></li>
 </ul>
 </div>
@@ -369,42 +368,9 @@ document.write(`
 <h1>Library<a class="headerlink" href="#library" title="Link to this heading">#</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">sdof</span></code> library is primarily implemented in standard C, and
 interfaces are provided for both Python and Javascript.</p>
-<p>All functions accept the following parameters for the <span class="math notranslate nohighlight">\(\alpha\)</span> integrator:</p>
-<table><tbody><tr class="odd"><td><p><p>alphaM</p>
-</p></td><td><p><p><span class="math notranslate nohighlight">\(\alpha_M\)</span> factor</p>
-</p></td></tr><tr class="even"><td><p><p>alphaF</p>
-</p></td><td><p><p><span class="math notranslate nohighlight">\(\alpha_F\)</span> factor</p>
-</p></td></tr><tr class="odd"><td><p><p>gamma</p>
-</p></td><td><p><p><span class="math notranslate nohighlight">\(\gamma\)</span> factor</p>
-</p></td></tr><tr class="even"><td><p><p>beta</p>
-</p></td><td><p><p><span class="math notranslate nohighlight">\(\beta\)</span> factor</p>
-</p></td></tr></tbody></table><ol class="arabic simple">
-<li><p><span class="math notranslate nohighlight">\(\alpha_F\)</span> and <span class="math notranslate nohighlight">\(\alpha_M\)</span> are defined differently that in
-the paper, we use <span class="math notranslate nohighlight">\(\alpha_F = (1-\alpha_f)\)</span> and
-<span class="math notranslate nohighlight">\(\alpha_M=(1-\alpha_m)\)</span> where <span class="math notranslate nohighlight">\(\alpha_f\)</span> and
-<span class="math notranslate nohighlight">\(\alpha_m\)</span> are those used in the paper.</p></li>
-<li><p>Like Newmark and other implicit schemes, the unconditional stability of
-this method applies to linear problems. There are no results showing
-stability of this method over the wide range of nonlinear problems that
-potentially exist. Experience indicates that the time step for implicit
-schemes in nonlinear situations can be much greater than those for
-explicit schemes.</p></li>
-<li><p><span class="math notranslate nohighlight">\(\alpha_M = 1.0, \alpha_F = 1.0\)</span> produces the Newmark Method.</p></li>
-<li><p><span class="math notranslate nohighlight">\(\alpha_M = 1.0\)</span> corresponds to the HHT method.</p></li>
-<li><p>The method is second-order accurate provided <span class="math notranslate nohighlight">\(\gamma = \dfrac{1}{2} + \alpha_M - \alpha_F\)</span></p></li>
-<li><p>The method is unconditionally stable provided <span class="math notranslate nohighlight">\(\alpha_M \ge \alpha_F \ge \dfrac{1}{2}, \quad \beta \ge \dfrac{1}{4} +\dfrac{1}{2}(\alpha_M - \alpha_F)\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\gamma\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> are optional. The default values ensure
-the method is unconditionally stable, second order accurate and high
-frequency dissipation is maximized.</p></li>
-</ol>
-<p>The defaults are:</p>
-<ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(\gamma = \dfrac{1}{2} + \alpha_M - \alpha_F\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\beta = \dfrac{1}{4}(1 + \alpha_M - \alpha_F)^2\)</span></p></li>
-</ul>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="sdof.html"><code class="docutils literal notranslate"><span class="pre">sdof</span></code> Python Package</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="sdof.html">Python Package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="sdof.html#install">Install</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sdof.html#library">Library</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="sdof.html#sdof.integrate"><code class="docutils literal notranslate"><span class="pre">integrate()</span></code></a></li>
@@ -414,6 +380,7 @@ frequency dissipation is maximized.</p></li>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="capi.html">C Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="javascript.html">Javascript</a></li>
 </ul>
 </div>
@@ -444,7 +411,7 @@ frequency dissipation is maximized.</p></li>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">sdof</span></code> Python Package</p>
+        <p class="prev-next-title">Python Package</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
