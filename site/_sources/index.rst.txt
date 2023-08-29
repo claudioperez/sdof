@@ -48,7 +48,7 @@ Hibert-Hughes-Taylor (HHT), or Newmark families of integration schemes.
 .. grid:: 2
 
     .. grid-item-card::
-        :img-top: ../source/_static/index-images/getting_started.svg
+        :img-top: _static/index-images/getting_started.svg
 
         Getting Started
         ^^^^^^^^^^^^^^^
@@ -66,7 +66,7 @@ Hibert-Hughes-Taylor (HHT), or Newmark families of integration schemes.
             To the absolute beginner's guide
 
     .. grid-item-card::
-        :img-top: ../source/_static/index-images/user_guide.svg
+        :img-top: _static/index-images/user_guide.svg
 
         User Guide
         ^^^^^^^^^^
@@ -84,7 +84,7 @@ Hibert-Hughes-Taylor (HHT), or Newmark families of integration schemes.
             To the user guide
 
     .. grid-item-card::
-        :img-top: ../source/_static/index-images/api.svg
+        :img-top: _static/index-images/api.svg
 
         Library Reference
         ^^^^^^^^^^^^^^^^^
@@ -104,7 +104,7 @@ Hibert-Hughes-Taylor (HHT), or Newmark families of integration schemes.
             To the reference guide
 
     .. grid-item-card::
-        :img-top: ../source/_static/index-images/contributor.svg
+        :img-top: _static/index-images/contributor.svg
 
         Examples
         ^^^^^^^^
