@@ -72,9 +72,9 @@ html_context = {
     "examples": [
         {"title": "Python Basics", "link": "examples/sdof-0001/index", "image": "sdof-0001.png",
          "description": ""},
-        {"title": "Faster Spectra", "link": "examples/sdof-0001/index", "image": "sdof-0001.png",
+        {"title": "Live App", "link": "examples/sdof-0002/index", "image": "sdof-0001.png",
          "description": ""},
-        {"title": "Live App", "link": "examples/sdof-0001/index", "image": "sdof-0001.png",
+        {"title": "Spectra from C", "link": "examples/sdof-0003/index", "image": "sdof-0001.png",
          "description": ""},
     ],
     **globals()
