@@ -47,14 +47,28 @@ struct sdof_alpha CONF = {1.0, 1.0, 0.25, 0.5};
 /**
  * Main linear integrator.
  *
- * .. note:: The first row of the response array (u0 and v0)
- *     is expected to be initialized.
  *
  * Parameters:
  *     conf (struct sdof_alpha*): Struct holding integration parameters.
+ *
+ *     const double[n] load: Pointer to excitation series
+ *     const int n: size of excitation series
+ *     const double dt: Time step of excitation data.
+ *
  *     M (double): Mass.
  *     C (double): Damping.
  *     K (double): Stiffness
+ *
+ *     response (double[n][3]): Pointer to the beginning of an n x 3 array of doubles.
+ *        displacement at ``i``: ``response[i][0]``
+ *        velocity at ``i``:     ``response[i][1]``
+ *        acceleration at ``i``: ``response[i][2]``
+ *
+ * .. note:: The first row of the response array
+ *     is expected to be initialized, ie
+ *     ::
+ *         response[0][0] = u0;
+ *         response[0][1] = v0;
  */
 SDOF_EXPORT int
 sdof_integrate(struct sdof_alpha* conf,
@@ -98,7 +112,7 @@ sdof_integrate(struct sdof_alpha* conf,
       // Move current state pointers forward
       u += 3; v += 3; a += 3;
 
-      // Predictor
+      // SETUP
       u[pres] = u[past];
       v[pres] = b1*v[past] + b2*a[past];
       a[pres] = b4*a[past] + b3*v[past];

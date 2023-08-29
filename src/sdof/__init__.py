@@ -247,6 +247,9 @@ def _spectrum_pythreads(n_threads=1):
 def spectrum(accel, dt, damping, periods=None, interp=None, threads:int=None, **kwds):
     """
     This function is a wrapper around the C function :c:func:`sdof_spectrum`.
+
+    Parameters:
+        accel (list), dt (float): Excitation array and time step
     """
 
     # Setup default parameters

@@ -117,7 +117,7 @@ run_peaks(void *sdof_thread) {
  * Parameters:
  *     struct sdof_alpha* conf: .
  *
- *     const double load[n]: Pointer to excitation series
+ *     const double[n] load: Pointer to excitation series
  *     const int n: size of excitation series
  *     const double dt: Time step of excitation data.
  *
@@ -128,7 +128,6 @@ run_peaks(void *sdof_thread) {
  *     const double damp: .
  *     int n_threads: .
  *     struct sdof_peaks *response
- *
  *
  */
 SDOF_EXPORT int

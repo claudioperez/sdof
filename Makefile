@@ -13,7 +13,7 @@ fsdof.js:
 		-sINCOMING_MODULE_JS_API="['onRuntimeInitialized']" \
 		-s EXPORTED_RUNTIME_METHODS="['cwrap','getValue','setValue']"
 
-docs/_static/js/sdof.js:
+docs/_static/js/sdof.js: src/_integrate.c src/_spectrum.c
 	mkdir -p dist/
 	emcc src/_spectrum.c src/_integrate.c -O3 -pthread -lm -o $@ \
 		-s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -s SINGLE_FILE=1 \
