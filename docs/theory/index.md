@@ -158,17 +158,26 @@ Applying this to a nonlinear problem yields:
 
 $$
 \begin{aligned}
-r(\boldsymbol{x}_{n+1}) = \mathbf{M}\,  \left(\tilde{\boldsymbol{a}} + c_{ax}\,\boldsymbol{x}_{n+1}\right) 
-                        + \boldsymbol{p}\left(\tilde{\boldsymbol{d}} + c_{dx}\,\boldsymbol{x}_{n+1}, 
-                                         \tilde{\boldsymbol{v}} + c_{vx}\, \boldsymbol{x}_{n+1}\right) - \boldsymbol{f}(t_{n+1}) \\
+r(\boldsymbol{x}_{n+1})&= \mathbf{M}\,  \left(\tilde{\boldsymbol{a}} + c_{ax}\,\boldsymbol{x}_{n+1}\right)
+                        + \mathbf{C}\,  \left(\tilde{\boldsymbol{v}} + c_{vx}\,\boldsymbol{x}_{n+1}\right)
+                        + \boldsymbol{p}\left(\tilde{\boldsymbol{d}} + c_{dx}\,\boldsymbol{x}_{n+1},
+                                              \tilde{\boldsymbol{v}} + c_{vx}\,\boldsymbol{x}_{n+1}\right)
+                        - \boldsymbol{f}(t_{n+1})
 \end{aligned}
 $$
 
-
-for $r_\eta = r(\boldsymbol{x} + \eta \Delta\boldsymbol{x})$:
+Linearizing for $r_\eta = r(\boldsymbol{x}_{n+1}^i + \eta \Delta\boldsymbol{x})$ yields
 
 $$
-\left.\frac{d}{d \eta}r_\eta\right|_{\eta=0} = \left( c_d \mathbf{K}\left(\tilde{\boldsymbol{d}}+c_{d}\,\boldsymbol{x}_{n+1}\right) + c_v \mathbf{C} + c_a \mathbf{M}\right)\Delta \boldsymbol{x} = \mathbf{A} \Delta\boldsymbol{x}
+\begin{aligned}
+\mathcal{L} \, r_{\eta} &= r(\boldsymbol{x}^i_{n+1}) + \mathbf{A}\Delta \boldsymbol{x} \\
+\end{aligned}
+$$
+
+where
+
+$$
+\mathbf{A} \Delta\boldsymbol{x} = \left.\frac{d}{d \eta}r_\eta\right|_{\eta=0} = \left( c_d \mathbf{K}\left(\tilde{\boldsymbol{d}}+c_{d}\,\boldsymbol{x}_{n+1}\right) + c_v \mathbf{C} + c_a \mathbf{M}\right)\Delta \boldsymbol{x} 
 $$
 
 

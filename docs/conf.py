@@ -62,7 +62,7 @@ html_css_files = [
 ] + [
     'css/css/'+str(file.name) for file in (Path(__file__).parents[0]/"_static/css/css/").glob("*.css")
 ]
-html_additional_pages = {'index': 'home.html'}
+html_additional_pages = {'index': 'home.html', 'sdof': 'sdof.html'}
 html_context = {
     'description': description,
     'highlights': {

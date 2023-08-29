@@ -84,6 +84,15 @@ _sdof_integrate.argtypes = (
     ndpointer(c_double, flags="C_CONTIGUOUS")
 )
 
+_sdof_integrate_plastic = lib.sdof_integrate_plastic
+_sdof_integrate_plastic.restype  = c_int
+_sdof_integrate_plastic.argtypes = (
+    POINTER(_sdof_config),
+    c_double,  c_double,  c_double,
+    c_double, c_int, POINTER(c_double), c_double,
+    ndpointer(c_double, flags="C_CONTIGUOUS")
+)
+
 _sdof_integrate_unrolled = lib.sdof_integrate_unrolled
 _sdof_integrate_unrolled.restype  = c_int
 _sdof_integrate_unrolled.argtypes = (
@@ -154,6 +163,7 @@ def integrate_0(m,c,k,f,dt, u0=0.0, v0=0.0,
 
 def integrate(m,c,k,f,dt, u0=0.0, v0=0.0,
               out  =  None,
+              fy: float = None,
               alpha_m: float = 1.0,
               alpha_f: float = 1.0,
               beta   : float = 0.25,
@@ -187,9 +197,12 @@ def integrate(m,c,k,f,dt, u0=0.0, v0=0.0,
                 beta    = beta,
                 gamma   = gamma
     )
-
-    _sdof_integrate_unrolled(config, m, c, k, 1.0, len(f),
-                             np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
+    if fy is not None:
+        _sdof_integrate_plastic(config, m, c, k, 1.0, len(f),
+                                np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
+    else:
+        _sdof_integrate_unrolled(config, m, c, k, 1.0, len(f),
+                                 np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     return output.T
 
 

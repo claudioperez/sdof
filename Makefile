@@ -1,15 +1,23 @@
 
-src/sdof/_spectrum.so: src/_spectrum.c src/_integrate.c Makefile
+src/sdof/_spectrum%so: src/_spectrum.c src/_integrate.c Makefile
 	# clang -DC11THREADS -std=c11 -O3 -o thread src/spectrum.c src/_integrate.c
 	gcc -std=c99 -fPIC -O3 -Wall -Wextra -pedantic \
-	    -shared -o src/sdof/_spectrum.so \
+	    -shared -o $@ \
 	    src/_spectrum.c src/_integrate.c -lpthread
 
 fsdof.js:
 	mkdir -p dist/
-	emcc src/_integrate.c -O3 -lm -o wasm/fsdof.js \
+	emcc src/_spectrum.c src/_integrate.c -O3 -lm -o wasm/fsdof.js \
 		-s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -s SINGLE_FILE=1 \
-		-s EXPORTED_FUNCTIONS="['_sdof_integrate','_malloc','_free']" \
+		-s EXPORTED_FUNCTIONS="['_sdof_integrate','_sdof_spectrum','_malloc','_free']" \
+		-sINCOMING_MODULE_JS_API="['onRuntimeInitialized']" \
+		-s EXPORTED_RUNTIME_METHODS="['cwrap','getValue','setValue']"
+
+docs/_static/js/sdof.js:
+	mkdir -p dist/
+	emcc src/_spectrum.c src/_integrate.c -O3 -pthread -lm -o $@ \
+		-s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -s SINGLE_FILE=1 \
+		-s EXPORTED_FUNCTIONS="['_sdof_integrate','_sdof_spectrum','_malloc','_free']" \
 		-sINCOMING_MODULE_JS_API="['onRuntimeInitialized']" \
 		-s EXPORTED_RUNTIME_METHODS="['cwrap','getValue','setValue']"
 

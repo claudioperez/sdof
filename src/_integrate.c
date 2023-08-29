@@ -29,6 +29,7 @@
  */
 #include "sdof.h"
 #include <math.h>
+#include <stddef.h>
 
 #if defined(_WIN32)
    // Python header is only required if compiling
@@ -124,7 +125,13 @@ sdof_integrate(struct sdof_alpha* conf,
     return 1;
 }
 
-
+/**
+ * Elastic-perfectly plastic
+ *
+ * Parameters
+ *   Fy: Yield force
+ *    a: Kinematic hardening ratio
+ */
 SDOF_EXPORT int
 sdof_integrate_plastic(struct sdof_alpha* conf,
     double M, double C, double K,
@@ -160,12 +167,11 @@ sdof_integrate_plastic(struct sdof_alpha* conf,
 
     // Plasticity
     const int maxIter = 10;
-    double up  = 0.0,
-           up0 = 0.0,
-           tol = 1e-8,
-           Fy  = 0.002*K,
-           alpha = 0.01,
-           Hkin = alpha/(1.0 - alpha)*K;
+    double up    = 0.0,
+           tol   = 1e-12,
+           Fy    = 7.5,
+           alpha = 0.00,
+           Hkin  = K*alpha/(1.0 - alpha);
 
 
     int i     = 0;
@@ -185,27 +191,16 @@ sdof_integrate_plastic(struct sdof_alpha* conf,
       aa = (1.0 - alpha_m)*a[past] + alpha_m*a[pres];
 
       double R = scale*p[i] - (M*aa + C*va + pa);
-      double R0 = R;
+      double R0 = 1.0; //R;
       if (R0 == 0.0)
           R0 = 1.0;
 
       double du = 0.0;
-      for (int iter = 0; iter < maxIter; iter++) {
+      for (int iter = 0; iter <= maxIter; iter++) {
 
-        // SOLVE
-        double Keff = alpha_f*Kt + k0;
-
-        du = R/Keff;
-        double du = R / Keff;
-
-        // UPDATE
-        u[pres] += c1*du;
-        v[pres] += c2*du;
-        a[pres] += c3*du;
         ua += alpha_f*c1*du;
         va += alpha_f*c2*du;
         aa += alpha_m*c3*du;
-
 
         // State determination for pa, kT
         pa = K*(ua - up);
@@ -215,7 +210,7 @@ sdof_integrate_plastic(struct sdof_alpha* conf,
           Kt = K;
 
         } else {
-          double dg = ftrial/(K+Hkin);
+          double dg = ftrial/(K + Hkin);
 
           if (pa < 0) {
             pa += dg*K;
@@ -229,10 +224,18 @@ sdof_integrate_plastic(struct sdof_alpha* conf,
 
         }
 
-        R = scale*p[i] - (M*aa + C*va + pa);
+        // SOLVE
+        R  = scale*p[i] - (M*aa + C*va + pa);
+        du = R/(alpha_f*c1*Kt + k0);
+
+        // UPDATE
+        u[pres] += c1*du;
+        v[pres] += c2*du;
+        a[pres] += c3*du;
 
         if (fabs(R/R0) < tol)
           break;
+
       }
 
     }
