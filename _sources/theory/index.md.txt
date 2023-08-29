@@ -166,18 +166,18 @@ r(\boldsymbol{x}_{n+1})&= \mathbf{M}\,  \left(\tilde{\boldsymbol{a}} + c_{ax}\,\
 \end{aligned}
 $$
 
-Linearizing for $r_\eta = r(\boldsymbol{x}_{n+1}^i + \eta \Delta\boldsymbol{x})$ yields
+Linearizing for $r_\eta = r(\boldsymbol{x}_{n+1}^i + \eta \, d\boldsymbol{x})$ yields
 
 $$
 \begin{aligned}
-\mathcal{L} \, r_{\eta} &= r(\boldsymbol{x}^i_{n+1}) + \mathbf{A}\Delta \boldsymbol{x} \\
+\mathcal{L} \, r_{\eta} &= r(\boldsymbol{x}^i_{n+1}) + \mathbf{A} d \boldsymbol{x} \\
 \end{aligned}
 $$
 
 where
 
 $$
-\mathbf{A} \Delta\boldsymbol{x} = \left.\frac{d}{d \eta}r_\eta\right|_{\eta=0} = \left( c_d \mathbf{K}\left(\tilde{\boldsymbol{d}}+c_{d}\,\boldsymbol{x}_{n+1}\right) + c_v \mathbf{C} + c_a \mathbf{M}\right)\Delta \boldsymbol{x} 
+\mathbf{A} d\boldsymbol{x} = \left.\frac{d}{d \eta}r_\eta\right|_{\eta=0} = \left( c_d \mathbf{K}\left(\tilde{\boldsymbol{d}}+c_{d}\,\boldsymbol{x}_{n+1}\right) + c_v \mathbf{C} + c_a \mathbf{M}\right) d \boldsymbol{x}
 $$
 
 
