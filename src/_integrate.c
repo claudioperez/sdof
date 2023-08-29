@@ -43,7 +43,6 @@
 // Default parameters
 struct sdof_alpha CONF = {1.0, 1.0, 0.25, 0.5};
 
-
 /**
  * Main linear integrator.
  *
@@ -142,9 +141,14 @@ sdof_integrate(struct sdof_alpha* conf,
 /**
  * Elastic-perfectly plastic
  *
+ * - Simo, J.C. and Hughes, T.J.R. (2000) Computational inelasticity. Corr. 2.
+ *   print. New York Heidelberg Berlin: Springer (Interdisciplinary applied
+ *   mathematics Mechanics and materials, 7).
+ *
  * Parameters:
  *   Fy (double): Yield force
  *   a (double): Kinematic hardening ratio
+ *
  */
 SDOF_EXPORT int
 sdof_integrate_plastic(struct sdof_alpha* conf,
@@ -168,10 +172,7 @@ sdof_integrate_plastic(struct sdof_alpha* conf,
 
     const double k0 = alpha_f*c2*C + alpha_m*c3*M;
 
-    double  ua,
-            va,
-            aa,
-            pa = 0.0, // TODO: Find pa for initial u0
+    double  pa = 0.0, // TODO: Find pa for initial u0
             *u = &response[0],
             *v = &response[1],
             *a = &response[2];
@@ -197,12 +198,12 @@ sdof_integrate_plastic(struct sdof_alpha* conf,
       u += 3; v += 3; a += 3;
 
       // Predictor
-      u[pres] = u[past];
-      v[pres] = b1*v[past] + b2*a[past];
-      a[pres] = b4*a[past] + b3*v[past];
-      ua = (1.0 - alpha_f)*u[past] + alpha_f*u[pres];
-      va = (1.0 - alpha_f)*v[past] + alpha_f*v[pres];
-      aa = (1.0 - alpha_m)*a[past] + alpha_m*a[pres];
+      u[pres]   = u[past];
+      v[pres]   = b1*v[past] + b2*a[past];
+      a[pres]   = b4*a[past] + b3*v[past];
+      double ua = (1.0 - alpha_f)*u[past] + alpha_f*u[pres];
+      double va = (1.0 - alpha_f)*v[past] + alpha_f*v[pres];
+      double aa = (1.0 - alpha_m)*a[past] + alpha_m*a[pres];
 
       double R = scale*p[i] - (M*aa + C*va + pa);
       double R0 = 1.0; //R;
@@ -220,7 +221,7 @@ sdof_integrate_plastic(struct sdof_alpha* conf,
         pa = K*(ua - up);
         double ftrial = fabs(pa - Hkin*up) - Fy;
 
-        if (ftrial < 0) {
+        if (ftrial <= 0) {
           Kt = K;
 
         } else {
@@ -410,9 +411,9 @@ sdof_integrate_peaks_2(struct sdof_alpha* conf,
     double scale, int n, const double *p, double dt)
 {
     struct sdof_peaks response = {
-              .max_displ      = 0.0,
-              .max_veloc      = 0.0,
-              .max_accel      = 0.0,
+            .max_displ      = 0.0,
+            .max_veloc      = 0.0,
+            .max_accel      = 0.0,
     };
     const double gamma   = conf->gamma;
     const double beta    = conf->beta;
@@ -473,6 +474,4 @@ sdof_integrate_peaks_2(struct sdof_alpha* conf,
     }
     return response;
 }
-
-
 
