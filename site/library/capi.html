@@ -219,6 +219,10 @@ document.write(`
   
 
   
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
 </div>
 
     </nav>
@@ -371,6 +375,8 @@ document.write(`
                   
   <section id="c-library">
 <h1>C Library<a class="headerlink" href="#c-library" title="Link to this heading">#</a></h1>
+<section id="data-structures">
+<h2>Data Structures<a class="headerlink" href="#data-structures" title="Link to this heading">#</a></h2>
 <p>//</p>
 <dl class="c struct">
 <dt class="sig sig-object c" id="c.sdof_alpha">
@@ -426,6 +432,9 @@ document.write(`
 
 </dd></dl>
 
+</section>
+<section id="integration">
+<h2>Integration<a class="headerlink" href="#integration" title="Link to this heading">#</a></h2>
 <p>//</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.sdof_integrate">
@@ -463,6 +472,11 @@ is expected to be initialized, ie</p>
 <dt class="sig sig-object c" id="c.sdof_integrate_plastic">
 <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdof_integrate_plastic</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#c.sdof_alpha" title="sdof_alpha"><span class="n"><span class="pre">sdof_alpha</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">conf</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">M</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">C</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">K</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">scale</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">n</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">dt</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">response</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.sdof_integrate_plastic" title="Link to this definition">#</a><br /></dt>
 <dd><p>Elastic-perfectly plastic</p>
+<ul class="simple">
+<li><p>Simo, J.C. and Hughes, T.J.R. (2000) Computational inelasticity. Corr. 2.
+print. New York Heidelberg Berlin: Springer (Interdisciplinary applied
+mathematics Mechanics and materials, 7).</p></li>
+</ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -492,6 +506,9 @@ is expected to be initialized, ie</p>
 used in _spectrum.c .</p>
 </dd></dl>
 
+</section>
+<section id="response-spectra">
+<h2>Response Spectra<a class="headerlink" href="#response-spectra" title="Link to this heading">#</a></h2>
 <p>//</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.sdof_spectrum">
@@ -520,6 +537,7 @@ of <cite>n_periods</cite> integrations over regularly spaced periods.</p>
 </dl>
 </dd></dl>
 
+</section>
 </section>
 
 
@@ -560,6 +578,22 @@ of <cite>n_periods</cite> integrations over regularly spaced periods.</p>
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structures">Data Structures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#integration">Integration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#response-spectra">Response Spectra</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
