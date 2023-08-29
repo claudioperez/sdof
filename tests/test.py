@@ -16,11 +16,23 @@ f =     np.array([
          0.0000,
          0.0000])
 
+import matplotlib.pyplot as plt
 from pandas import DataFrame
-U = sdof.integrate(0.2533, 0.1592, 10., f, 0.10)
+U = sdof.integrate(0.2533, 0.1592, 10., f, 0.10,
+                   beta=0.25, gamma=0.5, # const avg accel
+#                  beta=1/6,  gamma=0.5, # linear accel
+                   )
+plt.plot(U[0])
+U = sdof.integrate(0.2533, 0.1592, 10., f, 0.10,
+                   beta=0.25, gamma=0.5, # const avg accel
+#                  beta=1/6,  gamma=0.5, # linear accel
+                   fy=7.5, )
+
 print(DataFrame(U.T))
 
 
+plt.plot(U[0])
+plt.show()
 import sys
 sys.exit()
 

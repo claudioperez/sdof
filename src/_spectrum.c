@@ -86,7 +86,7 @@ struct sdof_thread {
 
 static void *
 run_peaks(void *sdof_thread) {
-  struct sdof_thread td = *((struct sdof_thread*) sdof_thread);
+  const struct sdof_thread td = *((struct sdof_thread*) sdof_thread);
   struct sdof_peaks *const resp = td.response;
   const int i = td.thread_index;
   const int stride   = td.stride;
@@ -109,7 +109,27 @@ run_peaks(void *sdof_thread) {
 }
 
 /**
- * Threaded response spectrum
+ * Threaded response spectrum over regularly spaced periods.
+ *
+ * This function spawns `n_threads` threads to perform a total
+ * of `n_periods` integrations over regularly spaced periods.
+ *
+ * Parameters:
+ *     struct sdof_alpha* conf: .
+ *
+ *     const double load[n]: Pointer to excitation series
+ *     const int n: size of excitation series
+ *     const double dt: Time step of excitation data.
+ *
+ *     const double t_min: Start period
+ *     const double t_max: End period
+ *     const int n_periods: Number of periods to integrate.
+ *    
+ *     const double damp: .
+ *     int n_threads: .
+ *     struct sdof_peaks *response
+ *
+ *
  */
 SDOF_EXPORT int
 sdof_spectrum(struct sdof_alpha* conf,
