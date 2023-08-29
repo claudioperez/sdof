@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>&lt;no title&gt; &#8212; sdof</title>
+    <title>Spectra from C &#8212; sdof</title>
   
   
   
@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
-    <link rel="stylesheet" type="text/css" href="../../_static/css/peer.css?v=5e4ab7cc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/peer.css?v=6235cf1b" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/css/shell.css.min.5ee5a6b8d8faedbb5157b1bfb4d9be5b2482bbe4e40af84575a92ae6ab028842.css?v=77841b74" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/css/vars-override.css.min.ff70feeb43b75e041c44e6aba96a0979ee53f0e959cb0ecf8f4e00c2ec6c9494.css?v=0571797e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/css/tabs.css.min.2774227fab8d6dfd0b5b1c8f06b5abafeaf3d6247bec4efda87ac5a587b3d2bc.css?v=46696a9d" />
@@ -216,10 +216,6 @@ document.write(`
   
 
   
-    <label class="sidebar-toggle secondary-toggle" for="__secondary">
-      <span class="fa-solid fa-outdent"></span>
-    </label>
-  
 </div>
 
     </nav>
@@ -309,9 +305,10 @@ document.write(`
         <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../sdof-0001/index.html">Basics in Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sdof-0002/index.html">Fast Response Spectra</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Spectra from C</a></li>
 </ul>
 </div>
 </nav></div>
@@ -352,7 +349,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Examples</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">&lt;no title&gt;</li>
+    <li class="breadcrumb-item active" aria-current="page">Spectra from C</li>
   </ul>
 </nav>
 </div>
@@ -369,9 +366,65 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <figure class="align-default">
-<img alt="../../_images/sdof-0003.png" src="../../_images/sdof-0003.png" />
-</figure>
+  <section id="spectra-from-c">
+<h1>Spectra from C<a class="headerlink" href="#spectra-from-c" title="Link to this heading">#</a></h1>
+<p>The following is a minimal (and crude) example for an app
+that calls the <a class="reference internal" href="../../library/capi.html#c.sdof_spectrum" title="sdof_spectrum"><code class="xref c c-func docutils literal notranslate"><span class="pre">sdof_spectrum()</span></code></a> function from C.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define WORK_SIZE 290</span>
+
+<span class="c1">#include &lt;sdof.h&gt;</span>
+<span class="c1">#include &lt;stdio.h&gt;</span>
+<span class="c1">#include &lt;stdlib.h&gt;</span>
+<span class="n">extern</span> <span class="n">struct</span> <span class="n">sdof_alpha</span> <span class="n">CONF</span><span class="p">;</span>
+
+<span class="n">static</span> <span class="nb">int</span>
+<span class="n">read_load</span><span class="p">(</span><span class="n">FILE</span><span class="o">*</span> <span class="n">file</span><span class="p">,</span> <span class="nb">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">double</span> <span class="o">*</span><span class="n">p</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="nb">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">((</span><span class="n">fscanf</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%lf</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="o">!=</span> <span class="n">EOF</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">++</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">))</span> <span class="n">p</span><span class="o">++</span><span class="p">;</span>
+  <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="nb">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">char</span> <span class="n">const</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;usage: spectrum &lt;filename&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">FILE</span><span class="o">*</span> <span class="n">f</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;r&quot;</span><span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">f</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;bad file: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">double</span> <span class="n">damp</span>  <span class="o">=</span> <span class="mf">0.02</span><span class="p">,</span>
+         <span class="n">t_min</span> <span class="o">=</span> <span class="mf">0.02</span><span class="p">,</span>
+         <span class="n">t_max</span> <span class="o">=</span> <span class="mf">3.00</span><span class="p">;</span>
+
+  <span class="n">double</span> <span class="n">load</span><span class="p">[</span><span class="mi">5000</span><span class="p">];</span>
+  <span class="nb">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">1550</span><span class="p">;</span>
+  <span class="n">n</span> <span class="o">=</span> <span class="n">read_load</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">load</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+  <span class="n">double</span> <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.02</span><span class="p">;</span>
+
+  <span class="n">const</span> <span class="nb">int</span> <span class="n">n_threads</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+
+  <span class="n">struct</span> <span class="n">sdof_peaks</span> <span class="o">*</span><span class="n">response</span> <span class="o">=</span><span class="p">(</span><span class="n">struct</span> <span class="n">sdof_peaks</span> <span class="o">*</span><span class="p">)</span>
+                               <span class="n">calloc</span><span class="p">(</span><span class="n">sizeof</span><span class="p">(</span><span class="n">struct</span> <span class="n">sdof_peaks</span><span class="p">),</span><span class="n">WORK_SIZE</span><span class="p">);</span>
+
+  <span class="n">sdof_spectrum</span><span class="p">(</span><span class="o">&amp;</span><span class="n">CONF</span><span class="p">,</span> <span class="n">load</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">t_max</span><span class="p">,</span> <span class="n">WORK_SIZE</span><span class="p">,</span> <span class="n">damp</span><span class="p">,</span> <span class="n">n_threads</span><span class="p">,</span> <span class="n">response</span><span class="p">);</span>
+  
+  <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;# T </span><span class="se">\t</span><span class="s2"> Accel</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">WORK_SIZE</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">double</span> <span class="n">period</span> <span class="o">=</span> <span class="n">t_min</span> <span class="o">+</span> <span class="p">(</span><span class="n">t_max</span> <span class="o">-</span> <span class="n">t_min</span><span class="p">)</span><span class="o">/</span><span class="p">((</span><span class="n">double</span><span class="p">)</span><span class="n">WORK_SIZE</span><span class="p">)</span><span class="o">*</span><span class="p">((</span><span class="n">double</span><span class="p">)</span><span class="n">i</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%lf</span><span class="se">\t</span><span class="si">%lf</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">response</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">max_accel</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="n">free</span><span class="p">(</span><span class="n">response</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
 
 
                 </article>
@@ -402,20 +455,6 @@ document.write(`
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-  </nav></div>
-
-</div></div>
               
             
           </div>

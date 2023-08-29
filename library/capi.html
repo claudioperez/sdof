@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/peer.css?v=5e4ab7cc" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/peer.css?v=6235cf1b" />
     <link rel="stylesheet" type="text/css" href="../_static/css/css/shell.css.min.5ee5a6b8d8faedbb5157b1bfb4d9be5b2482bbe4e40af84575a92ae6ab028842.css?v=77841b74" />
     <link rel="stylesheet" type="text/css" href="../_static/css/css/vars-override.css.min.ff70feeb43b75e041c44e6aba96a0979ee53f0e959cb0ecf8f4e00c2ec6c9494.css?v=0571797e" />
     <link rel="stylesheet" type="text/css" href="../_static/css/css/tabs.css.min.2774227fab8d6dfd0b5b1c8f06b5abafeaf3d6247bec4efda87ac5a587b3d2bc.css?v=46696a9d" />
@@ -46,6 +46,8 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'library/capi';</script>
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -371,6 +373,36 @@ document.write(`
 <h1>C Library<a class="headerlink" href="#c-library" title="Link to this heading">#</a></h1>
 <p>//</p>
 <dl class="c struct">
+<dt class="sig sig-object c" id="c.sdof_alpha">
+<span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdof_alpha</span></span></span><a class="headerlink" href="#c.sdof_alpha" title="Link to this definition">#</a><br /></dt>
+<dd><p>Parameters for the generalized alpha method.</p>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.sdof_alpha.alpha_m">
+<span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">alpha_m</span></span></span><a class="headerlink" href="#c.sdof_alpha.alpha_m" title="Link to this definition">#</a><br /></dt>
+<dd><p>WBZ alpha parameter</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.sdof_alpha.alpha_f">
+<span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">alpha_f</span></span></span><a class="headerlink" href="#c.sdof_alpha.alpha_f" title="Link to this definition">#</a><br /></dt>
+<dd><p>HHT alpha parameter</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.sdof_alpha.gamma">
+<span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gamma</span></span></span><a class="headerlink" href="#c.sdof_alpha.gamma" title="Link to this definition">#</a><br /></dt>
+<dd><p>Newmark’s <span class="math notranslate nohighlight">\(\gamma\)</span> parameter</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.sdof_alpha.beta">
+<span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">beta</span></span></span><a class="headerlink" href="#c.sdof_alpha.beta" title="Link to this definition">#</a><br /></dt>
+<dd><p>Newmark’s <span class="math notranslate nohighlight">\(\beta\)</span> parameter</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c struct">
 <dt class="sig sig-object c" id="c.sdof_peaks">
 <span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdof_peaks</span></span></span><a class="headerlink" href="#c.sdof_peaks" title="Link to this definition">#</a><br /></dt>
 <dd><p>Struct to return peak response quantities by value.</p>
@@ -397,34 +429,46 @@ document.write(`
 <p>//</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.sdof_integrate">
-<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdof_integrate</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">sdof_alpha</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">conf</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">M</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">C</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">K</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">scale</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">n</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">dt</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">response</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.sdof_integrate" title="Link to this definition">#</a><br /></dt>
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdof_integrate</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#c.sdof_alpha" title="sdof_alpha"><span class="n"><span class="pre">sdof_alpha</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">conf</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">M</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">C</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">K</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">scale</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">n</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">dt</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">response</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.sdof_integrate" title="Link to this definition">#</a><br /></dt>
 <dd><p>Main linear integrator.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The first row of the response array (u0 and v0)
-is expected to be initialized!</p>
-</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>conf</strong> – Struct holding integration parameters.</p></li>
-<li><p><strong>M</strong> – Mass.</p></li>
-<li><p><strong>C</strong> – Damping.</p></li>
-<li><p><strong>K</strong> – Stiffness</p></li>
+<li><p><strong>conf</strong> (<span><span class="c-expr sig sig-inline c"><span class="k">struct</span><span class="w"> </span><a class="reference internal" href="#c.sdof_alpha" title="sdof_alpha"><span class="n">sdof_alpha</span></a><span class="p">*</span></span></span>) – Struct holding integration parameters.</p></li>
+<li><p><strong>load</strong> (<span><span class="c-expr sig sig-inline c"><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="p">[</span><a class="reference internal" href="#c.sdof_integrate" title="n"><span class="n">n</span></a><span class="p">]</span></span></span>) – Pointer to excitation series</p></li>
+<li><p><strong>n</strong> (<span><span class="c-expr sig sig-inline c"><span class="k">const</span><span class="w"> </span><span class="kt">int</span></span></span>) – size of excitation series</p></li>
+<li><p><strong>dt</strong> (<span><span class="c-expr sig sig-inline c"><span class="k">const</span><span class="w"> </span><span class="kt">double</span></span></span>) – Time step of excitation data.</p></li>
+<li><p><strong>M</strong> (<span><span class="c-expr sig sig-inline c"><span class="kt">double</span></span></span>) – Mass.</p></li>
+<li><p><strong>C</strong> (<span><span class="c-expr sig sig-inline c"><span class="kt">double</span></span></span>) – Damping.</p></li>
+<li><p><strong>K</strong> (<span><span class="c-expr sig sig-inline c"><span class="kt">double</span></span></span>) – Stiffness</p></li>
+<li><p><strong>response</strong> (<span><span class="c-expr sig sig-inline c"><span class="kt">double</span><span class="p">[</span><a class="reference internal" href="#c.sdof_integrate" title="n"><span class="n">n</span></a><span class="p">]</span><span class="p">[</span><span class="m">3</span><span class="p">]</span></span></span>) – Pointer to the beginning of an n x 3 array of doubles.
+displacement at <code class="docutils literal notranslate"><span class="pre">i</span></code>: <code class="docutils literal notranslate"><span class="pre">response[i][0]</span></code>
+velocity at <code class="docutils literal notranslate"><span class="pre">i</span></code>:     <code class="docutils literal notranslate"><span class="pre">response[i][1]</span></code>
+acceleration at <code class="docutils literal notranslate"><span class="pre">i</span></code>: <code class="docutils literal notranslate"><span class="pre">response[i][2]</span></code></p></li>
 </ul>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The first row of the response array
+is expected to be initialized, ie</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">response</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">u0</span><span class="p">;</span>
+<span class="n">response</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">v0</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.sdof_integrate_plastic">
-<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdof_integrate_plastic</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">sdof_alpha</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">conf</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">M</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">C</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">K</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">scale</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">n</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">dt</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">response</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.sdof_integrate_plastic" title="Link to this definition">#</a><br /></dt>
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdof_integrate_plastic</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#c.sdof_alpha" title="sdof_alpha"><span class="n"><span class="pre">sdof_alpha</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">conf</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">M</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">C</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">K</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">scale</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">n</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">dt</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">response</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.sdof_integrate_plastic" title="Link to this definition">#</a><br /></dt>
 <dd><p>Elastic-perfectly plastic</p>
-<dl class="simple">
-<dt>Parameters</dt><dd><dl class="simple">
-<dt>Fy: Yield force</dt><dd><p>a: Kinematic hardening ratio</p>
-</dd>
-</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Fy</strong> (<span><span class="c-expr sig sig-inline c"><span class="kt">double</span></span></span>) – Yield force</p></li>
+<li><p><strong>a</strong> (<span><span class="c-expr sig sig-inline c"><span class="kt">double</span></span></span>) – Kinematic hardening ratio</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -437,13 +481,13 @@ is expected to be initialized!</p>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.sdof_integrate_peaks">
-<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdof_integrate_peaks</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">sdof_alpha</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">conf</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">M</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">C</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">K</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">scale</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">n</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">dt</span></span>, <span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#c.sdof_peaks" title="sdof_peaks"><span class="n"><span class="pre">sdof_peaks</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">response</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.sdof_integrate_peaks" title="Link to this definition">#</a><br /></dt>
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdof_integrate_peaks</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#c.sdof_alpha" title="sdof_alpha"><span class="n"><span class="pre">sdof_alpha</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">conf</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">M</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">C</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">K</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">scale</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">n</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">dt</span></span>, <span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#c.sdof_peaks" title="sdof_peaks"><span class="n"><span class="pre">sdof_peaks</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">response</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.sdof_integrate_peaks" title="Link to this definition">#</a><br /></dt>
 <dd><p>Integrate a linear system, tracking only peak values.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.sdof_integrate_peaks_2">
-<span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#c.sdof_peaks" title="sdof_peaks"><span class="n"><span class="pre">sdof_peaks</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdof_integrate_peaks_2</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">sdof_alpha</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">conf</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">M</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">C</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">K</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">scale</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">n</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">dt</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.sdof_integrate_peaks_2" title="Link to this definition">#</a><br /></dt>
+<span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#c.sdof_peaks" title="sdof_peaks"><span class="n"><span class="pre">sdof_peaks</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdof_integrate_peaks_2</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#c.sdof_alpha" title="sdof_alpha"><span class="n"><span class="pre">sdof_alpha</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">conf</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">M</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">C</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">K</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">scale</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">n</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">dt</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.sdof_integrate_peaks_2" title="Link to this definition">#</a><br /></dt>
 <dd><p>Alternative implementation to return an sdof_peaks struct by value. This is
 used in _spectrum.c .</p>
 </dd></dl>
@@ -451,8 +495,29 @@ used in _spectrum.c .</p>
 <p>//</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.sdof_spectrum">
-<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdof_spectrum</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">sdof_alpha</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">conf</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">load</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">n</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">dt</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">t_min</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">t_max</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">n_periods</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">damp</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">n_threads</span></span>, <span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#c.sdof_peaks" title="sdof_peaks"><span class="n"><span class="pre">sdof_peaks</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">response</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.sdof_spectrum" title="Link to this definition">#</a><br /></dt>
-<dd><p>Threaded response spectrum</p>
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sdof_spectrum</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#c.sdof_alpha" title="sdof_alpha"><span class="n"><span class="pre">sdof_alpha</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">conf</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">load</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">n</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">dt</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">t_min</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">t_max</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">n_periods</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">damp</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">n_threads</span></span>, <span class="k"><span class="pre">struct</span></span><span class="w"> </span><a class="reference internal" href="#c.sdof_peaks" title="sdof_peaks"><span class="n"><span class="pre">sdof_peaks</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">response</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.sdof_spectrum" title="Link to this definition">#</a><br /></dt>
+<dd><p>Threaded response spectrum over regularly spaced periods.</p>
+<p>This function spawns <cite>n_threads</cite> threads to perform a total
+of <cite>n_periods</cite> integrations over regularly spaced periods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>conf</strong> (<span><span class="c-expr sig sig-inline c"><span class="k">struct</span><span class="w"> </span><a class="reference internal" href="#c.sdof_alpha" title="sdof_alpha"><span class="n">sdof_alpha</span></a><span class="p">*</span></span></span>) – <p>.</p>
+</p></li>
+<li><p><strong>load</strong> (<span><span class="c-expr sig sig-inline c"><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="p">[</span><a class="reference internal" href="#c.sdof_spectrum" title="n"><span class="n">n</span></a><span class="p">]</span></span></span>) – Pointer to excitation series</p></li>
+<li><p><strong>n</strong> (<span><span class="c-expr sig sig-inline c"><span class="k">const</span><span class="w"> </span><span class="kt">int</span></span></span>) – size of excitation series</p></li>
+<li><p><strong>dt</strong> (<span><span class="c-expr sig sig-inline c"><span class="k">const</span><span class="w"> </span><span class="kt">double</span></span></span>) – Time step of excitation data.</p></li>
+<li><p><strong>t_min</strong> (<span><span class="c-expr sig sig-inline c"><span class="k">const</span><span class="w"> </span><span class="kt">double</span></span></span>) – Start period</p></li>
+<li><p><strong>t_max</strong> (<span><span class="c-expr sig sig-inline c"><span class="k">const</span><span class="w"> </span><span class="kt">double</span></span></span>) – End period</p></li>
+<li><p><strong>n_periods</strong> (<span><span class="c-expr sig sig-inline c"><span class="k">const</span><span class="w"> </span><span class="kt">int</span></span></span>) – Number of periods to integrate.</p></li>
+<li><p><strong>damp</strong> (<span><span class="c-expr sig sig-inline c"><span class="k">const</span><span class="w"> </span><span class="kt">double</span></span></span>) – <p>.</p>
+</p></li>
+<li><p><strong>n_threads</strong> (<span><span class="c-expr sig sig-inline c"><span class="kt">int</span></span></span>) – <p>.</p>
+</p></li>
+<li><p><strong>*response</strong> (<span><span class="c-expr sig sig-inline c"><span class="k">struct</span><span class="w"> </span><a class="reference internal" href="#c.sdof_peaks" title="sdof_peaks"><span class="n">sdof_peaks</span></a></span></span>) – </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

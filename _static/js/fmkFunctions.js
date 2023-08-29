@@ -1,7 +1,7 @@
 // Copyright 2021 fmckenna@berkeley.edu
 
 var margin = { top: 0, right: 20, bottom: 0, left: 60 };
-const { eigs } = math
+// const { eigs } = math
 
 
 function mapResponse(t, disp) {
