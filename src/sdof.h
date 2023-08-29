@@ -59,7 +59,16 @@
 
 #endif
 
-// Parameters for the generalized alpha method.
+/**
+ * Parameters for the generalized alpha method.
+ *
+ * Members:
+ *     alpha_m: WBZ alpha parameter
+ *     alpha_f: HHT alpha parameter
+ *     gamma  : Newmark's :math:`\gamma` parameter
+ *     beta   : Newmark's :math:`\beta` parameter
+ *
+ */
 struct sdof_alpha {
   double alpha_m,
          alpha_f,

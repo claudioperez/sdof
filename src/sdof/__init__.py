@@ -177,11 +177,18 @@ def integrate(m,c,k,f,dt, u0=0.0, v0=0.0,
        m \ddot{u} + c \dot{u} + k u = f(t)
 
     for constant coefficients :math:`m`, :math:`c` and :math:`k`.
+
+    Parameters:
+        m (float): mass
+        c (float): damping
+        k (float): stiffness
+
+
     Integration is carried out using a Generalized - :math:`\alpha`
     integrator that is implemented under the hood in highly optimized
     multi-threaded C code.
 
-    This function is a wrapper around the C function ``sdof_integrate_unrolled``.
+    This function is a wrapper around the C function :c:func:`sdof_integrate`.
     """
     if out is None:
         output = np.empty((len(f),3))
@@ -238,6 +245,9 @@ def _spectrum_pythreads(n_threads=1):
 
 
 def spectrum(accel, dt, damping, periods=None, interp=None, threads:int=None, **kwds):
+    """
+    This function is a wrapper around the C function :c:func:`sdof_spectrum`.
+    """
 
     # Setup default parameters
 

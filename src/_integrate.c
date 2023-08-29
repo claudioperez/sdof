@@ -48,13 +48,13 @@ struct sdof_alpha CONF = {1.0, 1.0, 0.25, 0.5};
  * Main linear integrator.
  *
  * .. note:: The first row of the response array (u0 and v0)
- *     is expected to be initialized!
+ *     is expected to be initialized.
  *
  * Parameters:
- *     conf: Struct holding integration parameters.
- *     M: Mass.
- *     C: Damping.
- *     K: Stiffness
+ *     conf (struct sdof_alpha*): Struct holding integration parameters.
+ *     M (double): Mass.
+ *     C (double): Damping.
+ *     K (double): Stiffness
  */
 SDOF_EXPORT int
 sdof_integrate(struct sdof_alpha* conf,
@@ -128,9 +128,9 @@ sdof_integrate(struct sdof_alpha* conf,
 /**
  * Elastic-perfectly plastic
  *
- * Parameters
- *   Fy: Yield force
- *    a: Kinematic hardening ratio
+ * Parameters:
+ *   Fy (double): Yield force
+ *   a (double): Kinematic hardening ratio
  */
 SDOF_EXPORT int
 sdof_integrate_plastic(struct sdof_alpha* conf,
