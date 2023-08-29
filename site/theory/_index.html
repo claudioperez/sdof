@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sdof &#8212; sdof</title>
+    <title>Theory &#8212; sdof</title>
   
   
   
@@ -46,7 +46,9 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'library/modules';</script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'theory/_index';</script>
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -132,14 +134,14 @@
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="index.html">
+                      <a class="nav-link nav-internal" href="../library/index.html">
                         Library
                       </a>
                     </li>
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../theory/index.html">
+                      <a class="nav-link nav-internal" href="index.html">
                         Theory
                       </a>
                     </li>
@@ -215,6 +217,10 @@ document.write(`
   
 
   
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
 </div>
 
     </nav>
@@ -241,14 +247,14 @@ document.write(`
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="index.html">
+                      <a class="nav-link nav-internal" href="../library/index.html">
                         Library
                       </a>
                     </li>
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../theory/index.html">
+                      <a class="nav-link nav-internal" href="index.html">
                         Theory
                       </a>
                     </li>
@@ -332,7 +338,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">sdof</li>
+    <li class="breadcrumb-item active" aria-current="page">Theory</li>
   </ul>
 </nav>
 </div>
@@ -349,22 +355,74 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="sdof">
-<h1>sdof<a class="headerlink" href="#sdof" title="Link to this heading">#</a></h1>
-<div class="toctree-wrapper compound">
+  <section class="tex2jax_ignore mathjax_ignore" id="theory">
+<h1>Theory<a class="headerlink" href="#theory" title="Link to this heading">#</a></h1>
+<p><span class="math notranslate nohighlight">\(\alpha_F\)</span> and <span class="math notranslate nohighlight">\(\alpha_M\)</span> are defined differently than in the paper, we use <span class="math notranslate nohighlight">\(\alpha_F = (1-\alpha_f)\)</span> and <span class="math notranslate nohighlight">\(\alpha_M=(1-\alpha_m)\)</span> where <span class="math notranslate nohighlight">\(\alpha_f\)</span> and <span class="math notranslate nohighlight">\(\alpha_m\)</span> are those used in the paper.
+Like Newmark and all the implicit schemes, the unconditional stability of this method applies to linear problems. There are no results showing stability of this method over the wide range of nonlinear problems that potentially exist. Experience indicates that the time step for implicit schemes in nonlinear situations can be much greater than those for explicit schemes.</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\alpha_M = 1.0, \alpha_F = 1.0\)</span> produces the Newmark Method.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha_M = 1.0\)</span> corresponds to the HHT method.</p></li>
+</ul>
+<p>The method is second-order accurate provided <span class="math notranslate nohighlight">\(\gamma = \tfrac{1}{2} + \alpha_M - \alpha_F\)</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="sdof.html">Python Package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sdof.html#install">Install</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sdof.html#library">Library</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="sdof.html#sdof.integrate"><code class="docutils literal notranslate"><span class="pre">integrate()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="sdof.html#sdof.spectrum"><code class="docutils literal notranslate"><span class="pre">spectrum()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="sdof.html#sdof.peaks"><code class="docutils literal notranslate"><span class="pre">peaks()</span></code></a></li>
-</ul>
+<li><p>The method is unconditionally stable provided <span class="math notranslate nohighlight">\(\alpha_M &gt;= \alpha_F &gt;= \tfrac{1}{2}, \beta&gt;=\tfrac{1}{4} +\tfrac{1}{2}(\alpha_M - \alpha_F)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\gamma\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> are optional. The default values ensure the method is unconditionally stable, second order accurate and high frequency dissipation is maximized.
+The defaults are:</p>
+<div class="math notranslate nohighlight">
+\[\gamma = \tfrac{1}{2} + \alpha_M - \alpha_F\]</div>
+<p>and</p>
 </li>
 </ul>
-</li>
-</ul>
-</div>
+<div class="math notranslate nohighlight">
+\[\beta = \tfrac{1}{4}(1 + \alpha_M - \alpha_F)^2\]</div>
+<section id="id1">
+<h2>Theory<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>The Generalized <span class="math notranslate nohighlight">\(\alpha\)</span> method (sometimes called the <span class="math notranslate nohighlight">\(\alpha\)</span> method) is a one step implicit method for solving the transient problem which attempts to increase the amount of numerical damping present without degrading the order of accuracy. As with the HHT method, the following Newmark approximations are used:</p>
+<div class="math notranslate nohighlight">
+\[
+U_{t+\Delta t} = U_t + \Delta t \dot U_t + [(0.5 - \beta) \Delta t^2] \ddot U_t + [\beta \Delta t^2] \ddot U_{t+\Delta t}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\dot U_{t+\Delta t} = \dot U_t + [(1-\gamma)\Delta t] \ddot U_t + [\gamma \Delta t ] \ddot U_{t+\Delta t}
+\]</div>
+<p>but the time-discrete momentum equation is modified:</p>
+<div class="math notranslate nohighlight">
+\[
+R_{t + \alpha_M \Delta t} = F_{t+\Delta t}^\text{ext} - M \ddot U_{t + \alpha_M \Delta t} - C \dot U_{t+\alpha_F \Delta t} - F^\text{int}(U_{t + \alpha_F \Delta t})
+\]</div>
+<p>where the displacements and velocities at the intermediate point are given by:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{d}_{t+ \alpha_F \Delta t} = (1 - \alpha_F) U_t + \alpha_F U_{t + \Delta t}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{v}_{t+\alpha_F \Delta t} = (1-\alpha_F) \dot U_t + \alpha_F \dot U_{t + \Delta t}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{a}_{t+\alpha_M \Delta t} = (1-\alpha_M) \ddot U_t + \alpha_M \ddot U_{t + \Delta t}
+\]</div>
+<p>Following the methods outlined for Newmarks method, linearization of the nonlinear momentum equation results in the following linear equations:</p>
+<div class="math notranslate nohighlight">
+\[K_{t+\Delta t}^{\star i} d U_{t+\Delta t}^{i+1} = R_{t+\Delta t}^i\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[
+K_{t+\Delta t}^{\star i} = \alpha_F K_t + \frac{\alpha_F \gamma}{\beta \Delta t} C_t + \frac{\alpha_M}{\beta \Delta t^2} M
+\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[
+R_{t+\Delta t}^i = F_{t + \Delta t}^\text{ext} - F(U_{t + \alpha F \Delta t}^{i-1})^\text{int} - C \dot U_{t+\alpha F \Delta t}^{i-1} - M \ddot U_{t+ \alpha M \Delta t}^{i-1}
+\]</div>
+<p>The linear equations are used to solve for <span class="math notranslate nohighlight">\(U_{t+\alpha F \Delta t}, \dot U_{t + \alpha F \Delta t} \ddot U_{t+ \alpha M \Delta t}\)</span>. Once convergence has been achieved the displacements, velocities and accelerations at time <span class="math notranslate nohighlight">\(t + \Delta t\)</span> can be computed.</p>
+</section>
+<section id="references">
+<h2>REFERENCES<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<p>J. Chung, G.M.Hubert. “A Time Integration Algorithm for Structural Dynamics with Improved Numerical Dissipation: The Generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> Method” ASME Journal of Applied Mechanics, 60, 371:375, 1993.</p>
+</section>
 </section>
 
 
@@ -387,6 +445,21 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Theory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">REFERENCES</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

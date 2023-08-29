@@ -1,5 +1,5 @@
-``sdof`` Python Package
-=======================
+Python Package
+==============
 
 
 Install
