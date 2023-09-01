@@ -2,7 +2,7 @@
 
 We are looking to approximate second order differential equations of the form 
 
-$$\mathbf{M} \ddot{\boldsymbol{u}} + \boldsymbol{p}(\boldsymbol{u}, \dot{\boldsymbol{u}}) = \boldsymbol{f}$$
+$$\mathbf{M} \ddot{\boldsymbol{u}} + \mathbf{C}\dot{\boldsymbol{u}} + \boldsymbol{p}(\boldsymbol{u}, \dot{\boldsymbol{u}}) = \boldsymbol{f}$$
 
 ## Newmark Equations
 
@@ -80,17 +80,14 @@ t_{\alpha_{f}}              &= (1-\alpha_{f}) \, t_{n+1}              + \alpha_{
 
 ## Implementation
 
-where $x_{n+1}$ is ideally one of the three unknowns, $a_{n+1}, v_{n+1}$ or $d_{n+1}$.
 
-The Newmark equations allow one to express all three of these unknowns
-in terms of one of these. In the standard form above, this is done in terms of the
-unknown acceleration, $a_{n+1}$. However, one can manipulate these equations to be expressed
-in terms of either of the other unknowns. 
+The Newmark equations allow one to express all three unknowns (i.e., $a_{n+1}, v_{n+1}$ or $d_{n+1}$)
+in terms of one of these. 
 
 ### Linear Newmark Schemes
 
 The most straight-forward way to implement the Newmark scheme, is to form
-a single equation in terms of unknown accelerations, $a_{n+1}$.
+a single equation in terms of unknown accelerations, $\boldsymbol{a}_{n+1}$.
 
 $$
 \mathbf{A} \boldsymbol{a}_{n+1} = \boldsymbol{b}
@@ -109,7 +106,7 @@ $$
 
 where the tilde variables allow us to collect everything that is known at the start of a time step.
 Expanding and plugging into the discretized equilibrium equation furnishes
-the a Newmark scheme in "a-form":
+the Newmark scheme in "a-form":
 
 $$\begin{aligned}
 \tilde{\boldsymbol{d}} &= \boldsymbol{d}_n + \Delta t \boldsymbol{v}_n + \tfrac{1}{2} \Delta t^2 (1-2\beta) \boldsymbol{a}_n \\ 
@@ -122,6 +119,10 @@ $$\begin{aligned}
 \boldsymbol{v}_{n+1} &= \tilde{\boldsymbol{v}} + \gamma \Delta t \, \boldsymbol{a}_{n+1}
 \end{aligned}$$
 
+### Generalized Unknowns
+
+Alternatively, the Newmark equations can be manipulated to produce
+a problem in terms of velocity or displacement.
 This generalizes as follows:
 
 $$\begin{aligned}
@@ -166,18 +167,18 @@ r(\boldsymbol{x}_{n+1})&= \mathbf{M}\,  \left(\tilde{\boldsymbol{a}} + c_{ax}\,\
 \end{aligned}
 $$
 
-Linearizing for $r_\eta = r(\boldsymbol{x}_{n+1}^i + \eta \Delta\boldsymbol{x})$ yields
+Linearizing for $r_\eta = r(\boldsymbol{x}_{n+1}^i + \eta \, d\boldsymbol{x})$ yields
 
 $$
 \begin{aligned}
-\mathcal{L} \, r_{\eta} &= r(\boldsymbol{x}^i_{n+1}) + \mathbf{A}\Delta \boldsymbol{x} \\
+\mathcal{L} \, r_{\eta} &= r(\boldsymbol{x}^i_{n+1}) + \mathbf{A} d \boldsymbol{x} \\
 \end{aligned}
 $$
 
 where
 
 $$
-\mathbf{A} \Delta\boldsymbol{x} = \left.\frac{d}{d \eta}r_\eta\right|_{\eta=0} = \left( c_d \mathbf{K}\left(\tilde{\boldsymbol{d}}+c_{d}\,\boldsymbol{x}_{n+1}\right) + c_v \mathbf{C} + c_a \mathbf{M}\right)\Delta \boldsymbol{x} 
+\mathbf{A} d\boldsymbol{x} = \left.\frac{d}{d \eta}r_\eta\right|_{\eta=0} = \left( c_d \mathbf{K}\left(\tilde{\boldsymbol{d}}+c_{d}\,\boldsymbol{x}_{n+1}\right) + c_v \mathbf{C} + c_a \mathbf{M}\right) d \boldsymbol{x}
 $$
 
 
@@ -258,23 +259,6 @@ $$
 
 <!--
 
-## Explicit Predictor-Corrector
-
-$$
-\begin{aligned}
-\tilde{d}_{n+1}= &  d_n+\Delta t  v_n+\Delta t^2\left(\frac{1}{2}-\beta\right)  a_n \\
-\tilde{ v}_{n+1}= &  v_n+\Delta t(1-\gamma)  a_n  \\
-M  a_{n+1-\alpha_m} 
-& +\left(1-\alpha_f\right)\left( C \tilde{ v}_{n+1}+ K \tilde{ d}_{n+1}\right) \\
-& +\alpha_f\left( C  v_n+ K  d_n\right)= f\left(t_{n+1-\alpha_f}\right) \\
- d_{n+1}= & \tilde{ d}_{n+1}+\beta \Delta t^2  a_{n+1} \\
- v_{n+1}= & \tilde{v}_{n+1}+\gamma \Delta t  a_{n+1}
-\end{aligned}
-$$
-
--->
-
-
 ## Parameters
 
 By properly choosing the parameters, we can recover HHT, Newmark, or WBZ methods. 
@@ -292,6 +276,7 @@ $$\begin{aligned}
 \beta  &= \tfrac{1}{4} (1-\alpha_{m}+\alpha_{f})^2
 \end{aligned}$$
 
+-->
 
 <!--
 

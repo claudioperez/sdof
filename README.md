@@ -39,13 +39,14 @@ families of integration schemes.
 import numpy as np
 from sdof import integrate, peaks, spectrum
 
-c  = 0.1
-T  = 1.2
+k  = 10.0
+c  = 0.1592
+m  = 0.2533
 f  = np.sin(np.linspace(0, 5*np.pi, 100))
 dt = 5*np.pi/100
 
 
-u, v, a = integrate(f, dt, T, c)
+u, v, a = integrate(f, dt, k, c, m)
 
 D, V, A = spectrum(f, dt, periods=(0.02, 3.0, 100), damping=[0.02, 0.05])
 ```

@@ -136,7 +136,11 @@ except Exception as e:
     warnings.warn(f"Failed to load native library: {e}")
 
 
-def integrate_0(m,c,k,f,dt, u0=0.0, v0=0.0,
+def integrate_0(f, dt,
+              k      : float,
+              c      : float = 0.0,
+              m      : float = 1.0,
+              u0=0.0, v0=0.0,
               out  =  None,
               alpha_m: float = 1.0,
               alpha_f: float = 1.0,
@@ -161,13 +165,20 @@ def integrate_0(m,c,k,f,dt, u0=0.0, v0=0.0,
     _sdof_integrate_0(config, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     return output
 
-def integrate(m,c,k,f,dt, u0=0.0, v0=0.0,
+def integrate(
+              f,
+              dt: float,
+              k:  float,
+              c:  float,
+              m:  float,
+              u0: float = 0.0,
+              v0: float = 0.0,
               out  =  None,
               fy: float = None,
-              alpha_m: float = 1.0,
-              alpha_f: float = 1.0,
               beta   : float = 0.25,
-              gamma  : float = 0.50
+              gamma  : float = 0.50,
+              alpha_m: float = 1.0,
+              alpha_f: float = 1.0
     ):
     r"""
     This function integrates scalar differential equations of the form
@@ -179,16 +190,22 @@ def integrate(m,c,k,f,dt, u0=0.0, v0=0.0,
     for constant coefficients :math:`m`, :math:`c` and :math:`k`.
 
     Parameters:
-        m (float): mass
-        c (float): damping
-        k (float): stiffness
+          f       (list)  : Loading
+          dt      (float) : Time step
+          k       (float) : Stiffness
+          c       (float) : Damping
+          m       (float) : Mass
+          u0      (float, optional): Initial displacement
+          v0      (float, optional): Initial velocity
+          out     (array, optional): Array to store outputs
+          alpha_m (float, optional): Integrator :math:`\alpha_m` parameter
+          alpha_f (float, optional): Integrator :math:`\alpha_f` parameter
+          beta    (float, optional): Newmark :math:`\beta` parameter
+          gamma   (float, optional): Newmark :math:`\gamma` parameter
 
 
     Integration is carried out using a Generalized - :math:`\alpha`
-    integrator that is implemented under the hood in highly optimized
-    multi-threaded C code.
-
-    This function is a wrapper around the C function :c:func:`sdof_integrate`.
+    scheme by calling the C function :c:func:`sdof_integrate`.
     """
     if out is None:
         output = np.empty((len(f),3))
