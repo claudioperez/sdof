@@ -1,0 +1,6 @@
+sphinx_c_autodoc
+myst_parser
+sphinx_design
+nbsphinx
+clang
+
