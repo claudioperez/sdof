@@ -3,7 +3,7 @@ import numpy as np
 
 
 
-f =     np.array([
+f = np.array([
          0.0000,
          5.0000,
          8.6603,
@@ -18,15 +18,18 @@ f =     np.array([
 
 import matplotlib.pyplot as plt
 from pandas import DataFrame
-U = sdof.integrate(0.2533, 0.1592, 10., f, 0.10,
+
+m, k, c = 0.2533, 0.1592, 10.
+
+U = sdof.integrate(f, 0.10, k, c, m
                    beta=0.25, gamma=0.5, # const avg accel
 #                  beta=1/6,  gamma=0.5, # linear accel
                    )
 plt.plot(U[0])
-U = sdof.integrate(0.2533, 0.1592, 10., f, 0.10,
+U = sdof.integrate(f, 0.10, k, c, m
                    beta=0.25, gamma=0.5, # const avg accel
 #                  beta=1/6,  gamma=0.5, # linear accel
-                   fy=7.5, )
+                   fy=7.5)
 
 print(DataFrame(U.T))
 

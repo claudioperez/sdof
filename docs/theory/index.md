@@ -84,8 +84,6 @@ t_{\alpha_{f}}              &= (1-\alpha_{f}) \, t_{n+1}              + \alpha_{
 The Newmark equations allow one to express all three unknowns (i.e., $a_{n+1}, v_{n+1}$ or $d_{n+1}$)
 in terms of one of these. 
 
-### Linear Newmark Schemes
-
 The most straight-forward way to implement the Newmark scheme, is to form
 a single equation in terms of unknown accelerations, $\boldsymbol{a}_{n+1}$.
 
@@ -123,6 +121,18 @@ $$\begin{aligned}
 
 Alternatively, the Newmark equations can be manipulated to produce
 a problem in terms of velocity or displacement.
+
+If $\boldsymbol{x}_{n+1}$ denotes our chosen unknown
+we can write the equations in the following form:
+
+$$
+\begin{aligned}
+\boldsymbol{d}_{\alpha} &= \tilde{\boldsymbol{d}}_x + c_{dx} \, \boldsymbol{x}_{n+1} \\
+\boldsymbol{v}_{\alpha} &= \tilde{\boldsymbol{v}}_x + c_{vx} \, \boldsymbol{x}_{n+1} \\
+\boldsymbol{a}_{\alpha} &= \tilde{\boldsymbol{a}}_x + c_{ax} \, \boldsymbol{x}_{n+1} \\
+\end{aligned}
+$$
+
 This generalizes as follows:
 
 $$\begin{aligned}
@@ -138,22 +148,12 @@ $$\begin{aligned}
 \boldsymbol{a}_{n+1} &= \tilde{\boldsymbol{a}} + c_a  \, \boldsymbol{x}_{n+1}
 \end{aligned}$$
 
+for some coefficients $c_{yx}$, and where $\tilde{\left(\cdot\right)}_x$
+variables encapsulate the information that is known at the start of the
+time step.
+
 
 ### Nonlinear Generalized - $\alpha$
-
-If $\boldsymbol{x}_{n+1}$ denotes our chosen unknown from these
-three, we can write the equations in the following form:
-
-$$
-\begin{aligned}
-\boldsymbol{d}_{\alpha} &= \tilde{\boldsymbol{d}}_x + c_{dx} \, \boldsymbol{x}_{n+1} \\
-\boldsymbol{v}_{\alpha} &= \tilde{\boldsymbol{v}}_x + c_{vx} \, \boldsymbol{x}_{n+1} \\
-\boldsymbol{a}_{\alpha} &= \tilde{\boldsymbol{a}}_x + c_{ax} \, \boldsymbol{x}_{n+1} \\
-\end{aligned}
-$$
-
-for some coefficients $c_{yx}$, and 
-where $\tilde{\left(\cdot\right)}_x$ variables encapsulate the information that is known at the start of the time step.
 
 Applying this to a nonlinear problem yields:
 
@@ -181,13 +181,16 @@ $$
 \mathbf{A} d\boldsymbol{x} = \left.\frac{d}{d \eta}r_\eta\right|_{\eta=0} = \left( c_d \mathbf{K}\left(\tilde{\boldsymbol{d}}+c_{d}\,\boldsymbol{x}_{n+1}\right) + c_v \mathbf{C} + c_a \mathbf{M}\right) d \boldsymbol{x}
 $$
 
-
-### Displacements and Velocity as Unknown
-
+For a chosen unknown $\boldsymbol{x}$, we can collect coefficients into a "predictor
+matrix" $\mathsf{B}_x$, and corrector array $c_{yx}$ so that any of the
+other unknowns, $\boldsymbol{y} \in (\boldsymbol{d}, \boldsymbol{v} ,\boldsymbol{a})$ can be
+expressed as:
 
 $$
-\boldsymbol{y}_{n+1} =  \mathsf{B}_x \, \boldsymbol{y}_n + \mathsf{c}_{yx}\, \boldsymbol{x}_{n+1}
+\boldsymbol{y}_{n+1} =  \mathsf{B}_x \, \boldsymbol{y}_n + {c}_{yx}\, \boldsymbol{x}_{n+1}
 $$
+
+From the Newmark equations, these follow as:
 
 $$
 c_{xy} = \begin{pmatrix}
