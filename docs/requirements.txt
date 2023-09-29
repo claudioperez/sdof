@@ -3,4 +3,5 @@ myst_parser
 sphinx_design
 nbsphinx
 clang
+sphinxcontrib-pandoc-markdown
 
