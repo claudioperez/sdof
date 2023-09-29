@@ -33,8 +33,10 @@ extensions = [
     'sphinx_c_autodoc.napoleon'
 ]
 
-import clang.cindex
-clang.cindex.Config.set_library_file('/usr/lib/libclang.so')
+import pathlib
+if pathlib.Path('/usr/lib/libclang.so').is_file():
+    import clang.cindex
+    clang.cindex.Config.set_library_file('/usr/lib/libclang.so')
 c_autodoc_roots = ['../src/']
 
 myst_enable_extensions = ["dollarmath", "amsmath"]
