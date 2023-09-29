@@ -4,4 +4,5 @@ sphinx_design
 nbsphinx
 clang
 sphinxcontrib-pandoc-markdown
+pydata_sphinx_theme
 
