@@ -5,6 +5,17 @@ src/sdof/_spectrum%so: src/_spectrum.c src/_integrate.c Makefile
 	    -shared -o $@ \
 	    src/_spectrum.c src/_integrate.c -lpthread
 
+src/sdof/_integrate.%.so: src/_integrate.c Makefile
+	 cc -std=c99 -pedantic -Wall -Wextra -shared -O3 src/_integrate.c -o $@  -fPIC -lm \
+	    -fno-math-errno -fno-signaling-nans -fno-trapping-math \
+	    -fassociative-math -ffast-math
+
+src/sdof/_integrate.s: src/_integrate.c Makefile
+	 cc -S -std=c99 -pedantic -Wall -Wextra -O3 src/_integrate.c -o $@   \
+	    -fno-math-errno -fno-signaling-nans -fno-trapping-math \
+	    -fassociative-math -ffast-math -march=native
+
+
 fsdof.js:
 	mkdir -p dist/
 	emcc src/_spectrum.c src/_integrate.c -O3 -lm -o wasm/fsdof.js \
@@ -20,11 +31,6 @@ docs/_static/js/sdof.js: src/_integrate.c src/_spectrum.c
 		-s EXPORTED_FUNCTIONS="['_sdof_integrate','_sdof_spectrum','_malloc','_free']" \
 		-sINCOMING_MODULE_JS_API="['onRuntimeInitialized']" \
 		-s EXPORTED_RUNTIME_METHODS="['cwrap','getValue','setValue']"
-
-src/sdof/_integrate.%.so: src/_integrate.c Makefile
-	 cc -std=c99 -pedantic -Wall -Wextra -shared -O3 src/_integrate.c -o $@  -fPIC -lm \
-	    -fno-math-errno -fno-signaling-nans -fno-trapping-math \
-	    -fassociative-math -ffast-math
 
 # src/sdof/_integrate.%.so: src/_integrate.c Makefile
 # 	 gcc -g -fsanitize=address -std=c99 -pedantic -Wall -Wextra -shared -Og src/_integrate.c -o $@  -fPIC -lm
