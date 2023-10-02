@@ -11,6 +11,8 @@ description="Lightning-fast integration of single degree-of-freedom systems."
 readme = "README.md"
 
 keywords = [
+  "dynamics",
+  "integration",
   "seismic",
   "earthquake-engineering",
 ] 
