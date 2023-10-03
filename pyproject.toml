@@ -49,7 +49,7 @@ classifiers = [
 
 [project.urls]
 repository = "http://github.com/claudioperez/sdof"
-# documentation = "https://brace2.github.io/sdof"
+documentation = "https://claudioperez.github.io/sdof"
 
 [project.scripts]
 sdof = "sdof.__main__:main"
