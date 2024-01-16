@@ -243,7 +243,7 @@ pip install .
   </td>
 
   <td>
-    <a href="https://peer.berkeley.edu">
+    <a href="https://dot.ca.gov/">
     <img src="https://raw.githubusercontent.com/claudioperez/sdof/master/docs/assets/Caltrans.svg.png/"
          alt="Caltrans Logo" width="200"/>
     </a>
