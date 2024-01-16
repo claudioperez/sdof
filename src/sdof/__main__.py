@@ -9,7 +9,7 @@ sdof input.txt $dt $damp $period
 
 # Response History
 """
-
+import sys
 import numpy as np
 from sdof import spectrum
 
@@ -45,8 +45,7 @@ COLUMNS = {
 }
 
 
-if __name__ == "__main__":
-    import sys
+def main():
     options = parse_args(sys.argv[1:])
 
     accel  = np.loadtxt(options["file"])
@@ -68,4 +67,7 @@ if __name__ == "__main__":
 
 
     np.savetxt(sys.stdout.buffer, output)
+
+if __name__ == "__main__":
+    main()
 
