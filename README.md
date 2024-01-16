@@ -1,6 +1,6 @@
 # `sdof`
 
-<img align="left" src="https://raw.githubusercontent.com/BRACE2/OpenSeesRT/master/docs/figures/spectrum.svg" width="250px" alt="PEER Logo">
+<img align="left" src="https://raw.githubusercontent.com/claudioperez/sdof/master/docs/spectrum.svg" width="250px" alt="PEER Logo">
 
 Lightning-fast integration of single degree-of-freedom systems.
 
