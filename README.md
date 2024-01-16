@@ -230,3 +230,18 @@ pip install .
 - [`mdof`](https://pypi.org/project/mdof)
 - [`opensees`](https://pypi.org/project/opensees)
 
+## Support
+
+<table align="center">
+<tr>
+
+  <td>
+    <a href="https://peer.berkeley.edu">
+    <img src="https://raw.githubusercontent.com/claudioperez/sdof/master/docs/assets/peer-black-300.png/"
+         alt="PEER Logo" width="200"/>
+    </a>
+  </td>
+
+ </tr>
+</table>
+
