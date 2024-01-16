@@ -242,6 +242,20 @@ pip install .
     </a>
   </td>
 
+  <td>
+    <a href="https://peer.berkeley.edu">
+    <img src="https://raw.githubusercontent.com/claudioperez/sdof/master/docs/assets/Caltrans.svg.png/"
+         alt="Caltrans Logo" width="200"/>
+    </a>
+  </td>
+
+  <td>
+    <a href="https://peer.berkeley.edu">
+    <img src="https://raw.githubusercontent.com/claudioperez/sdof/master/docs/assets/brace2_logo-new3_ungrouped.svg/"
+         alt="BRACE2 Logo" width="200"/>
+    </a>
+  </td>
+ 
  </tr>
 </table>
 
