@@ -1,2 +1,3 @@
 graft src
-global-exclude *~ *.py[cod] *.so
+global-exclude *~ *.py[cod] *.so  src/tinycthread*
+recursive-exclude threads*

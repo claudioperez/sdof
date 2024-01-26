@@ -356,3 +356,123 @@ def peaks(m,c,k, f, dt):
                           f.ctypes.data_as(POINTER(c_double)), dt, response)
     return response
 
+
+class sdof:
+    def __init__(self, **kwds):
+        self.u0 = kwds.get("u0", 0.0)
+        self.v0 = kwds.get("v0", 0.0)
+
+        if "omega" in kwds:
+            w  = self.w = kwds["omega"]
+            w2 = w*w
+            self.k = kwds.get("k", w2*kwds.get("m", 1))
+            self.m = kwds.get("m", w2/kwds.get("k", 1))
+
+        else:
+            self.m = kwds["m"]
+            self.k = kwds["k"]
+            self.w = np.sqrt(self.k/self.m)
+
+        if "c" in kwds:
+            self.c = kwds["c"]
+            self.zeta = self.c/(2*self.w*self.m)
+        else:
+            self.zeta = kwds.get("zeta", 0.0)
+            self.c = 2*self.m*self.w*self.zeta
+
+    def integrate(self, f, dt):
+        return integrate(m=self.m, c=self.c, k=self.k, f, dt)
+
+    def impulse(self, t, u0=None, v0=None):
+        wd = self.w*np.emath.sqrt(1-self.zeta**2)
+        return 1/(m*wd)*np.exp(-self.zeta*self.w*t)*np.sin(wd*t), None, None
+
+    def transfer(self, w):
+        k = self.k
+        m = self.m
+        c = self.c
+        return 1/(k - m*w**2 + c*w*1j)
+
+    def harmonic(self, t, w, F=1.0, u0=0.0, v0=0.0):
+        wn = self.w
+        zeta = self.zeta
+        wd = wn*sqrt(1-zeta**2)
+
+        b = w/wn
+        G = (F/K)*(1.0/( (1-b)**2+(2.0*zeta*b**2) ))
+        particular = G*( (1-b**2)*sin(L*time) - 2*n*b*cos(L*time) )
+        #
+        #
+        A = x0 + 2*zeta*b*G
+        B = (v0 + G*w*(b**2-1) + A*zeta*wn)/wd
+        homogeneous = (A*cos(wd*time)+B*sin(wd*time))*exp(-zeta*wn*time)
+
+        return particular + homogeneous, None, None
+
+    def homogeneous_bases(self, t):
+        return 
+
+    def homogeneous(self, t, u0=0.0, v0=0.0):
+        w    = self.w                   # natural frequency, rad/sec
+        zeta = self.zeta                # damping ratio
+
+        wd = w*np.sqrt(1 - zeta**2)     # damped natural frequency
+
+        if 0 < zeta < 1:
+            a = np.sqrt(((v0 + zeta*w*u0)**2 + (u0*wd)**2) / wd**2)
+            phi = np.arctan2(u0*wd, v0 + zeta*w*u0)
+            u = a*np.exp(-zeta*w*t)*np.sin(wd*t + phi)
+
+        elif zeta == 1:
+            a1 = u0
+            a2 = v0 + w*u0
+            u = (a1 + a2*t)*np.exp(-w*t)
+
+        else:
+            a1 = (-v0 + (-zeta + np.sqrt(zeta**2 - 1))*w*u0) / (2*w*np.sqrt(zeta**2 - 1))
+            a2 = ( v0 + ( zeta + np.sqrt(zeta**2 - 1))*w*u0) / (2*w*np.sqrt(zeta**2 - 1))
+            a3 = np.sqrt(zeta*zeta - 1)
+            u  = np.exp(-zeta*w*t)*(a1*np.exp(-w*a3*t) + a2*np.exp(w*a3*t))
+        return u, None, None
+
+
+
+if __name__ == "__main__":
+    k = 10
+    c = 0.05*k
+    m = 2
+
+    # Make frequency array, w
+    n  = 500
+    dw = 0.2
+    wmax = (n-1)*dw
+    w  = np.arange(0, wmax, dw)
+
+    # Make time array, t
+    dt = np.pi/wmax
+    tmax = 2*np.pi/dw
+    t = np.arange(0, tmax, dt)
+
+    print(f"{len(t) = }\n{len(w) = }")
+
+    # Create the SDOF
+    model = sdof(k=k, m=m, c=c)
+
+    Hw = np.zeros(2*n-1, dtype=complex)
+    Hw[:n] = model.transfer(w)
+#   for i in range(n):
+#     w = i*dw
+#     he[i] = model.transfer(w)
+
+    import numpy.fft as fft
+    ht = 2.0*np.real(fft.ifft(Hw))/dt
+
+
+    import matplotlib.pyplot as plt
+
+    _, ax = plt.subplots()
+    ax.plot(t, ht[:len(t)], 'o')
+    ax.plot(t, model.impulse(t)[0], 'x')
+    ax.plot(t, model.homogeneous(t, v0=1/m)[0], '.')
+    plt.show()
+
