@@ -381,7 +381,7 @@ class sdof:
             self.c = 2*self.m*self.w*self.zeta
 
     def integrate(self, f, dt):
-        return integrate(m=self.m, c=self.c, k=self.k, f, dt)
+        return integrate(m=self.m, c=self.c, k=self.k, f=f, dt=dt)
 
     def impulse(self, t, u0=None, v0=None):
         wd = self.w*np.emath.sqrt(1-self.zeta**2)
@@ -474,5 +474,8 @@ if __name__ == "__main__":
     ax.plot(t, ht[:len(t)], 'o')
     ax.plot(t, model.impulse(t)[0], 'x')
     ax.plot(t, model.homogeneous(t, v0=1/m)[0], '.')
+
+#   from integration.transition import exponential
+#   ax.plot(t, exponential(np.sin(t), dt, model)[0], '.')
     plt.show()
 
