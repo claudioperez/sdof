@@ -38,7 +38,7 @@ else:
     import   distutils.ccompiler
     so_ext = distutils.ccompiler.new_compiler().shared_lib_extension
 
-class sdof_peaks_t(ctypes.Structure):
+class _sdof_peaks_t(ctypes.Structure):
     _fields_ = [
         ("max_displ",      c_double),
         ("max_veloc",      c_double),
@@ -63,7 +63,7 @@ _sdof_integrate_peaks.argtypes = (
     POINTER(_sdof_config),
     c_double,  c_double,  c_double,
     c_double, c_int, POINTER(c_double), c_double,
-    POINTER(sdof_peaks_t)
+    POINTER(_sdof_peaks_t)
 )
 
 _sdof_integrate_peaks_2 = lib.sdof_integrate_peaks_2
@@ -72,7 +72,7 @@ _sdof_integrate_peaks_2.argtypes = (
     POINTER(_sdof_config),
     c_double,  c_double,  c_double,
     c_double, c_int, POINTER(c_double), c_double,
-    POINTER(sdof_peaks_t)
+    POINTER(_sdof_peaks_t)
 )
 
 _sdof_integrate = lib.sdof_integrate
@@ -128,7 +128,7 @@ try:
         c_double,  c_double,  c_int, # p_min, p_max, np
         c_double,                    # damping
         c_int,
-        POINTER(sdof_peaks_t)
+        POINTER(_sdof_peaks_t)
     )
 
 except Exception as e:
@@ -233,7 +233,7 @@ def integrate(
 
 def _spectrum_cthreads(response, accel, dt, damping, periods: tuple, config: _sdof_config, n_threads=8):
     Sd, Sv, Sa = response
-    output = (sdof_peaks_t * periods[2])()
+    output = (_sdof_peaks_t * periods[2])()
     for i,damp in enumerate(damping):
         _sdof_spectrum(config, np.asarray(accel).ctypes.data_as(POINTER(c_double)), len(accel), dt,
                         periods[0], periods[1], periods[2],
@@ -345,7 +345,7 @@ def spectrum(accel, dt, damping, periods=None, interp=None, threads:int=None, **
 
 
 def peaks(m,c,k, f, dt):
-    response = sdof_peaks_t()
+    response = _sdof_peaks_t()
     config = _sdof_config(
                 alpha_m = kwds.get("alpha_m", 1.00),
                 alpha_f = kwds.get("alpha_f", 1.00),
