@@ -400,12 +400,12 @@ class sdof:
 
         b = w/wn
         G = (F/K)*(1.0/( (1-b)**2+(2.0*zeta*b**2) ))
-        particular = G*( (1-b**2)*sin(L*time) - 2*n*b*cos(L*time) )
+        particular = G*( (1-b**2)*sin(w*t) - 2*n*b*cos(w*t) )
         #
         #
         A = x0 + 2*zeta*b*G
         B = (v0 + G*w*(b**2-1) + A*zeta*wn)/wd
-        homogeneous = (A*cos(wd*time)+B*sin(wd*time))*exp(-zeta*wn*time)
+        homogeneous = (A*cos(wd*t)+B*sin(wd*t))*exp(-zeta*wn*t)
 
         return particular + homogeneous, None, None
 
