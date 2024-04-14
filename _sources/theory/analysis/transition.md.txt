@@ -1,0 +1,27 @@
+
+# Transition
+
+- The **state transition function** satisfies the differential equation $\dot{\boldsymbol{\chi}}\left(t, t_0\right)=\mathbf{A}(t) \mathbf{\chi}\left(t, t_0\right)$ with initial conditions $\boldsymbol{\chi}\left(t_0, t_0\right)=\bm{1}$
+- In the time-invariant case,  $\boldsymbol{\chi}$ is given by the matrix exponential $\boldsymbol{\chi}\left(t, t_0\right)=e^{\mathbf{A}\left(t-t_0\right)}$
+- One can show that a function $\Psi$ is *a* fundamental matrix of $\dot{\mathbf{x}}(t)=\mathbf{A}(t) \mathbf{x}(t)$ if and only if $\dot{\Psi}(t)=\mathbf{A}(t) \Psi(t)$ and $\Psi$ is a non-singular matrix for all $t$.
+
+----------------------------------------
+
+$$
+\mathbf{x}(t)=U(t) U^{-1}\left(t_0\right) \mathbf{x}_0+U(t)\int_{t_0}^{t} U^{-1}(\tau) \mathbf{b}(\tau) d \tau
+$$
+
+$$
+\mathbf{x}(t)=\boldsymbol{\chi}\left(t, t_0\right) \mathbf{x}\left(t_0\right)+\int_{t_0}^t \boldsymbol{\chi}(t, \tau) \mathbf{B}(\tau) \mathbf{u}(\tau) d \tau
+$$
+
+
+$$
+\boldsymbol{\chi}(t, \tau) \equiv \mathbf{U}(t) \mathbf{U}^{-1}(\tau)
+$$
+
+
+$$
+\boldsymbol{y}_p(k)=\mathcal{O}_p \boldsymbol{x}(k)+\mathcal{T}_p \boldsymbol{u}_p(k)
+$$
+

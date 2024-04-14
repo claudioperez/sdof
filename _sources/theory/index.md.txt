@@ -19,24 +19,33 @@ $$
 $$
 \begin{aligned}
 &\boldsymbol{v}_{n+1}= \boldsymbol{v}_n + (1 - \gamma) \Delta t~ \boldsymbol{a}_n + \gamma \Delta t\,  \boldsymbol{a}_{n+1}\\
-&\boldsymbol{d}_{n+1}= \boldsymbol{d}_n + \Delta t~\boldsymbol{v}_n + \tfrac{1}{2}\Delta t^2 \left(\left(1 - 2\beta\right) a_n + 2\beta \boldsymbol{a}_{n+1}\right)\\
+&\boldsymbol{d}_{n+1}= \boldsymbol{d}_n + \Delta t~\boldsymbol{v}_n + \tfrac{1}{2}\Delta t^2 \left(\left(1 - 2\beta\right) \boldsymbol{a}_n + 2\beta \boldsymbol{a}_{n+1}\right)\\
 %&m  \boldsymbol{a}_{n+1} + c \boldsymbol{v}_{n+1} + p(\boldsymbol{d}_{n+1}) = \boldsymbol{f}_{n+1}^{\textrm{ext}}
 \end{aligned}
 $$
+for scalar parameters $\beta$ and $\gamma$ and the following notation is used:
 
-- Using the extended mean value
-  theorem, the Newmark-$\beta$
-  method states that the velocity (i.e., first time derivative)
-  can be decomposed as,
+$$
+\begin{aligned}
+\boldsymbol{d}_n &\approx       \boldsymbol{u}(t_n) \\
+\boldsymbol{v}_n &\approx  \dot{\boldsymbol{u}}(t_n) \\
+\boldsymbol{a}_n &\approx \ddot{\boldsymbol{u}}(t_n) \\
+\end{aligned}
+$$
+
+#### Remarks
+
+
+- The Newmark-$\beta$ follows from Taylor's theorem with explicit remainder
+  which states that the first time derivative can be expressed as:
 
   $$
   \begin{aligned}
   \dot{\boldsymbol{u}}_{n+1} &= \dot{\boldsymbol{u}}_n + \Delta t~ \ddot{\boldsymbol{u}}_\gamma \\
-  \boldsymbol{d}_{n+1}       &= \boldsymbol{u}_n       + \Delta t~ \dot{\boldsymbol{u}}_n + \begin{matrix} \frac 1 2 \end{matrix} \Delta t^2~ \ddot{\boldsymbol{u}}_\beta
+  \boldsymbol{u}_{n+1}       &= \boldsymbol{u}_n       + \Delta t~ \dot{\boldsymbol{u}}_n + \begin{matrix} \frac 1 2 \end{matrix} \Delta t^2~ \ddot{\boldsymbol{u}}_\beta.
   \end{aligned}
   $$
-
-  where
+  for some $\ddot{\boldsymbol{u}}_\gamma$ and $\ddot{\boldsymbol{u}}_\beta$ with the form:
 
   $$
   \begin{aligned}
@@ -64,17 +73,18 @@ $$
 
 The generalized $\alpha$ scheme imposes equilibrium with the following form:
 
-$$\begin{aligned}
-\mathbf{M}\, a _{\alpha_{m}} + \boldsymbol{p}(d_{\alpha_{f}}, v_{\alpha_{f}}) &= \boldsymbol{f}(t_{\alpha_{f}})
-\end{aligned}$$
-
+$$
+\begin{aligned}
+\mathbf{M}\, \boldsymbol{a}_{\alpha_{m}} + \boldsymbol{p}(\boldsymbol{d}_{\alpha_{f}}, \boldsymbol{v}_{\alpha_{f}}) &= \boldsymbol{f}(t_{\alpha_{f}})
+\end{aligned}
+$$
 where
 
 $$\begin{aligned}
-t_{\alpha_{f}}              &= (1-\alpha_{f}) \, t_{n+1}              + \alpha_{f} \, t_n \\
-\boldsymbol{d}_{\alpha_{f}} &= (1-\alpha_{f}) \, \boldsymbol{d}_{n+1} + \alpha_{f} \, \boldsymbol{d}_n \\
-\boldsymbol{v}_{\alpha_{f}} &= (1-\alpha_{f}) \, \boldsymbol{v}_{n+1} + \alpha_{f} \, \boldsymbol{v}_n \\
-\boldsymbol{a}_{\alpha_{m}} &= (1-\alpha_{m}) \, \boldsymbol{a}_{n+1} + \alpha_{m} \, \boldsymbol{a}_n
+t_{\alpha_{f}}              &\triangleq (1-\alpha_{f}) \, t_{n+1}              + \alpha_{f} \, t_n \\
+\boldsymbol{d}_{\alpha_{f}} &\triangleq (1-\alpha_{f}) \, \boldsymbol{d}_{n+1} + \alpha_{f} \, \boldsymbol{d}_n \\
+\boldsymbol{v}_{\alpha_{f}} &\triangleq (1-\alpha_{f}) \, \boldsymbol{v}_{n+1} + \alpha_{f} \, \boldsymbol{v}_n \\
+\boldsymbol{a}_{\alpha_{m}} &\triangleq (1-\alpha_{m}) \, \boldsymbol{a}_{n+1} + \alpha_{m} \, \boldsymbol{a}_n
 \end{aligned}$$
 
 
@@ -85,15 +95,15 @@ The Newmark equations allow one to express all three unknowns (i.e., $a_{n+1}, v
 in terms of one of these. 
 
 The most straight-forward way to implement the Newmark scheme, is to form
-a single equation in terms of unknown accelerations, $\boldsymbol{a}_{n+1}$.
+a single equation in terms of unknown accelerations, $\boldsymbol{a}_{n+1}$:
 
 $$
 \mathbf{A} \boldsymbol{a}_{n+1} = \boldsymbol{b}
 $$
-
-This simply follows from plugging the Newmark equations into the discrete
-equilibrium statement at $t_{n+1}$. However, before this, it is useful rewrite
-equations [@eqn:newmark] as follows:
+for some known matrix $\mathbf{A}$ and vector $\boldsymbol{b}$.
+This is obtained by plugging the Newmark equations into the discrete
+equilibrium statement at $t_{n+1}$. However before deriving this, it is useful rewrite
+equations [@eq:newmark] as follows:
 
 $$
 \begin{aligned}
@@ -133,7 +143,7 @@ $$
 \end{aligned}
 $$
 
-This generalizes as follows:
+This generalizes as follows :
 
 $$\begin{aligned}
 \tilde{\boldsymbol{d}} &= \sum_i b_{di}\boldsymbol{y}_i  \\ 
@@ -148,7 +158,8 @@ $$\begin{aligned}
 \boldsymbol{a}_{n+1} &= \tilde{\boldsymbol{a}} + c_a  \, \boldsymbol{x}_{n+1}
 \end{aligned}$$
 
-for some coefficients $c_{yx}$, and where $\tilde{\left(\cdot\right)}_x$
+where $\boldsymbol{y}_i = (\boldsymbol{d}_n, \boldsymbol{v}_n ,\boldsymbol{a}_n)$
+coefficients $c_{yx}$ and $b_{ij}$ given below, and where $\tilde{\left(\cdot\right)}_x$
 variables encapsulate the information that is known at the start of the
 time step.
 
@@ -159,8 +170,8 @@ Applying this to a nonlinear problem yields:
 
 $$
 \begin{aligned}
-r(\boldsymbol{x}_{n+1})&= \mathbf{M}\,  \left(\tilde{\boldsymbol{a}} + c_{ax}\,\boldsymbol{x}_{n+1}\right)
-                        + \mathbf{C}\,  \left(\tilde{\boldsymbol{v}} + c_{vx}\,\boldsymbol{x}_{n+1}\right)
+r(\boldsymbol{x}_{n+1})&= \mathbf{M}\,  \left[\tilde{\boldsymbol{a}} + c_{ax}\,\boldsymbol{x}_{n+1}\right]
+                        + \mathbf{C}\,  \left[\tilde{\boldsymbol{v}} + c_{vx}\,\boldsymbol{x}_{n+1}\right]
                         + \boldsymbol{p}\left(\tilde{\boldsymbol{d}} + c_{dx}\,\boldsymbol{x}_{n+1},
                                               \tilde{\boldsymbol{v}} + c_{vx}\,\boldsymbol{x}_{n+1}\right)
                         - \boldsymbol{f}(t_{n+1})
@@ -190,7 +201,7 @@ $$
 \boldsymbol{y}_{n+1} =  \mathsf{B}_x \, \boldsymbol{y}_n + {c}_{yx}\, \boldsymbol{x}_{n+1}
 $$
 
-From the Newmark equations, these follow as:
+From the Newmark equations, the coefficients $c_{xy}$ follow as:
 
 $$
 c_{xy} = \begin{pmatrix}
@@ -200,11 +211,13 @@ c_{xy} = \begin{pmatrix}
 \end{pmatrix}
 $$
 
+The matrix $\mathsf{B}$ is given for the acceleration formulation ($\boldsymbol{x} \triangleq \boldsymbol{a}$) by:
+
 $$
 \begin{pmatrix}
-\tilde{ d} \\
-\tilde{ v} \\
-\tilde{ a}
+\tilde{ \boldsymbol{d}} \\
+\tilde{ \boldsymbol{v}} \\
+\tilde{ \boldsymbol{a}}
 \end{pmatrix}_a =
 \begin{pmatrix}
 1 & \Delta t & \Delta t^2 \left(\tfrac{1}{2} - \beta\right) \\ 
@@ -212,18 +225,19 @@ $$
 && 0
 \end{pmatrix}
 \begin{pmatrix}
- d \\ 
- v \\ 
- a
-\end{pmatrix}_n
+ \boldsymbol{d}_n \\ 
+ \boldsymbol{v}_n \\ 
+ \boldsymbol{a}_n 
+\end{pmatrix}
 $$
 
+In the velocity formulation ($\boldsymbol{x} \triangleq \boldsymbol{v}$):
 
 $$
 \begin{pmatrix}
-\tilde{ d} \\
-\tilde{ v} \\
-\tilde{ a}
+\tilde{ \boldsymbol{d}} \\
+\tilde{ \boldsymbol{v}} \\
+\tilde{ \boldsymbol{a}}
 \end{pmatrix}_v =
 \begin{pmatrix}
 1 & - \Delta t\frac{\beta}{\gamma}\left(1 - \frac{\gamma}{\beta}\right) & \Delta t^2 \frac{\beta}{\gamma}\left(\frac{\gamma}{2\beta} - 1 \right) \\ 
@@ -231,18 +245,19 @@ $$
 &\frac{-1}{\gamma \Delta t} & 1 - \frac{1}{\gamma}
 \end{pmatrix}
 \begin{pmatrix}
- d \\ 
- v \\ 
- a
-\end{pmatrix}_n
+ \boldsymbol{d}_n \\ 
+ \boldsymbol{v}_n \\ 
+ \boldsymbol{a}_n 
+\end{pmatrix}
 $$
 
+Finally, for the displacement formulation ($\boldsymbol{x} \triangleq \boldsymbol{d}$):
 
 $$
 \begin{pmatrix}
-\tilde{ d} \\
-\tilde{ v} \\
-\tilde{ a}
+\tilde{ \boldsymbol{d}} \\
+\tilde{ \boldsymbol{v}} \\
+\tilde{ \boldsymbol{a}}
 \end{pmatrix}_d =
 \begin{pmatrix}
 0 \\ 
@@ -250,10 +265,10 @@ $$
 \frac{1}{\beta \Delta t^2} & \frac{-1}{\beta\Delta t} & \quad \left(1 + \tfrac{1}{2\beta}\right)
 \end{pmatrix}
 \begin{pmatrix}
- d \\ 
- v \\ 
- a
-\end{pmatrix}_n
+ \boldsymbol{d}_n \\ 
+ \boldsymbol{v}_n \\ 
+ \boldsymbol{a}_n 
+\end{pmatrix}
 $$
 
 

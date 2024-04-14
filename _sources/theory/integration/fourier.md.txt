@@ -1,0 +1,73 @@
+# Fourier
+
+The transfer function $H$ is the Laplace transform of the impulse response.
+The transfer function provides a complete mathematical representation of the system's behavior.
+
+The frequency response is the Fourier transform of the impulse response.
+
+The frequency response is a special case of the Laplace transfer function where the transients are assumed to be completely dissipated, leaving the steady state sinusoidal response.
+
+The frequency response and transfer function are equivalent when the real part $\sigma$  of the  transfer function's complex variable $s=\sigma+j \omega$ is zero.
+A frequency response describes a linear time-invariant (LTI) system.
+
+A system with non-zero initial conditions is not LTI because its output has a component which only depends on the initial conditions and which is independent of the input signal. Consequently, a system with non-zero initial conditions cannot fully be described by a frequency response. If you assume zero initial conditions, then such a system (if otherwise LTI) can be described by a frequency response.
+
+Complex exponentials are eigenfunctions of LTI systems. 
+
+
+$$
+\phi =  \tan^{-1}\frac{2\zeta \omega / \omega_n}{1 - (\omega/\omega_n)^2} = \tan^{-1} -\frac{\Im H(\omega)}{\Re H(\omega)} 
+$$
+
+--------
+
+Consider the Fourier transform $G(\omega,\tau)$ of the impulse response $g(t,\tau)$:
+$$
+\begin{aligned}
+G(\omega,\tau)&=\int_{-\infty}^{\infty}  e^{i \omega t} g\left(t, \tau\right) d t \\
+\end{aligned}
+$$
+$$
+\left[-\omega^2-2 i \gamma \omega+\omega_0^2\right] G\left(\omega, \tau\right)=\int_{-\infty}^{\infty} e^{i \omega t} \delta\left(t-\tau\right) d t  =e^{i \omega \tau}
+$$
+$$
+G\left(\omega, \tau\right)=\frac{e^{i \omega \tau}}{-\omega_0^2 + \omega^2 + 2 i \gamma \omega}
+$$
+
+
+The first thing to notice is that the Green's function depends on $t$ and $\tau$ only in the combination $t-\tau$. This makes sense: the response of the oscillator to the force pulse should only depend on the time elapsed since the pulse. We can exploit this property by re-defining the frequency-domain Green's function as
+$$
+G(\omega)=\int_{-\infty}^{\infty} e^{i \omega\left(t-\tau\right)} g\left(t-\tau\right) \, d t
+$$
+which then obeys
+$$
+\left[-\omega^2-2 i \gamma \omega+\omega_0^2\right] G(\omega)=\int_{-\infty}^{\infty} e^{i \omega (t-\tau)} \delta\left(t-\tau\right)\, d t =e^{i \omega \tau}=1 .
+$$
+so
+$$
+H(\omega)=\frac{{Y}(\omega)}{{F}(\omega)}=\frac{1}{\omega_0^2-\omega^2 + 2 i \gamma \omega} .
+$$
+For a system with an arbitrary initial displacement, $u_0$, and arbitrary initial velocity, $\dot{u}_0$, Eq. 9 should be generalized as follows:
+$$
+Y(\omega)=H(\omega)F(\omega)+H(\omega)\left[m\left(2 \zeta p+i \omega\right) u_0 +m \dot{u}_0\right] 
+$$
+
+
+
+
+## Laplace
+
+$$
+Y(s) = H(s) F(s)
+$$
+$$
+H(s)=\frac{Y(s)}{F(s)}=\frac{\mathcal{L}\{y(t)\}}{\mathcal{L}\{f(t)\}}
+$$
+
+The eigenfunction property of exponentials is very useful for both analysis and insight into LTI systems. The one-sided Laplace transform
+$$
+H(s) \stackrel{\text { def }}{=} \mathcal{L}\{h(t)\} \stackrel{\text { def }}{=} \int_0^{\infty} h(t) e^{-s t} \mathrm{~d} t
+$$
+is exactly the way to get the eigenvalues from the impulse response. Of particular interest are pure sinusoids (i.e., exponential functions of the form $e^{j \omega t}$ where $\omega \in \mathbb{R}$ and $j \stackrel{\text { def }}{=} \sqrt{-1})$. The Fourier transform $H(j \omega)=\mathcal{F}\{h(t)\}$ gives the eigenvalues for pure complex sinusoids. Both of $H(s)$ and $H(j \omega)$ are called the system function, system response, or transfer function.
+
+--------------

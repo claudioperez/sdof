@@ -1,0 +1,490 @@
+# Differntial-Algebraic Equations
+
+
+``` tikzit
+/mnt/c/Users/claud/Documents/Tikzit/plasticity
+```
+
+
+Five key concepts form the basis of almost all classical theories of plasticity.  They are
+
+1. The decomposition of strain into elastic and plastic parts;
+2. Yield criteria, which predict whether the solid responds elastically or plastically;
+3. Strain hardening rules, which control the way in which resistance to plastic flow increases with plastic straining;
+4. The plastic flow rule, which determines the relationship between stress and plastic strain under multi-axial loading;
+5. The elastic unloading criterion, which models the irreversible behavior of the solid.
+
+
+the hardening law is defined as a 
+relation between the back-stress tensor and the plastic strain 
+tensor 
+
+Equations:
+
+1. Elastic stress-strain relationships
+  $$
+  \begin{aligned}
+  \boldsymbol{\sigma} &=\frac{\partial W\left(\varepsilon-\varepsilon^{p}\right)}{\partial \varepsilon}=\mathbf{C}:\left(\varepsilon-\varepsilon^{p}\right) \\
+  %\mathbf{C}: &=\frac{\partial^{2} W\left(\varepsilon-\varepsilon^{p}\right)}{\partial \varepsilon^{2}}=\text { constant (elastic moduli). }
+  \end{aligned}
+  $$
+
+2. Elastic domain in stress space (single surface)
+   $$
+   \mathbb{E}_{\sigma}=\left\{(\boldsymbol{\sigma}, \boldsymbol{q}) \in \mathbb{S} \times \mathbb{R}^{m} \mid f(\boldsymbol{\sigma}, \boldsymbol{q}) \leq 0\right\}
+   $$
+
+3. Flow rule and hardening law
+
+   $$
+   \begin{aligned}
+   & \text{General}  & \text{Associative} \\
+   \dot{\varepsilon}^{p} &=\lambda \boldsymbol{r}(\boldsymbol{\sigma}, \boldsymbol{q}) &=\lambda \frac{\partial f}{\partial \boldsymbol{\sigma}}  \\
+   \dot{\boldsymbol{q}} &=-\lambda \boldsymbol{h}(\boldsymbol{\sigma}, \boldsymbol{q}) &= -\lambda \mathbf{D} \frac{\partial f}{\partial \boldsymbol{q}}
+   \end{aligned}
+   $$
+
+   where $\mathbf{D}$ is a matrix of generalized plastic moduli.
+
+4. Kuhn-Tucker loading/unloading (complementarity)
+
+  $$
+  \lambda \geq 0, \quad f(\boldsymbol{\sigma}, \boldsymbol{q}) \leq 0, \quad \lambda f(\boldsymbol{\sigma}, \boldsymbol{q})=0 .
+  $$
+
+5. Consistency condition
+
+   $$
+   \lambda \dot{f}(\boldsymbol{\sigma}, \boldsymbol{q})=0 .
+   $$
+
+
+### Yield Criteria
+
+Huber Von-Mises ($J_2$) 
+:   ~
+
+> $$
+ \begin{aligned}
+ \boldsymbol{\eta} &:=\operatorname{dev}[\boldsymbol{\sigma}]-\overline{\boldsymbol{\beta}} \\
+ \operatorname{tr}[\overline{\boldsymbol{\beta}}] &:=0 \\
+ f(\boldsymbol{\sigma}, \boldsymbol{q}) &=\|\boldsymbol{\eta}\|-\sqrt{\frac{2}{3}} K(\alpha) \\
+ \dot{\varepsilon}^{p} &=\lambda \frac{\boldsymbol{\eta}}{\|\boldsymbol{\eta}\|}, \\
+ \lambda &= \left\|\dot{\varepsilon}^{p}\right\|=\frac{\left<\frac{\boldsymbol{\eta}}{\|\boldsymbol{\eta}\|}: \dot{\boldsymbol{\varepsilon}}\right>}{1+\frac{H^{\prime}+K^{\prime}}{3 \mu}}, \\
+ \dot{\overline{\boldsymbol{\beta}}} &=\lambda \frac{2}{3} H^{\prime}(\alpha) \frac{\boldsymbol{\eta}}{\|\boldsymbol{\eta}\|} \\
+ \dot{\alpha} &=\lambda \sqrt{\frac{2}{3}} \\
+ % \boldsymbol{n}&:=\frac{\boldsymbol{\eta}}{\|\boldsymbol{\eta}\|}
+ \end{aligned}
+> $$
+
+
+
+### Isotropic Hardening
+
+
+#### Prager
+
+#### Voce
+
+: Isotropic Hardening (Voce 1948). Note that this is equivalent to the special case $r=1$
+  for the power law below.
+
+  <!--
+  > $$
+  > \sigma_{y} = f_{y} + f_{\infty} \left(1-e^{-b \varepsilon_{e q}^{p}}\right)
+  > $$
+
+  Presented by Simo & Hughes as:
+
+  > $$
+  > K(\alpha):=\sigma_{Y}+\theta \bar{H} \alpha+\left(\bar{K}_{\infty}-\bar{K}_{0}\right)[1-\exp (-\delta \alpha)]
+  > $$
+  > where $\bar{H} \geq 0, \bar{K}_{\infty} \geq \bar{K}_{0}>0$, and  $\delta \geq 0$ are material constants. 
+
+
+  Or Anand and Govindjee (2020) as:
+  -->
+
+  > $$
+    \sigma_{y} = f_{y} + f_{\infty}\left(1-e^{-b \varepsilon_{e q}^{p}}\right)
+    Y\left(\bar{\varepsilon}^{\mathrm{p}}\right)=f_{s}-\left(Y_{s}-Y_{0}\right) \exp \left(-\frac{H_{0}}{Y_{s}} \bar{\varepsilon}^{\mathrm{p}}\right)
+  > $$
+  > 
+  > | Symbol | Description |
+  > |--------|-------------|
+  > | $f_y$   | Initial yield stress. |
+  > | $f_\infty$ | Saturated yield stress |
+
+  by specializing
+  $$
+  \dot{\sigma}_\text{y} = \dot{\lambda} H_{0}\left(1-\frac{\sigma_\text{y}}{f_{\text{y}, \infty}}\right)^{r}
+  $$
+  for $r=1$
+
+
+#### Power-Law Hardening (Govindjee 2020)
+
+$$
+\boxed{
+\dot{\sigma}_y(\bar{{\varepsilon}}^\mathrm{p})=\dot{\bar{\epsilon}}^p H_\text{iso}\left(1-\frac{\sigma_y}{f_{y,s}}\right)^{r}, \\
+\quad \sigma_y(0) = Y_0
+}
+$$
+$$
+\sigma_y\left(\bar{{\varepsilon}}^{\mathrm{p}}\right)
+= \begin{cases}
+f_{s}-\left[\left(f_{y,s}-f_{y}\right)^{(1-r)}+(r-1)\left(\frac{H_{0}}{\left(f_{s}\right)^{r}}\right) \bar{\varepsilon}^{\mathrm{p}}\right]^{\frac{1}{1-r}} & r \ne 1 \\
+f_{s}-\left(f_{y,s}-f_y\right) \exp \left(-\frac{H_\text{iso}}{f_{s}} \bar{{\varepsilon}}^{\mathrm{p}}\right) & r = 1
+\end{cases}
+$$
+
+
+### Kinematic Hardening
+
+
+#### Prager
+
+$$
+\boxed{
+\sigma_{\mathrm{b}} = H_\mathrm{k} \, \varepsilon^p
+}
+$$
+
+| Symbol             | Description |
+|--------------------|-------------|
+| ${H}_{\text{k}}$   | Kinematic hardening modulus |
+
+#### Ziegler
+
+$$
+d \alpha_{i j}=d a\left(\varepsilon_{i j}^p\right)\left(\sigma_{i j}-\alpha_{i j}\right)
+$$
+
+for some scalar function $a$.
+or
+
+$$
+\dot{\boldsymbol{\alpha}}=C \dot{\bar{\varepsilon}}^{p l} \frac{1}{\sigma^0}(\boldsymbol{\sigma}-\boldsymbol{\alpha})+\frac{1}{C} \boldsymbol{\alpha} \dot{C}
+$$
+where $C(\theta)$ is the hardening parameter $\left(C(\theta)\right.$ is the work-hardening slope of the isothermal uniaxial stress-strain response, $d \sigma / d \varepsilon^{p l}$, taken at different temperatures) and $\dot{C}$ is the rate of change of $C$ with respect to temperature. This form of evolution law for $\alpha$ defines the rate of $\alpha$ due to plastic straining to be in the direction of the current radius vector from the center of the yield surface, $\sigma-\alpha$, and the rate due to temperature changes to be toward the origin of stress space. Rice $(\underline{1975})$ writes this concept quite generally as
+$$
+\dot{\boldsymbol{\alpha}}=\dot{\mu}(\boldsymbol{\sigma}-\boldsymbol{\alpha})+h \boldsymbol{\alpha} \dot{\theta} .
+$$
+
+-------
+
+
+#### Ziegler
+
+>
+> $$
+  \dot{\boldsymbol{\sigma}}_\text{back}=\frac{2}{3} H \dot{\varepsilon}^{p}=\dot{\lambda} \sqrt{\frac{2}{3}} H \frac{\boldsymbol{\eta}}{\|\eta\|}
+> $$
+>
+> | Symbol                 | Description |
+> |------------------------|-------------|
+> | $\bar{H}_{\text{k}}$   | Kinematic hardening modulus |
+
+Typically implemented with isotropic hardening as:
+
+$$
+\begin{aligned}
+H^{\prime}(\alpha) &=(1-\theta) \bar{H} \\
+K(\alpha) &=\left[\sigma_{y}+\theta \bar{H} \alpha\right], \quad \theta \in[0,1]
+\end{aligned}
+$$
+
+- Ishlinsky, A. I., "General Theory of Plasticity with Linear Strain Hardening," Ukrainian Mathematical Zhurnal, Vol. 6, 1954, pp. 314-324.
+- Ziegler, H., "A Modification of Prager's Hardening Rule," Quarterly of Applied Mathematics, Vol. 17, 1959, pp. 55-65.
+
+#### Armstrong–Frederick
+
+<!-- see Lemaitre and Chaboche (1990), Chapter 5, or Jirásek and Bažant (2002), Chapter 20 for details --> 
+<!-- From de Souza Neto (2008);  -->
+
+
+> $$
+  \begin{aligned}
+  \dot{\boldsymbol{\sigma}}_\text{back} &=\frac{2}{3} \bar{H}_\text{k} \dot{\boldsymbol{\varepsilon}}^{p}-\dot{\lambda} b \boldsymbol{\sigma_\text{back}} \\
+  %&=\dot{\lambda}\left(\frac{2}{3} \bar{H}_\text{k} \frac{\partial \Phi}{\partial \boldsymbol{\sigma}}-b \boldsymbol{\sigma_\text{back}}\right)
+  \end{aligned}
+> $$
+>
+> | Symbol                 | Description |
+> |------------------------|-------------|
+> | $\bar{H}_{\text{k}}$   | Back stress modulus |
+> | $b$                    | Kinematic saturation parameter |
+
+
+<!--
+    From Anand and Govindjee (2020):
+
+    > $$
+      \dot{A}=\dot{\varepsilon}^{\mathrm{p}}-\gamma A \dot{\bar{\varepsilon}}^{\mathrm{p}}
+    > $$
+
+    $$
+    \begin{aligned}
+    \dot{\psi}^{\mathrm{p}} &=C A \dot{A} \\
+    &=C A \dot{\varepsilon}^{\mathrm{p}}-C \gamma A^{2} \dot{\bar{\varepsilon}}^{\mathrm{p}} \\
+    &=\sigma_{\text {back }} \dot{\varepsilon}^{\mathrm{p}}-C \gamma A^{2} \dot{\varepsilon}^{\mathrm{p}}
+    \end{aligned}
+    $$
+
+    where
+    $$
+    \sigma_{\text {back }} \stackrel{\text { def }}{=} C A
+    $$
+
+    and $C$ is known as the back stress modulus. Note that using (20.4.12) the back stress evolves according to
+    $$
+    \dot{\sigma}_{\text {back }}=C \dot{\varepsilon}^{\mathrm{p}}-\gamma \sigma_{\text {back }} \dot{\bar{\varepsilon}}^{\mathrm{p}} .
+    $$
+    Substituting $(20.4 .13)_{3}$ in (20.4.3) we obtain,
+    $$
+    \mathcal{D}=\left(\sigma-\sigma_{\text {back }}\right) \dot{\varepsilon}^{\mathrm{p}}+C \gamma A^{2} \dot{\bar{\varepsilon}}^{\mathrm{p}} \geq 0,
+    $$
+-->
+
+#### Chaboche (Chaboche et al. 1979)
+
+
+$$
+\boxed{
+\begin{gathered}
+\dot{\boldsymbol{\sigma}}_{\text{back},k}=\sqrt{2 / 3} C_{k} \dot{\boldsymbol{\varepsilon}}^{p} -\gamma_{k} \dot{\bar{\varepsilon}}^{p} \boldsymbol{\sigma}_{\text{back},k}\\
+\mathbf{\sigma}_\text{back}=\sum_{k=1}^{n B a c k} \sigma_{\text{back},k}
+\end{gathered}
+}
+$$
+
+$$
+\dot{\boldsymbol{\alpha}}=C \dot{\bar{\varepsilon}}^{p l} \frac{1}{\sigma^0}(\boldsymbol{\sigma}-\boldsymbol{\alpha})-\gamma \boldsymbol{\alpha} \dot{\bar{\varepsilon}}^{p l}+\frac{1}{C} \boldsymbol{\alpha} \dot{C}
+$$
+where $C$ and $\gamma$ are material parameters,
+
+<!-- 
+### Common Implementations
+
+Hardening Combinations:
+
+- Power-Chaboche
+- Voce-Chaboche
+- Voce-Armstrong-Fredrick 
+- Voce-Prager 
+- Linear
+- Perfect plasticity
+
+## Sub-layer Models
+
+A "Masing material" (@masing1923zur), is
+one such that the ascending branches (for example) of
+hysteresis loops of different total strain ranges coincide
+when their compressive peaks are superimposed at a
+common origin [4].
+
+The discrete yielding
+exhibited by Massing-type models is often associated with heterogeneous microstructures (@skelton1997bauschinger)
+
+## Algorithmic
+
+### Masing
+
+The Masing model is discussed in @sivaselvan2000hysteretic . 
+
+- $\phi(-\varepsilon) = - \phi(\varepsilon)$
+
+- The Masing model implicitly assumes that no microstructural variations take place during loading, which means the same prevailing microstructure and deformation mechanisms at all plastic strain amplitudes [45].
+
+### Ramberg-Osgood
+
+The Ramberg-Osgood model was presented in a NASA report [@ramberg1943description]. Formulations which derive from the Ramberg-Osgood formula include that of @kent1969inelastic
+
+<dl>
+<dt>Kent</dt>
+a
+<dd></dd>
+</dl>
+
+
+
+### GMP
+
+$$
+\sigma_{s} = \sigma_{o} + E_{o}\left(\varepsilon_{s}-\varepsilon_{o}\right)\left\{Q+\frac{1-Q}{\left[1+\left|E_{o} \frac{\varepsilon_{s}-\varepsilon_{o}}{f_{c h}-f_{o}}\right|^{R}\right]^{\frac{1}{R}}}\right\}
+$$
+
+
+Giuffre - Pinto (1970)
+
+:   @giuffre1970comportamento
+
+    >$$
+    \sigma_s(\varepsilon) = \left[b\xi + \frac{(1-b)\xi}{\left(1 + |\xi|^r\right)^\frac{1}{r}}\right] E f_y
+    >$$
+
+    Implementations:
+
+    - `SteelMP`
+    - `SteelMPF`
+    - `Steel02`
+    - `GMP1dMat`
+
+Filippou 1983
+: ...
+
+Steel4
+:   > $$\mu = \frac{\varepsilon_{pl,tot}}{\varepsilon_{y0}} - \ell_{yp}$$
+    > 
+    > $$ 
+      \mu  \left(b_2 + (b_1 - b_2)  \left(1.0 + \left(b_1  \frac{\mu}{\rho}\right)^R\right)^{-1/R} \right)
+    > $$
+
+
+Monti - Nuti
+:
+
+Dodd - Restreppo
+:   Monotonic
+
+    >   - Linear-elastic: $\sigma^\prime =E \varepsilon^\prime$
+    >   - Yield plateau:  $\sigma^\prime = \sigma_y e^{\varepsilon^\prime} \operatorname{sign}(\varepsilon)$
+    >   - Strain Hardening :
+    >     $$
+          \begin{aligned}
+          f_{s}^{\prime}=&s\left[f_{s h}^{\prime}+f_{s u}^{\prime *}\left(\varepsilon_{s u}^{\prime}+\varepsilon_{s h}^{\prime}\right) - f_{s u}^{\prime}\right]\left\{\frac{\varepsilon_{s u}^{\prime}-s\left[\varepsilon_{s}^{\prime}-\varepsilon_{o}^{\prime}(k)\right]}{\varepsilon_{s u}^{\prime}-\varepsilon_{s h}^{\prime}}\right\}^{P} \\
+          &-f_{s u}^{\prime * *}\left\{s \varepsilon_{s u}^{\prime}-\left[\varepsilon_{s}^{\prime}-\varepsilon_{o,}^{\prime}(k)\right]\right\}+s f_{s u}^{\prime} \\
+          P=&\log \left[\frac{f_{s h, 1}^{\prime}+f_{s u}^{\prime *}\left(\varepsilon_{s t}^{\prime}-\varepsilon_{s h, 1}^{\prime}\right)-f_{s u}^{\prime}}{f_{s h}^{\prime}+f_{s u}^{\prime *}\left(\varepsilon_{s u}^{\prime}-\varepsilon_{s h}^{\prime}\right)-f_{s u}^{\prime}}\right] / \log \left(\frac{\varepsilon_{s t}^{\prime}-\varepsilon_{s h, 1}^{\prime}}{\varepsilon_{s u}^{\prime}-\varepsilon_{s h}^{\prime}}\right)
+          \end{aligned}
+    >     $$
+    > 
+    
+    Hysteretic
+
+    > - Unloading: linear until $\left(\varepsilon_a, f_a\right)$ with slope $E_u$
+    >   $$\varepsilon_{a}^{\prime}=\varepsilon_{r}^{\prime}+\frac{s f_{y}}{E_{u}^{\prime}} ; \quad \text { and } \quad f_{a}^{\prime}=f_{r}^{\prime}+s f_{y}$$
+    >   $$\frac{E_{u}^{\prime}}{E_{v}}=0.82+\frac{1}{5.55+1,000 \varepsilon_{M}^{\prime}}$$
+
+The total Luders strain is assumed to be aconstant, independent of the number of reversals, as proposed by Thompson and Park (1978) and Mander et al. (1984).
+
+
+Chang - Mander
+
+:   ![](assets/chang-mander.png)
+
+    2.2 Monotonic Curve
+
+    >
+    >- 2.2.1 Linear-Elastic $\sigma^\prime =E \varepsilon^\prime$
+    >- 2.2.2 Plateau, $\sigma = \sigma_y$
+    >- 2.2.3 Strain Hardening
+    >  $$
+       \sigma = f_{s u}+\left(f_{y}-f_{s u}\right)\left|\frac{\varepsilon_{s u}-\varepsilon_{s}}{\varepsilon_{s u}-\varepsilon_{s h}}\right|^{p} \\
+       p=E_{s h} \frac{\varepsilon_{s u}-\varepsilon_{s h}}{f_{s u}-f_{y}}
+    >  $$
+    >
+    > 2.3 Evolution of GMP curve
+    >
+    > 2.4 Cyclic Model
+    > - Tension/Compression Envelopes
+    >   $$
+        f_{s}=\frac{E_{s} \varepsilon_{s s}}{\left[1+\left(\frac{E_{s} \varepsilon_{s s}}{f_{y}^{+}}\right)^{10}\right]^{0.1}}+\frac{\operatorname{sign}\left(\varepsilon_{s s}-\varepsilon_{s h}^{+}\right)+1}{2}\left(f_{s u}^{+}-f_{y}^{+}\right)\left[1-\left|\frac{\varepsilon_{s u}^{+}-\varepsilon_{s s}}{\varepsilon_{s u}^{+}-\varepsilon_{s h}^{+}}\right|^{p+}\right]
+    >   $$
+    >   $$
+        \begin{aligned}
+    \varepsilon_{s s} &=\varepsilon_{s}-\varepsilon_{o m}^{+} \\
+    p^{+} &=E_{s h}^{+} \frac{\varepsilon_{s u}^{+}-\varepsilon_{s h}^{+}}{f_{s u}^{+}-f_{y}^{+}}
+    \end{aligned}
+        $$
+
+
+
+
+### Dodd-Restreppo
+
+
+## Notes
+
+### Consistency
+
+- **Maximum plastic dissipation**:
+  $$\left(\sigma-\sigma^{*}\right) \dot{\varepsilon}^{p} \geqq 0$$
+  *the actual stress is greater (less) that any other stress attainable by unloading if the plastic strain rate is positive (negative)* (@lubliner1983maximum). The principal consequences are:
+  1. where the yield locus is regular, the plastic strain rate is perpendicular to it ("normality rule")
+  2. where the yield locus forms a corner, the plastic strain-rate vector lies in the cone formed by the limiting normal vectors ;
+  3. the yield locus in convex
+
+  A consitutive model for plastic deformation can be governed by an associative flow rule, with the plastic strain increment normal to the yield surface, even though there may be cycles of stress and strain for which Drucker's and Ilyushin's work inequalities are both violated. 
+
+- **Drucker's postulate**: the work done by an external added stress over a closed stress loop is non-negative:
+  $$\dot{\sigma}_{i j} \dot{\varepsilon}_{i j}^{p} \geqq 0$$
+  Failure to satisfy Drucker's postulate implies that the model can be disturbed from an
+equilibrium state by an external agency that does negative work [@thyagarajan1990modeling].
+- **Il'iushin's postulate**:
+
+- Bounded-input bounded-output stability (BIBO):
+- Drift
+- Passivity: the system does not generate energy
+- Masing
+
+
+-->
+
+```{=tex}
+\pagebreak
+```
+
+# Appendix
+
+
+$$
+\dot{\sigma}_\text{b} + \gamma |\dot{\epsilon}|\sigma_\text{b} = H \dot{\epsilon} 
+$$
+
+$$
+\begin{aligned}
+u^\prime + a x u = bx \\
+u = \frac{b}{a} - \frac{1}{a} e^{\frac{-1}{2}\left(ax^2+2c_1a\right)}
+\end{aligned}
+$$
+
+$$
+\frac{b}{a^2}\left(ax-1\right)+ c_1 e^{-ax}
+$$
+
+
+```{=tex}
+\pagebreak
+\raggedbottom
+```
+
+# Notation
+
+$$
+\dot{\bar{\epsilon}}^p \stackrel{\text { def }}{=}\left|\dot{\epsilon}^p\right|
+$$
+
+$$
+\bar{\epsilon}^p(t)\triangleq \int_0^t \dot{\bar{\epsilon}}^p(\zeta) d \zeta
+$$
+
+$Y\left(\bar{\epsilon}^p\right)$ characterizes the strain-hardening
+$$
+H\left(\bar{\epsilon}^p\right) \stackrel{\text { def }}{=} \frac{d Y\left(\bar{\epsilon}^p\right)}{d \bar{\epsilon}^p}
+$$
+
+$\dot{\epsilon}^p=\left\{\begin{array}{llll}0 & \text { if } & |\sigma|<Y\left(\bar{\epsilon}^p\right) & \text { (behavior in the elastic state), } \\ 0 & \text { if } & |\sigma|=Y\left(\bar{\epsilon}^p\right) & \text { and } \quad \sigma \dot{\epsilon}<0 \quad \text { (elastic unloading), } \\ \beta \dot{\epsilon} & \text { if } & |\sigma|=Y\left(\bar{\epsilon}^p\right) & \text { and } \quad \sigma \dot{\epsilon}>0 \quad \text { (plastic loading), }\end{array}\right.$
+where
+$\beta=\frac{E}{E+H\left(\bar{\epsilon}^p\right)}$
+
+|                       | Govindjee           | Simo                   |
+|-----------------------|---------------------|------------------------|
+| $\sigma_\text{yield}$ | $Y$                 | $K$                    |
+| $H_\text{iso}$        | $H_\text{iso}$      | $K^\prime$             |
+| $H_\text{kin}$        |                     | $H^\prime$             |
+| $\dot{\sigma}_y$      | $\dot{Y}$           | $K^\prime\dot{\alpha}$ |
+| $\|\epsilon^p\|$      | $\bar{\epsilon}^p$  | $\alpha$               |
+|                       | $\sigma_\text{eff}$ | $\eta$                 |
+| $\sigma_\text{back}$  |
+| $\sigma_\text{back}$  |
+

@@ -1,0 +1,26 @@
+The now standard return mapping algorithms for classical plasticity are based on the backward Euler method. Attempts to generalize these techniques to higher-order methods have found mixed success, see, e.g., ORTIZ and POPOV [1985], SIMO and GOVINDJEE [1988] and the follow-up work in CORIGLIANO and PEREGO [1991]. The new schemes described below generalize these algorithms within the context of the extremely convenient backward difference methods or ideas emanating from projected implicit Runge-Kutta methods widely used for stiff problems.
+
+
+-------------------------
+
+
+$$
+\boxed{
+\begin{aligned}
+& \boldsymbol{\Sigma}=\mathbf{G}\left[\boldsymbol{E}-\boldsymbol{E}^{\mathrm{p}}\right] \\
+& \dot{\boldsymbol{E}}^{\mathrm{p}}=\gamma \nabla f(\boldsymbol{\Sigma}), \\
+& f(\boldsymbol{\Sigma}) \leqslant 0, \quad \gamma \geqslant 0, \quad \text { and } \quad \gamma f(\boldsymbol{\Sigma})=0 .
+\end{aligned}}
+$$
+
+
+Basic approaches include:
+
+1. A first approach to the solution of (11.2) is to eliminate the multiplier $\gamma>0$ by differentiating the constraint. This yields
+   $$
+   \gamma=\frac{\nabla f(\boldsymbol{\Sigma}) \cdot \mathbf{G} \dot{\boldsymbol{E}}}{\nabla f(\boldsymbol{\Sigma}) \cdot \mathbf{G} \nabla f(\boldsymbol{\Sigma})} \quad \text { if } \nabla f \cdot \mathbf{G} \dot{\boldsymbol{E}}>0
+   $$
+   i.e., for plastic loading, and $\gamma=0$ otherwise. Substitution of this result then yields a rate problem that can be treated by conventional methods. This is, in fact, the approach taken in early treatments of elastoplasticity. The well-known drawback is that the algorithmic solution fails to satisfy the constraint. Matters worsen considerably as time progresses.
+
+2. Linear multistep methods and, amongst them, the so-called backward difference methods first applied to differential algebraic systems in GEAR [1971]. The lowest order backward difference method is the backward Euler method: a very stable scheme (it is simultaneously A-stable, B-stable and L-stable; see HAIRER and WANNER [1991]). Backward difference methods are widely used for stiff differential algebraic systems.
+3. Implicit Runge-Kutta methods. These are one-step methods which, in sharp contrast with linear multistep methods, are not subject to the so-called Dahlquist barriers which limit to two the order of accuracy of A-stable linear multistep methods. In fact, there exist implicit Runge-Kutta methods of arbitrarily high order which are A-stable; see, e.g., HUNDSDORFER [1985] and HAIRER, NORSETT and WANNER [1993]. In spite of their excellent stability properties, implicit Runge-Kutta methods are cumbersome to implement and rather expensive compared to linear multistep methods.

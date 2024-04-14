@@ -1,0 +1,36 @@
+# Semi-Implicit
+
+AKA Stormer-Verlet.
+
+The motion of a spring satisfying Hooke's law is given by
+$$
+\begin{aligned}
+& \frac{d x}{d t}=v(t) \\
+& \frac{d v}{d t}=-\frac{k}{m} x=-\omega^2 x .
+\end{aligned}
+$$
+
+The semi-implicit Euler for this equation is
+$$
+\begin{aligned}
+& v_{n+1}=v_n-\omega^2 x_n \Delta t \\
+& x_{n+1}=x_n+v_{n+1} \Delta t .
+\end{aligned}
+$$
+
+Substituting $v_{n+1}$ in the second equation with the expression given by the first equation, the iteration can be expressed in the following matrix form
+$$
+\left[\begin{array}{l}
+x_{n+1} \\
+v_{n+1}
+\end{array}\right]=\left[\begin{array}{cc}
+1-\omega^2 \Delta t^2 & \Delta t \\
+-\omega^2 \Delta t & 1
+\end{array}\right]\left[\begin{array}{l}
+x_n \\
+v_n
+\end{array}\right],
+$$
+and since the determinant of the matrix is 1 the transformation is area-preserving.
+The iteration preserves the modified energy functional $E_h(x, v)=\frac{1}{2}\left(v^2+\omega^2 x^2-\omega^2 \Delta t v x\right)$ exactly, leading to stable periodic orbits (for sufficiently small step size) that deviate by $O(\Delta t)$ from the exact orbits. The exact circular frequency $\omega$ increases in the numerical approximation by a factor of $1+\frac{1}{24} \omega^2 \Delta t^2+O\left(\Delta t^4\right)$.
+

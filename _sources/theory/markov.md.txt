@@ -1,0 +1,20 @@
+
+-------
+
+Most techniques to identify the Markov parameters sequence are based on the Fast Fourier Transform (FFT) of the inputs and measured outputs to compute the Frequency Response Functions (FRFs), and then use the Inverse Discrete Fourier Transform (IDFT) to compute the sampled pulse response histories. The discrete nature of the FFT causes one to obtain pulse response rather than impulse response, and a somewhat rich input is required to prevent numerical ill-conditioning. Indeed, the FRF is a ratio between the output and input DFT transform coefficients which requires the input signal to be rich in frequencies so that the corresponding quantity is invertible.
+
+
+For all LTI systems, the eigenfunctions, and the basis functions of the transforms, are complex exponentials. This is, if the input to a system is the complex waveform $A_s e^{s t}$ for some complex amplitude $A_s$ and complex frequency $s$, the output will be some complex constant times the input, say $B_s e^{s t}$ for some new complex amplitude $B_s$. The ratio $B_s / A_s$ is the transfer function at frequency $s$.
+
+
+$$
+H_i = \frac{Y_i}{U_i}
+$$
+
+$$
+Y^u = DFT^{-1}(H U)
+$$
+
+$$
+Y^\delta_i = DFT^{-1}({H})
+$$

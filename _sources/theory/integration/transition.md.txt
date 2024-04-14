@@ -1,0 +1,107 @@
+
+# Transition
+
+- The state transition matrix satisfies the differential equation $\frac{\partial \boldsymbol{\Phi}\left(t, t_0\right)}{\partial t}=\mathbf{A}(t) \mathbf{\Phi}\left(t, t_0\right)$ with initial conditions $\boldsymbol{\Phi}\left(t_0, t_0\right)=I$
+- In the time-invariant case, we can define $\boldsymbol{\Phi}$, using the matrix exponential, as $\boldsymbol{\Phi}\left(t, t_0\right)=e^{\mathbf{A}\left(t-t_0\right)}$
+- One can show that a matrix-valued function $\Psi$ is a fundamental matrix of $\dot{\mathbf{x}}(t)=A(t) \mathbf{x}(t)$ if and only if $\dot{\Psi}(t)=A(t) \Psi(t)$ and $\Psi$ is a non-singular matrix for all $t .$
+
+
+-----------------
+
+
+$$
+m\ddot{u} + c\dot{u} + k u = f(t)
+$$
+
+Let $x = (u, m\dot{u})$, so 
+
+$$
+\dot{x} = \begin{pmatrix}
+\dot{u} \\
+\ddot{u}
+\end{pmatrix} = \begin{bmatrix}
+0 & \frac{1}{m} \\
+-\frac{k}{m} & - \frac{c}{m}
+\end{bmatrix} x
+$$
+
+$$
+\mathbf{x}(t)=U(t) U^{-1}\left(t_0\right) \mathbf{x}_0+U(t)\int_{t_0}^{t} U^{-1}(\tau) \mathbf{b}(\tau) d \tau
+$$
+
+$$
+\mathbf{x}(t)=\boldsymbol{\Phi}\left(t, t_0\right) \mathbf{x}\left(t_0\right)+\int_{t_0}^t \boldsymbol{\Phi}(t, \tau) \mathbf{B}(\tau) \mathbf{u}(\tau) d \tau
+$$
+
+
+$$
+\boldsymbol{\Phi}(t, \tau) \equiv \mathbf{U}(t) \mathbf{U}^{-1}(\tau)
+$$
+
+
+$$
+\boldsymbol{y}_p(k)=\mathcal{O}_p \boldsymbol{x}(k)+\mathcal{T}_p \boldsymbol{u}_p(k)
+$$
+
+
+------
+
+$$
+\ddot{x}+2 \zeta \omega \dot{x}+\omega^2 x=-a_i-\frac{\Delta a_i}{\Delta t_i}\left(t-t_i\right) ; \quad t_i \leq t \leq t_{i+1}
+$$
+$$
+\begin{gathered}
+x=e^{-\zeta \omega\left(t-t_i\right)}\left[C_1 \sin \omega \sqrt{1-\zeta^2}\left(t-t_i\right)+C_2 \cos \omega \sqrt{1-\zeta^2}\left(t-t_i\right)\right] \\
+-\frac{a_i}{\omega^2}+\frac{2 \zeta}{\omega^3} \frac{\Delta a_i}{\Delta t_i}-\frac{1}{\omega^2} \frac{\Delta a_i}{\Delta t_i}\left(t-t_i\right)
+\end{gathered}
+$$
+$$
+\begin{aligned}
+\Delta t_i=t_{i+1}-t_i \\
+\Delta a_i=a_{i+1}-a_i
+\end{aligned}
+$$
+in which $C_1$ and $C_2$ are constants of integration. Setting $x=x_i$ and $\dot{x}=\dot{x}_i$ at $t=t_i$ and solving for $C_1$ and $C_2$, it can be shown that
+$$
+\begin{aligned}
+& C_1=\frac{1}{\omega \sqrt{1-\zeta^2}}\left(\zeta \omega x_i+\dot{x}_i-\frac{2 \zeta^2-1}{\omega^2} \frac{\Delta a_i}{\Delta t_i}+\frac{\zeta}{\omega} a_i\right) \\
+& C_2=x_i-\frac{2 \zeta}{\omega^3} \frac{\Delta a_i}{\Delta t_i}+\frac{a_i}{\omega^2}
+\end{aligned}
+$$
+
+$$
+\bar{x}_{i+1}= \mathbf{A} \bar{x}_i+ \mathbf{B} \bar{a}_i
+$$
+in which
+$$
+\bar{x}_i=\left\{\begin{array}{c}
+x_i \\
+\dot{x}_i
+\end{array}\right\} \quad \bar{a}_i=\left\{\begin{array}{c}
+a_i \\
+a_{i+1}
+\end{array} \right\}
+$$
+
+$$
+\begin{aligned}
+& a_{11}=e^{-\zeta \omega \Delta t_i}\left(\frac{\zeta}{\sqrt{1-\zeta^2}} \sin \omega \sqrt{1-\zeta^2} \Delta t_i+\cos \omega \sqrt{1-\zeta^2} \Delta t_i\right) \\
+& a_{12}=\frac{e^{-\zeta \omega \Delta t_i}}{\omega \sqrt{1-\zeta^2}} \sin \omega \sqrt{1-\zeta^2} \Delta t_i \\
+& a_{21}=-\frac{\omega}{\sqrt{1-\zeta^2}} e^{-\zeta \omega \Delta t_i} \sin \omega \sqrt{1-\zeta^2} \Delta t_i \\
+& a_{22}=e^{-\zeta \omega \Delta t_i}\left(\cos \omega \sqrt{1-\zeta^2} \Delta t_i-\frac{\zeta}{\sqrt{1-\zeta^2}} \sin \omega \sqrt{1-\zeta^2} \Delta t_i\right)
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+b_{11}&=\mathrm{e}^{-\beta \omega \Delta \mathrm{t}_{\mathrm{i}}}\left[\left(\frac{2 \beta^2-1}{\omega^2 \Delta \mathrm{t}_{\mathrm{i}}}+\frac{\beta}{\omega}\right) \frac{\sin \omega \sqrt{1-\beta^2} \Delta \mathrm{t}_{\mathrm{i}}}{\omega \sqrt{1-\beta^2}}+\left(\frac{2 \beta}{\omega^3 \Delta \mathrm{t}_{\mathrm{i}}}+\frac{1}{\omega^2}\right) \cos \omega \sqrt{1-\beta^2} \Delta \mathrm{t}_{\mathrm{i}}\right] \\
+& -\frac{2 \beta}{\omega^3 \Delta t_i} \\
+b_{12}&=-e^{-\beta \omega \Delta t_i}\left[\left(\frac{2 \beta^2-1}{\omega^2 \Delta t_i}\right) \frac{\sin \omega \sqrt{1-\beta^2} \Delta t_i}{\omega \sqrt{1-\beta^2}}+\frac{2 \beta}{\omega^3 \Delta t_i} \cos \omega \sqrt{1-\beta^2} \Delta t_i\right] \\
+& -\frac{1}{\omega^2}+\frac{2 \beta}{\omega^3 \Delta t_i} \\
+b_{21}&=e^{-\beta \omega \Delta t_i}\left[\left(\frac{2 \beta^2-1}{\omega^2 \Delta t_i}+\frac{\beta}{\omega}\right)\left(\cos \omega \sqrt{1-\beta^2} \Delta t_i-\frac{\beta}{\sqrt{1-\beta^2}} \sin \omega \sqrt{1-\beta^2} \Delta t_i\right)\right. \\
+& \left.-\left(\frac{2 \beta}{\omega^3 \Delta t_i}+\frac{1}{\omega^2}\right)\left(\omega \sqrt{1-\beta^2} \sin \omega \sqrt{1-\beta^2} \Delta t_i+\beta \omega \cos \omega \sqrt{1-\beta^2} \Delta t_i\right)\right] \\
+& +\frac{1}{\omega^2 \Delta t_i} \\
+b_{22}&=-e^{-\beta \omega \Delta t_i}\left[\frac{2 \beta^2-1}{\omega^2 \Delta t_i}\left(\cos \omega \sqrt{1-\beta^2} \Delta t_i-\frac{\beta}{\sqrt{1-\beta^2}} \sin \omega \sqrt{1-\beta^2} \Delta t_i\right)\right. \\
+&\left.-\frac{2 \beta}{\omega^3 \Delta t_i}\left(\omega \sqrt{1-\beta^2} \sin \omega \sqrt{1-\beta^2} \Delta t_i+\beta \omega \cos \omega \sqrt{1-\beta^2} \Delta t_i\right)\right]-\frac{1}{\omega^2 \Delta t_1}
+\end{aligned}
+$$

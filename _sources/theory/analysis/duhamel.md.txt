@@ -1,0 +1,126 @@
+
+# Duhamel
+
+
+A Green's function, $g(t, \tau)$, of a linear differential operator $\mathrm{L}=\mathrm{L}(t)$ acting on distributions over a subset of the Euclidean space $\mathbb{R}^n$, at a point $\tau$, is any solution of
+
+$$
+\mathrm{L} g(t, \tau)=\delta(\tau - t).
+$$
+
+Loosely speaking, if such a function $g$ can be found for the operator $\mathrm{L}$, then, if we multiply the equation (1) for the Green's function by $f(\tau)$, and then integrate with respect to $\tau$, one obtains,
+$$
+\begin{aligned}
+\int \mathrm{L} g(t, \tau) f(\tau) \,\mathrm{d} \tau &= \int \delta(t-\tau) f(\tau) \,\mathrm{d} \tau \\
+\left<\mathrm{L} g, f\right> &= \left<\delta, f\right> \\
+&= f(t)
+\end{aligned}
+$$
+Because the operator $\mathrm{L}=\mathrm{L}(t)$ is linear and acts only on the variable $t$ (and not on the variable of integration $\tau$ ), one may take the operator $\mathrm{L}$ outside of the integration, yielding
+$$
+\mathrm{L}\left(\int g(t, \tau) f(\tau) d \tau\right)=f(t) .
+$$
+A particular solution is then:
+$$
+u^*(t)=\int g(t, \tau) f(\tau) d \tau
+$$
+and
+$$
+\begin{aligned}
+u &= u^e(t) + u^{*}(t) \\
+  &=u^e(t) + \int g(t, \tau) f(\tau) d \tau
+\end{aligned}
+$$
+
+
+Duhamel's principle is the result that the solution to an inhomogeneous, linear, partial differential equation can be solved by first finding the solution for a step input, and then superposing using Duhamel's integral.
+Consider the IVP for a constant coefficient, $m$-th order inhomogeneous ODE with homogeneous boundary:
+$$
+\left\{
+\begin{aligned}
+& \mathrm{L} u(t)=f(t) \\
+& D_t^{(j)} u(0)=0, \quad 0 \leq j \leq m-1
+\end{aligned}
+\right.
+$$
+where the linear differential operator $\mathrm{L}$ is a linear combination of time derivatives $D_t^{(m)}$:
+$$
+\mathrm{L} \triangleq \sum^m_{j=0} a_j  D_t^{(j)},
+\quad a_m \neq 0 .
+$$
+
+
+Let $g$ solve the following homogeneous IVP with inhomogeneous boundary:
+$$
+\left\{
+\begin{aligned}
+\mathrm{L}\  g&=0,\\
+D_t^j g(0)&=0, \quad 0 \leq j \leq m-2, \\
+D_t^{m-1} g(0)&=1 / a_m .
+\end{aligned}
+\right.
+$$
+
+In terms of the Heaviside step function $\Theta_{[0, \infty)}$, define $g_0 \triangleq g{\Theta_{[0, \infty)}}$ so that:
+$$
+\mathrm{L} g_0=\delta
+$$
+in the sense of distributions. Therefore
+$$
+\begin{aligned}
+u(t) & =(g_0 * f)(t) \\
+& =\int_0^{\infty} g(\tau) f(t-\tau) d \tau \\
+& =\int_{-\infty}^t g(t-\tau) f(\tau) d \tau
+\end{aligned}
+$$
+
+
+> - The Green's function as used in physics is usually defined with the opposite sign s that
+$\mathrm{L} g(t, \tau)=\delta(t-\tau)$.
+> - This can be thought of as an expansion of $f$ according to a Dirac delta function basis (projecting $f$ over $\delta(x-s)$; and a superposition of the solution on each projection. Such an integral equation is known as a Fredholm integral equation, the study of which constitutes Fredholm theory.
+
+-   If the operator is translation invariant, that is, when $\mathrm{L}$ has constant coefficients with respect to $t$, then the Green's function can be taken to be a convolution kernel, that is,
+    $$
+    G(t, s)=G(t-s) .
+    $$
+
+    In this case, Green's function is the same as the **impulse response** of linear time-invariant system theory.
+
+- a **fundamental solution** for a linear partial differential operator $L$ is a formulation in the language of distribution theory of the older idea of a Green's function (although unlike Green's functions, fundamental solutions do not address boundary conditions).
+- the fundamental solution matrix $\mathbf{U}(t)$  satisfies $\dot{\mathbf{U}}(t)=\mathbf{A}(t) \mathbf{U}(t)$ with initial condition $\mathbf{U}\left(t_0\right)=\bm{1}$
+
+- The fundamental solution is not uniquely determined. If $U$ is a fundamental solution and $v$ is any solution to the homogeneous equation $Lv = 0$, then $U+v$ is also a fundamental solution.
+
+-------------------------------------
+
+
+$$
+\left[D^2-2 \alpha D +\omega_0^2\right] g\left(t, \tau\right)=\delta\left(t-\tau\right)
+$$
+
+$$
+\begin{aligned}
+g\left(t, \tau\right)
+& =\Theta\left(t-\tau\right) e^{\alpha\left(t-\tau\right)} \times \begin{cases}\frac{1}{\omega_d} \sin \left[\omega_d\left(t-\tau\right)\right], & \gamma<\omega_0, \\
+\frac{1}{\omega_d} \sinh \left[\omega_d\left(t-\tau\right)\right], & \gamma>\omega_0 .\end{cases}
+\end{aligned}
+$$
+
+
+
+Greens functions: 
+
+$$
+\begin{array}{l|l}
+\begin{array}{l}
+D_t^2+2 \gamma D_t+\omega_0^2 \\
+\text { where } \gamma=\omega_0
+\end{array} & \Theta(t) e^{-\gamma t} t
+\end{array}
+$$
+
+
+
+$$
+x(t)=\int_{-\infty}^{\infty} d \tau G\left(t, \tau\right) \frac{f\left(\tau\right)}{m}
+$$
