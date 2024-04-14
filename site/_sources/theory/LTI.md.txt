@@ -1,0 +1,16 @@
+The response of the system is given by
+$$
+y(t)=h(t) \star f(t)+y_0(t) \qquad (1)
+$$
+where $f(t)$ is the input signal, $h(t)$ is some well-behaved function, $y_0(t)$ is a function which is independent of $f(t)$, and $\star$ denotes convolution. The model (1) can be used for describing systems with non-zero initial conditions that would be LTI were it not for the non-zero initial conditions.
+
+For $y_0(t) \neq 0$, the system described by (1) cannot be linear, which is easily shown by considering a response $y_1(t)$ to an input signal $f_1(t)$. For a linear system, the response to a scaled version of $f_1(t)$ must be a scaled version of $y_1(t)$, with the same scaling factor. So the response to $a f_1(t)$ must be $a y_1(t)$ if the system is linear. But from (1) we have
+$$
+y_1(t)=h(t) \star f_1(t)+y_0(t)
+$$
+and for the scaled input we get
+$$
+y(t)=h(t) \star a f_1(t)+y_0(t)=a y_1(t)+(1-a) y_0(t) \neq a y_1(t)
+$$
+for $y_0(t) \neq 0$ and $a \neq 1$. Consequently, the system described by (1) is not linear.
+In a similar way it can be shown that the system is also not time-invariant. The reason is again the function $y_0(t)$, which is independent of the input signal $f(t)$. If $f(t)$ is shifted, the output doesn't shift accordingly, because $y_0(t)$ doesn't shift.

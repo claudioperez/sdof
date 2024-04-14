@@ -1,0 +1,55 @@
+The general form of a state-space model can be written as two functions.
+$$
+\begin{aligned}
+& \dot{\mathbf{x}}(t)=\mathbf{f}(t, x(t), u(t)) \\
+& \mathbf{y}(t)=\mathbf{h}(t, x(t), u(t))
+\end{aligned}
+$$
+
+The first is the state equation and the latter is the output equation. If the function $f(\cdot, \cdot, \cdot)$ is a linear combination of states and inputs then the equations can be written in matrix notation. The $u(t)$ argument to the functions can be dropped if the system is unforced (i.e., it has no inputs).
+
+
+## Linear
+
+The most general state-space representation of a linear system with $p$ inputs, $q$ outputs and $n$ state variables is written in the following form:[14]
+$$
+\begin{aligned}
+& \dot{\mathbf{x}}(t)=\mathbf{A}(t) \mathbf{x}(t)+\mathbf{B}(t) \mathbf{u}(t) \\
+& \mathbf{y}(t)=\mathbf{C}(t) \mathbf{x}(t)+\mathbf{D}(t) \mathbf{u}(t)
+\end{aligned}
+$$
+where:
+- $\mathbf{x}(\cdot)$ is called the "state vector", $\mathbf{x}(t) \in \mathbb{R}^n ;$
+- $\mathbf{y}(\cdot)$ is called the "output vector", $\mathbf{y}(t) \in \mathbb{R}^q$;
+- $\mathbf{u}(\cdot)$ is called the "input (or control) vector", $\mathbf{u}(t) \in \mathbb{R}^p$;
+- $\mathbf{A}(\cdot)$ is the "state (or system) matrix", $\operatorname{dim}[\mathbf{A}(\cdot)]=n \times n$,
+- $\mathbf{B}(\cdot)$ is the "input matrix", $\operatorname{dim}[\mathbf{B}(\cdot)]=n \times p$,
+- $\mathbf{C}(\cdot)$ is the "output matrix", $\operatorname{dim}[\mathbf{C}(\cdot)]=q \times n$,
+- $\mathbf{D}(\cdot)$ is the "feedthrough (or feedforward) matrix" (in cases where the system model does not have a direct feedthrough, $\mathbf{D}(\cdot)$ is the zero matrix), $\operatorname{dim}[\mathbf{D}(\cdot)]=q \times p$,
+$$
+\dot{\mathbf{x}}(t):=\frac{d}{d t} \mathbf{x}(t) .
+$$
+
+For the homogeneous problem:
+
+$$
+\begin{gathered}
+\underbrace{\left(\begin{array}{cc}
+\mathbf{0} & \mathbf{M} \\
+\mathbf{M} & \mathbf{C}
+\end{array}\right)}_{\mathbf{A}_B} \underbrace{\left(\begin{array}{c}
+\ddot{\mathbf{q}} \\
+\dot{\mathbf{q}}
+\end{array}\right)}_{\dot{\mathbf{u}}}+\underbrace{\left(\begin{array}{cc}
+-\mathbf{M} & \mathbf{0} \\
+\mathbf{0} & \mathbf{K}
+\end{array}\right)}_{-\mathbf{A}_A} \underbrace{\left(\begin{array}{c}
+\dot{\mathbf{q}} \\
+\mathbf{q}
+\end{array}\right)}_{\mathbf{u}}=\underbrace{\left(\begin{array}{l}
+\mathbf{0} \\
+\mathbf{0}
+\end{array}\right)}_{\mathbf{0}} \\
+\Longrightarrow \dot{\mathbf{u}}=\mathbf{A u} \quad \text { where } \mathbf{A}=\mathbf{A}_B^{-1} \mathbf{A}_A
+\end{gathered}
+$$

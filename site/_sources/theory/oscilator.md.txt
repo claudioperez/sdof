@@ -1,0 +1,279 @@
+
+- Greens function $G(t,\tau)$, impulse response $h(t)$
+- Transition function $\Phi$ and fundamental solution $U(t)$
+- Transfer function $H(s)$, frequency response $H(\omega)$
+- Newmark
+
+--------
+
+---
+
+The transfer function $H$ is the Laplace transform of the impulse response.
+The transfer function provides a complete mathematical representation of the system's behavior.
+
+The frequency response is the Fourier transform of the impulse response.
+
+The frequency response is a special case of the Laplace transfer function where the transients are assumed to be completely dissipated, leaving the steady state sinusoidal response.
+
+The frequency response and transfer function are equivalent when the real part $\sigma$  of the  transfer function's complex variable $s=\sigma+j \omega$ is zero.
+A frequency response describes a linear time-invariant (LTI) system.
+
+A system with non-zero initial conditions is not LTI because its output has a component which only depends on the initial conditions and which is independent of the input signal. Consequently, a system with non-zero initial conditions cannot fully be described by a frequency response. If you assume zero initial conditions, then such a system (if otherwise LTI) can be described by a frequency response.
+
+- complex exponentials are eigenfunctions of LTI systems. 
+
+## Duhamel
+
+A Green's function, $g(t, \tau)$, of a linear differential operator $\mathrm{L}=\mathrm{L}(t)$ acting on distributions over a subset of the Euclidean space $\mathbb{R}^n$, at a point $s$, is any solution of
+$$
+\mathrm{L} g(t, \tau)=\delta(\tau - t).
+$$
+
+Loosely speaking, if such a function $g$ can be found for the operator $\mathrm{L}$, then, if we multiply the equation (1) for the Green's function by $f(s)$, and then integrate with respect to $\tau$, we obtain,
+$$
+\int \mathrm{L} g(t, \tau) f(s) d \tau = \int \delta(x=t-\tau) f(\tau) d \tau = f(t) .
+$$
+
+Because the operator $\mathrm{L}=\mathrm{L}(t)$ is linear and acts only on the variable $t$ (and not on the variable of integration $s$ ), one may take the operator $\mathrm{L}$ outside of the integration, yielding
+$$
+\mathrm{L}\left(\int g(t, \tau) f(\tau) d \tau\right)=f(t) .
+$$
+The solution is then
+$$
+u(t)=u_0(t) + \int g(t, \tau) f(\tau) d \tau
+$$
+> - The Green's function as used in physics is usually defined with the opposite sign, instead. That is,
+$\mathrm{L} g(t, \tau)=\delta(t-\tau)$.
+> - This can be thought of as an expansion of $f$ according to a Dirac delta function basis (projecting $f$ over $\delta(x-s)$; and a superposition of the solution on each projection. Such an integral equation is known as a Fredholm integral equation, the study of which constitutes Fredholm theory.
+
+-   If the operator is translation invariant, that is, when $\mathrm{L}$ has constant coefficients with respect to $t$, then the Green's function can be taken to be a convolution kernel, that is,
+    $$
+    G(t, s)=G(t-s) .
+    $$
+
+    **In this case, Green's function is the same as the impulse response of linear time-invariant system theory.**
+
+- a fundamental solution for a linear partial differential operator $L$ is a formulation in the language of distribution theory of the older idea of a Green's function (although unlike Green's functions, fundamental solutions do not address boundary conditions).
+- the fundamental solution matrix $\mathbf{U}(t)$  satisfies $\dot{\mathbf{U}}(t)=\mathbf{A}(t) \mathbf{U}(t)$ with initial condition $\mathbf{U}\left(t_0\right)=I$
+
+- The fundamental solution is not uniquely determined. If $U$ is a fundamental solution and $v$ is any solution to the homogeneous equation $L(v)=0$, then $U+v$ is also a fundamental solution.
+
+
+$$
+x(t)=\int_{-\infty}^{\infty} d \tau G\left(t, \tau\right) \frac{f\left(\tau\right)}{m}
+$$
+
+$$
+m\partial^2 + c \partial + k \\
+\partial^2 + c/m \partial  + \omega^2
+$$
+$c/m = 2\gamma = 2 \omega \zeta$ so $\zeta = \gamma/\omega$
+
+
+Greens functions (with Heaviside function denoted by $\Theta$): 
+
+$$
+\begin{array}{l|l}
+\begin{array}{ll}
+\partial_t^2+2 \gamma \partial_t+\omega_0^2 \\
+\text { where } \gamma<\omega_0
+\end{array} & \Theta(t) e^{-\gamma t} \frac{\sin (\omega t)}{\omega} \text { with } \omega=\sqrt{\omega_0^2-\gamma^2} \\
+%
+\hline \begin{array}{l}
+\partial_t^2+2 \gamma \partial_t+\omega_0^2 \\
+\text { where } \gamma>\omega_0
+\end{array} & \Theta(t) e^{-\gamma t} \frac{\sinh (\omega t)}{\omega} \text { with } \omega=\sqrt{\gamma^2-\omega_0^2} \\
+%
+\hline 
+\begin{array}{l}
+\partial_t^2+2 \gamma \partial_t+\omega_0^2 \\
+\text { where } \gamma=\omega_0
+\end{array} & \Theta(t) e^{-\gamma t} t
+\end{array}
+$$
+
+
+
+-------------------------------------
+
+Consider a damped harmonic oscillator with input given by an external driving force $f(t)$,
+$$
+\ddot{u} + 2\gamma \dot{u}+\omega_0^2 u=f
+$$
+$$
+\left[\frac{\partial^2}{\partial t^2}+2 \gamma \frac{\partial}{\partial t}+\omega_0^2\right] G\left(t, \tau\right)=\delta\left(t-\tau\right)
+$$
+$$
+\begin{aligned}
+G(\omega,\tau)&=\int_{-\infty}^{\infty}  e^{i \omega t} g\left(t, \tau\right) d t \\
+\end{aligned}
+$$
+$$
+\left[-\omega^2-2 i \gamma \omega+\omega_0^2\right] G\left(\omega, \tau\right)=\int_{-\infty}^{\infty} e^{i \omega t} \delta\left(t-\tau\right) d t  =e^{i \omega \tau}
+$$
+$$
+G\left(\omega, \tau\right)=\frac{e^{i \omega \tau}}{-\omega_0^2 + \omega^2 + 2 i \gamma \omega}
+$$
+$$
+\begin{aligned}
+g\left(t, \tau\right)
+& =\Theta\left(t-\tau\right) e^{-\gamma\left(t-\tau\right)} \times \begin{cases}\frac{1}{\sqrt{\omega_0^2-\gamma^2}} \sin \left[\sqrt{\omega_0^2-\gamma^2}\left(t-\tau\right)\right], & \gamma<\omega_0, \\
+\frac{1}{\sqrt{\gamma^2-\omega_0^2}} \sinh \left[\sqrt{\gamma^2-\omega_0^2}\left(t-\tau\right)\right], & \gamma>\omega_0 .\end{cases}
+\end{aligned}
+$$
+The first thing to notice is that the Green's function depends on $t$ and $\tau$ only in the combination $t-\tau$. This makes sense: the response of the oscillator to the force pulse should only depend on the time elapsed since the pulse. We can exploit this property by re-defining the frequency-domain Green's function as
+$$
+G(\omega)=\int_{-\infty}^{\infty} d t e^{i \omega\left(t-\tau\right)} G\left(t-\tau\right)
+$$
+which then obeys
+$$
+\left[-\omega^2-2 i \gamma \omega+\omega_0^2\right] G(\omega)=1 .
+$$
+so
+$$
+H(\omega)=\frac{{Y}(\omega)}{{F}(\omega)}=\frac{1}{\omega_0^2-\omega^2 + 2 i \gamma \omega} .
+$$
+For a system with an arbitrary initial displacement, $u_0$, and arbitrary initial velocity, $\dot{u}_0$, Eq. 9 should be generalized as follows:
+$$
+Y(\omega)=H(\omega)\left[F(\omega)+m\left(2 \zeta p+i \omega\right) u_0 +m \dot{u}_0\right] \ldots \ldots \ldots \ldots \ldots \ldots \ldots \ldots
+$$
+
+From this representation, we see that for small $\gamma$ the Fourier transform ${H}(\omega)$ of the linear response function yields a pronounced maximum ("Resonance") at the frequency $\omega \approx \omega_0$. 
+
+
+
+
+## Transition
+
+- The state transition matrix satisfies the differential equation $\frac{\partial \boldsymbol{\Phi}\left(t, t_0\right)}{\partial t}=\mathbf{A}(t) \mathbf{\Phi}\left(t, t_0\right)$ with initial conditions $\boldsymbol{\Phi}\left(t_0, t_0\right)=I$
+- In the time-invariant case, we can define $\boldsymbol{\Phi}$, using the matrix exponential, as $\boldsymbol{\Phi}\left(t, t_0\right)=e^{\mathbf{A}\left(t-t_0\right)}$
+- One can show that a matrix-valued function $\Psi$ is a fundamental matrix of $\dot{\mathbf{x}}(t)=A(t) \mathbf{x}(t)$ if and only if $\dot{\Psi}(t)=A(t) \Psi(t)$ and $\Psi$ is a non-singular matrix for all $t .{ }^{[2]}$
+
+
+
+-----------------
+
+
+$$
+m\ddot{u} + c\dot{u} + k y = f(t)
+$$
+
+Let $x = (y, m\dot{u})$, so 
+
+$$
+\dot{x} = \begin{pmatrix}
+\dot{u} \\
+\ddot{u}
+\end{pmatrix} = \begin{bmatrix}
+0 & \frac{1}{m} \\
+-\frac{k}{m} & - \frac{c}{m}
+\end{bmatrix} x
+$$
+
+$$
+x(t) = x(t_0) + \int_{t_0}^t \dot{x}(x,\tau) \,d\tau 
+$$
+
+$$
+\mathbf{x}(t)=U(t) U^{-1}\left(t_0\right) \mathbf{x}_0+U(t)\int_{t_0}^{t} U^{-1}(\tau) \mathbf{b}(\tau) d \tau
+$$
+
+$$
+\mathbf{x}(t)=\boldsymbol{\Phi}\left(t, t_0\right) \mathbf{x}\left(t_0\right)+\int_{t_0}^t \boldsymbol{\Phi}(t, \tau) \mathbf{B}(\tau) \mathbf{u}(\tau) d \tau
+$$
+
+
+$$
+\boldsymbol{\Phi}(t, \tau) \equiv \mathbf{U}(t) \mathbf{U}^{-1}(\tau)
+$$
+
+
+$$
+\boldsymbol{y}_p(k)=\mathcal{O}_p \boldsymbol{x}(k)+\mathcal{T}_p \boldsymbol{u}_p(k)
+$$
+
+
+------
+
+## Laplace
+
+$$
+Y(s) = H(s) F(s)
+$$
+$$
+H(s)=\frac{Y(s)}{F(s)}=\frac{\mathcal{L}\{y(t)\}}{\mathcal{L}\{f(t)\}}
+$$
+
+The eigenfunction property of exponentials is very useful for both analysis and insight into LTI systems. The one-sided Laplace transform
+$$
+H(s) \stackrel{\text { def }}{=} \mathcal{L}\{h(t)\} \stackrel{\text { def }}{=} \int_0^{\infty} h(t) e^{-s t} \mathrm{~d} t
+$$
+is exactly the way to get the eigenvalues from the impulse response. Of particular interest are pure sinusoids (i.e., exponential functions of the form $e^{j \omega t}$ where $\omega \in \mathbb{R}$ and $j \stackrel{\text { def }}{=} \sqrt{-1})$. The Fourier transform $H(j \omega)=\mathcal{F}\{h(t)\}$ gives the eigenvalues for pure complex sinusoids. Both of $H(s)$ and $H(j \omega)$ are called the system function, system response, or transfer function.
+
+## Fourier
+
+$$
+\phi =  \tan^{-1}\frac{2\zeta \omega / \omega_n}{1 - (\omega/\omega_n)^2} = \tan^{-1} -\frac{\Im H(\omega)}{\Re H(\omega)} 
+$$
+
+--------------
+
+$$
+\ddot{x}+2 \zeta \omega \dot{x}+\omega^2 x=-a_i-\frac{\Delta a_i}{\Delta t_i}\left(t-t_i\right) ; \quad t_i \leq t \leq t_{i+1}
+$$
+$$
+\begin{gathered}
+x=e^{-\zeta \omega\left(t-t_i\right)}\left[C_1 \sin \omega \sqrt{1-\zeta^2}\left(t-t_i\right)+C_2 \cos \omega \sqrt{1-\zeta^2}\left(t-t_i\right)\right] \\
+-\frac{a_i}{\omega^2}+\frac{2 \zeta}{\omega^3} \frac{\Delta a_i}{\Delta t_i}-\frac{1}{\omega^2} \frac{\Delta a_i}{\Delta t_i}\left(t-t_i\right)
+\end{gathered}
+$$
+$$
+\begin{aligned}
+\Delta t_i=t_{i+1}-t_i \\
+\Delta a_i=a_{i+1}-a_i
+\end{aligned}
+$$
+in which $C_1$ and $C_2$ are constants of integration. Setting $x=x_i$ and $\dot{x}=\dot{x}_i$ at $t=t_i$ and solving for $C_1$ and $C_2$, it can be shown that
+$$
+\begin{aligned}
+& C_1=\frac{1}{\omega \sqrt{1-\zeta^2}}\left(\zeta \omega x_i+\dot{x}_i-\frac{2 \zeta^2-1}{\omega^2} \frac{\Delta a_i}{\Delta t_i}+\frac{\zeta}{\omega} a_i\right) \\
+& C_2=x_i-\frac{2 \zeta}{\omega^3} \frac{\Delta a_i}{\Delta t_i}+\frac{a_i}{\omega^2}
+\end{aligned}
+$$
+
+$$
+\bar{x}_{i+1}= \mathbf{A} \bar{x}_i+ \mathbf{B} \bar{a}_i
+$$
+in which
+$$
+\bar{x}_i=\left\{\begin{array}{c}
+x_i \\
+\dot{x}_i
+\end{array}\right\} \quad \bar{a}_i=\left\{\begin{array}{c}
+a_i \\
+a_{i+1}
+\end{array} \right\}
+$$
+
+$$
+\begin{aligned}
+& a_{11}=e^{-\zeta \omega \Delta t_i}\left(\frac{\zeta}{\sqrt{1-\zeta^2}} \sin \omega \sqrt{1-\zeta^2} \Delta t_i+\cos \omega \sqrt{1-\zeta^2} \Delta t_i\right) \\
+& a_{12}=\frac{e^{-\zeta \omega \Delta t_i}}{\omega \sqrt{1-\zeta^2}} \sin \omega \sqrt{1-\zeta^2} \Delta t_i \\
+& a_{21}=-\frac{\omega}{\sqrt{1-\zeta^2}} e^{-\zeta \omega \Delta t_i} \sin \omega \sqrt{1-\zeta^2} \Delta t_i \\
+& a_{22}=e^{-\zeta \omega \Delta t_i}\left(\cos \omega \sqrt{1-\zeta^2} \Delta t_i-\frac{\zeta}{\sqrt{1-\zeta^2}} \sin \omega \sqrt{1-\zeta^2} \Delta t_i\right)
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+b_{11}&=\mathrm{e}^{-\beta \omega \Delta \mathrm{t}_{\mathrm{i}}}\left[\left(\frac{2 \beta^2-1}{\omega^2 \Delta \mathrm{t}_{\mathrm{i}}}+\frac{\beta}{\omega}\right) \frac{\sin \omega \sqrt{1-\beta^2} \Delta \mathrm{t}_{\mathrm{i}}}{\omega \sqrt{1-\beta^2}}+\left(\frac{2 \beta}{\omega^3 \Delta \mathrm{t}_{\mathrm{i}}}+\frac{1}{\omega^2}\right) \cos \omega \sqrt{1-\beta^2} \Delta \mathrm{t}_{\mathrm{i}}\right] \\
+& -\frac{2 \beta}{\omega^3 \Delta t_i} \\
+b_{12}&=-e^{-\beta \omega \Delta t_i}\left[\left(\frac{2 \beta^2-1}{\omega^2 \Delta t_i}\right) \frac{\sin \omega \sqrt{1-\beta^2} \Delta t_i}{\omega \sqrt{1-\beta^2}}+\frac{2 \beta}{\omega^3 \Delta t_i} \cos \omega \sqrt{1-\beta^2} \Delta t_i\right] \\
+& -\frac{1}{\omega^2}+\frac{2 \beta}{\omega^3 \Delta t_i} \\
+b_{21}&=e^{-\beta \omega \Delta t_i}\left[\left(\frac{2 \beta^2-1}{\omega^2 \Delta t_i}+\frac{\beta}{\omega}\right)\left(\cos \omega \sqrt{1-\beta^2} \Delta t_i-\frac{\beta}{\sqrt{1-\beta^2}} \sin \omega \sqrt{1-\beta^2} \Delta t_i\right)\right. \\
+& \left.-\left(\frac{2 \beta}{\omega^3 \Delta t_i}+\frac{1}{\omega^2}\right)\left(\omega \sqrt{1-\beta^2} \sin \omega \sqrt{1-\beta^2} \Delta t_i+\beta \omega \cos \omega \sqrt{1-\beta^2} \Delta t_i\right)\right] \\
+& +\frac{1}{\omega^2 \Delta t_i} \\
+b_{22}&=-e^{-\beta \omega \Delta t_i}\left[\frac{2 \beta^2-1}{\omega^2 \Delta t_i}\left(\cos \omega \sqrt{1-\beta^2} \Delta t_i-\frac{\beta}{\sqrt{1-\beta^2}} \sin \omega \sqrt{1-\beta^2} \Delta t_i\right)\right. \\
+&\left.-\frac{2 \beta}{\omega^3 \Delta t_i}\left(\omega \sqrt{1-\beta^2} \sin \omega \sqrt{1-\beta^2} \Delta t_i+\beta \omega \cos \omega \sqrt{1-\beta^2} \Delta t_i\right)\right]-\frac{1}{\omega^2 \Delta t_1}
+\end{aligned}
+$$
