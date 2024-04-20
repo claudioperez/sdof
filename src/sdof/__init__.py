@@ -331,7 +331,8 @@ def spectrum(accel, dt, damping, periods=None, interp=None, threads:int=None, **
             k = 4*pi**2*mass/period**2
             c = 2*dmp*np.sqrt(k/mass)
 
-            d, v, a = integrate(mass, c, k, p, dt)
+            # d, v, a = integrate(mass, c, k, p, dt)
+            d, v, a = integrate(f=p, dt=dt, k=k, c=c, m=mass)
 
             # resp = peaks(m, c, k, p, dt)
             # resp.max_displ
