@@ -88,7 +88,7 @@ _sdof_integrate_plastic = lib.sdof_integrate_plastic
 _sdof_integrate_plastic.restype  = c_int
 _sdof_integrate_plastic.argtypes = (
     POINTER(_sdof_config),
-    c_double,  c_double,  c_double,
+    c_double,  c_double,  c_double, c_double,
     c_double, c_int, POINTER(c_double), c_double,
     ndpointer(c_double, flags="C_CONTIGUOUS")
 )
@@ -222,7 +222,7 @@ def integrate(
                 gamma   = gamma
     )
     if fy is not None:
-        _sdof_integrate_plastic(config, m, c, k, 1.0, len(f),
+        _sdof_integrate_plastic(config, m, c, k, fy, 1.0, len(f),
                                 np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     else:
         _sdof_integrate_unrolled(config, m, c, k, 1.0, len(f),
@@ -362,8 +362,8 @@ class sdof:
         self.u0 = kwds.get("u0", 0.0)
         self.v0 = kwds.get("v0", 0.0)
 
-        if "omega" in kwds:
-            w  = self.w = kwds["omega"]
+        if "omega" in kwds or "w" in kwds:
+            w  = self.w = kwds.get("omega", False) or kwds["w"]
             w2 = w*w
             self.k = kwds.get("k", w2*kwds.get("m", 1))
             self.m = kwds.get("m", w2/kwds.get("k", 1))
