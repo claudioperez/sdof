@@ -1,3 +1,8 @@
+#===----------------------------------------------------------------------===#
+#
+#         STAIRLab -- STructural Artificial Intelligence Laboratory
+#
+#===----------------------------------------------------------------------===#
 #
 # BSD 2-Clause License
 #
@@ -31,13 +36,17 @@ from ctypes import c_double, c_int, c_bool, CFUNCTYPE, POINTER
 import numpy as np
 from numpy.ctypeslib import ndpointer
 
+# Determine file exention of dynamic libraries for current platform
 if os.name == "nt":
     so_ext = ".pyd"
-
 else:
     import   distutils.ccompiler
     so_ext = distutils.ccompiler.new_compiler().shared_lib_extension
 
+
+# Declare the layout of the data structures used in
+# the underlying C code. This has to be kept consistent
+# with the contents of _integrate.c
 class _sdof_peaks_t(ctypes.Structure):
     _fields_ = [
         ("max_displ",      c_double),
@@ -53,6 +62,9 @@ class _sdof_config(ctypes.Structure):
         ("gamma",        c_double)
     ]
 
+#
+# Declare prototypes of C functions that will be called.
+#
 # TODO
 libfile = str(next(pathlib.Path(__file__).parents[0].glob("_integrate.*"+so_ext)))
 lib = ctypes.cdll.LoadLibrary(libfile)
@@ -162,8 +174,12 @@ def integrate_0(f, dt,
                 gamma   = gamma
     )
 
-    _sdof_integrate_0(config, m, c, k, 1.0, len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
+    _sdof_integrate_0(config, m, c, k, 1.0,
+                      len(f), np.asarray(f).ctypes.data_as(POINTER(c_double)), dt, output)
     return output
+
+
+# integrate(model, input)
 
 def integrate(
               f,
@@ -362,6 +378,8 @@ class sdof:
     def __init__(self, **kwds):
         self.u0 = kwds.get("u0", 0.0)
         self.v0 = kwds.get("v0", 0.0)
+        if "period" in kwds:
+            kwds["omega"] = np.pi*2/kwds["period"]
 
         if "omega" in kwds or "w" in kwds:
             w  = self.w = kwds.get("omega", False) or kwds["w"]
@@ -381,8 +399,8 @@ class sdof:
             self.zeta = kwds.get("zeta", 0.0)
             self.c = 2*self.m*self.w*self.zeta
 
-    def integrate(self, f, dt):
-        return integrate(m=self.m, c=self.c, k=self.k, f=f, dt=dt)
+    def integrate(self, f, dt, **kwds):
+        return integrate(m=self.m, c=self.c, k=self.k, f=f, dt=dt, **kwds)
 
     def impulse(self, t, u0=None, v0=None):
         wd = self.w*np.emath.sqrt(1-self.zeta**2)
@@ -397,21 +415,21 @@ class sdof:
     def harmonic(self, t, w, F=1.0, u0=0.0, v0=0.0):
         wn = self.w
         zeta = self.zeta
-        wd = wn*sqrt(1-zeta**2)
+        wd = wn*np.sqrt(1-zeta**2)
 
         b = w/wn
         G = (F/K)*(1.0/( (1-b)**2+(2.0*zeta*b**2) ))
-        particular = G*( (1-b**2)*sin(w*t) - 2*n*b*cos(w*t) )
+        particular = G*( (1-b**2)*np.sin(w*t) - 2*nw*b*np.cos(w*t) )
         #
         #
-        A = x0 + 2*zeta*b*G
+        A = u0 + 2*zeta*b*G
         B = (v0 + G*w*(b**2-1) + A*zeta*wn)/wd
-        homogeneous = (A*cos(wd*t)+B*sin(wd*t))*exp(-zeta*wn*t)
+        homogeneous = (A*np.cos(wd*t)+B*np.sin(wd*t))*np.exp(-zeta*wn*t)
 
         return particular + homogeneous, None, None
 
     def homogeneous_bases(self, t):
-        return 
+        return
 
     def homogeneous(self, t, u0=0.0, v0=0.0):
         w    = self.w                   # natural frequency, rad/sec
@@ -437,46 +455,4 @@ class sdof:
         return u, None, None
 
 
-
-if __name__ == "__main__":
-    k = 10
-    c = 0.05*k
-    m = 2
-
-    # Make frequency array, w
-    n  = 500
-    dw = 0.2
-    wmax = (n-1)*dw
-    w  = np.arange(0, wmax, dw)
-
-    # Make time array, t
-    dt = np.pi/wmax
-    tmax = 2*np.pi/dw
-    t = np.arange(0, tmax, dt)
-
-    print(f"{len(t) = }\n{len(w) = }")
-
-    # Create the SDOF
-    model = sdof(k=k, m=m, c=c)
-
-    Hw = np.zeros(2*n-1, dtype=complex)
-    Hw[:n] = model.transfer(w)
-#   for i in range(n):
-#     w = i*dw
-#     he[i] = model.transfer(w)
-
-    import numpy.fft as fft
-    ht = 2.0*np.real(fft.ifft(Hw))/dt
-
-
-    import matplotlib.pyplot as plt
-
-    _, ax = plt.subplots()
-    ax.plot(t, ht[:len(t)], 'o')
-    ax.plot(t, model.impulse(t)[0], 'x')
-    ax.plot(t, model.homogeneous(t, v0=1/m)[0], '.')
-
-#   from integration.transition import exponential
-#   ax.plot(t, exponential(np.sin(t), dt, model)[0], '.')
-    plt.show()
 
