@@ -80,7 +80,7 @@ def LogSO3(R):
     omega_hat = (theta / (2 * np.sin(theta))) * (R - R.T)
     return VeeSO3(omega_hat)
 
-def dLogSO3(R):
+def dLogSO3(omega):
     """
     Differential of the logarithm map (inverse of the exponential tangent) on SO(3).
     
@@ -90,7 +90,7 @@ def dLogSO3(R):
     Returns:
     np.array: 3x3 matrix representing the differential of the logarithm map
     """
-    omega = LogSO3(R)
+    # omega = LogSO3(R)
     theta = np.linalg.norm(omega)
     if theta < 1e-10:
         return np.eye(3)
@@ -127,14 +127,13 @@ def VeeSO3(omega_hat):
     """
     return np.array([omega_hat[2, 1], omega_hat[0, 2], omega_hat[1, 0]])
 
-def bb_rkmk_trap_wdexp(t0, p0, w0, R0, dt, J, Loading, state):
+def bb_rkmk_trap_wdexp(t0, p0, w0, R0, dt, J, Loading, state, maxiter=20):
     """
     Momentum and energy conserving integrator from Bottasso,
     Borri (1998), Integrating finite rotations. Trapezoidal Runge-Kutta
     (Munthe-Kaas) algorithm. With the dexp included.
     """
-    maxiter = 20
-    tol = 100 * np.finfo(float).eps
+    tol = 100 * EPS
 
     # calculate effective loads at t_n-1
     m0 = R0 @ Loading.Torque(t0, R0)
@@ -158,17 +157,17 @@ def bb_rkmk_trap_wdexp(t0, p0, w0, R0, dt, J, Loading, state):
             break
         pNu = Nun
 
-    P1 = None  # Placeholder, as P1 is not defined in the provided code
-    return P1, w1, R1, None
+    P1 = None  # TODO! Placeholder, as P1 is not defined in the provided code
+    return J@w1, w1, R1, None
 
-def bb_rkmk_trap      (t0, p0, w0, R0, dt, J, Loading, state):
+def bb_rkmk_trap      (t0, p0, w0, R0, dt, J, Loading, state, maxiter = 150):
     """
     Momentum and energy conserving integrator from Bottasso,
     Borri (1998), Integrating finite rotations. Trapezoidal Runge-Kutta
     (Munthe-Kaas) algorithm.
     """
-    tol = 100 * np.finfo(float).eps
-    maxiter = 150
+    tol = 100 * EPS
+    
 
     # calculate effective loads at t_n-1
     tn1 = R0 @ Loading.Torque(t0, R0)
@@ -193,17 +192,16 @@ def bb_rkmk_trap      (t0, p0, w0, R0, dt, J, Loading, state):
         pTheta = Theta
 
     P1 = None  # Placeholder, as P1 is not defined in the provided code
-    return P1, w1, Rn, None
+    return J@w1, w1, Rn, None
 
-def dyneq_trap        (t0, p0, w0, R0, dt, J, Loading, state):
+def dyneq_trap        (t0, p0, w0, R0, dt, J, Loading, state, maxiter = 10):
     """
     Trapezoidal rule integrator.
     Described as TRAP in the paper on dynamically equivalent implicit integrators.
     """
-    maxiter = 10
-    Ptol = 100 * np.finfo(float).eps
+    Ptol = 100 * EPS
 
-    t = t0
+    t  = t0
     M0 = Loading.Torque(t, R0)
     Pin1 = J @ w0
     Pin = Pin1 - dt * np.cross(w0, Pin1) + dt * M0  # predictor
@@ -225,15 +223,16 @@ def dyneq_trap        (t0, p0, w0, R0, dt, J, Loading, state):
 
     return Pin, w1, Rn, None
 
+
 def incrso3_akw       (t0, p0, w0, R0, dt, J, Loading, state):
     """
-    Implicit Austin, Krishnaprasad, Wang mid-point integrator constructor.
+    Implicit Austin, Krishnaprasad, Wang mid-point method
     """
     # akw_mid 
 
     def slv(J, t0, dt, R0, H0, Loading):
         maxiter = 25
-        tol = 100 * np.finfo(float).eps
+        tol = 100 * EPS
 
         H1 = H0
         M0 = Loading.Torque(t0, R0)
@@ -268,34 +267,33 @@ def incrso3_imid      (t0, p0, w0, R0, dt, J, Loading, state):
     dynamic equivalence of implicit integrators. This integrator is
     equivalent to the trapezoidal rule TRAP.
     """
-    tol = 100 * np.finfo(float).eps
 
-    wa = _solve_imid(J, t0, dt, R0, J @ w0, Loading, tol)
+    wa = _solve_imid(J, t0, dt, R0, J @ w0, Loading)
     Rn = R0 @ ExpSO3(dt * wa)
     Ra = R0 @ ExpSO3(dt*0.5 * wa)
     Ma = Loading.Torque(t0 + 0.5*dt, Ra)
     w1 = w0 + np.linalg.solve(J, -dt * HatSO3(wa)@J@ wa + dt * Ma)
-    P1 = J @ w1
 
-    return P1, w1, Rn, None
+    return J@w1, w1, Rn, None
 
-def _solve_imid(J, t, dt, R0, H0, Loading, ceps):
-    maxi = 50
+def _solve_imid(J, t, dt, R0, H0, Loading):
+    tol = 100 * EPS
+    maxiter = 50
 
     wa = np.zeros(3)
-    iter = 0
 
+    iter = 0
     while True:
         pOmegamid = wa
         Ra = R0 @ ExpSO3(dt / 2 * wa)
         Ma = Loading.Torque(t + dt / 2, Ra)
         wa = np.linalg.solve(J, H0 - dt / 2 * HatSO3(wa) @ J @ wa + dt / 2 * Ma)
         iter += 1
-        if iter > maxi:
+        if iter > maxiter:
             if np.max(np.abs(wa - pOmegamid)) > 1e-12:
                 print(f"Warning: {__file__} - Failed to converge: ||residual||={np.linalg.norm(wa)}")
             break
-        if np.linalg.norm(wa - pOmegamid) < ceps:
+        if np.linalg.norm(wa - pOmegamid) < tol:
             break
 
     return wa
@@ -339,7 +337,7 @@ def _solve_imidm(J, t, dt, R0, H0, Loading):
 
     return wa
 
-def KB_E              (t0, p0, w0, R0, dt, J, Loading, state):
+def kb_e              (t0, p0, w0, R0, dt, J, Loading, state):
     """
     Implicit integrator described in the provided MATLAB code.
     """
@@ -513,14 +511,14 @@ def incrso3_trap      (t0, p0, w0, R0, dt, J, Loading, state, maxiter = 10):
     Trapezoidal rule integrator.
     Described as TRAP in [3].
     """
-    Ptol = 100 * np.finfo(float).eps
+    Ptol = 100 * EPS
 
     M0 = Loading.Torque(t0, R0)
     Pin1 = J @ w0
     Pin = Pin1 \
         - dt * np.cross(w0, Pin1) \
         + dt * M0  # predictor
-    
+
     iter = 0
     while True:
         pPin = Pin
@@ -587,18 +585,18 @@ def incrso3_trapm     (t0, p0, w0, R0, dt, J, Loading, state):
     Ptol = 100 * np.finfo(float).eps
 
     M0 = Loading.Torque(t0, R0)
-    H0 = J @ w0
+    H0 = J@w0
     DRn = ExpSO3(dt / 2 * w0) @ ExpSO3(dt / 2 * w0)  # predictor
     H1 = DRn.T @ (H0 + dt / 2 * M0) + dt / 2 * M0  # predictor
-    iter = 0
 
+    iter = 0
     while True:
         Hx = H1
         w1 = np.linalg.solve(J, H1)
-        DRn = ExpSO3(dt / 2 * w0) @ ExpSO3(dt / 2 * w1)
+        DRn = ExpSO3(dt*0.5 * w0) @ ExpSO3(dt*0.5 * w1)
         Rn = R0 @ DRn
         M1 = Loading.Torque(t0 + dt, Rn)
-        H1 = DRn.T @ H0 + dt / 2 * DRn.T @ M0 + dt / 2 * M1
+        H1 = DRn.T @ H0 + dt*0.5 * DRn.T @ M0 + dt*0.5 * M1
         iter += 1
         if iter > maxiter:
             if np.max(np.abs(H1 - Hx)) > 1e-9:
@@ -753,7 +751,7 @@ def solve_Alpha(J, M0, dt, Alphan1, w0, tol, maxiter=100):
 def integrate(dt, hc, T, J, wi, R0, Gm, step, Loading, potential):
     """
     Perform the simulation.
-    
+
     Parameters:
     dt (float): time step size for the simulation
     hc (float): coarse time-stepsize for saving data
@@ -766,7 +764,7 @@ def integrate(dt, hc, T, J, wi, R0, Gm, step, Loading, potential):
     step (function): step function to be used in the simulation
     potential (function): potential function
     Loading (np.array): Loading matrix
-    
+
     Returns:
     tuple: (t, g, p, U, E)
     """
@@ -794,7 +792,7 @@ def integrate(dt, hc, T, J, wi, R0, Gm, step, Loading, potential):
     for i in tqdm(range(1, len(t))):
         pn, wn, Rn, state = step((i-1)*dt, p0, w0, R0, dt, J, Loading, state)
 
-        if i % int(hc//dt) == 0:
+        if True : # i % int(hc//dt) == 0:
             j += 1
             t[j] = t[j-1] + int(hc//dt)*dt
             U[j] = potential(Rn, Gm)
@@ -851,16 +849,15 @@ if __name__ == "__main__":
             G[0, 0] * Gm[0, 2] - G[0, 2] * Gm[0, 0] + G[1, 0] * Gm[1, 2] - G[1, 2] * Gm[1, 0] + G[2, 0] * Gm[2, 2] - G[2, 2] * Gm[2, 0],
             G[0, 1] * Gm[0, 0] - G[0, 0] * Gm[0, 1] - G[1, 0] * Gm[1, 1] + G[1, 1] * Gm[1, 0] - G[2, 0] * Gm[2, 1] + G[2, 1] * Gm[2, 0]
         ])
-        
-        return tau
 
+        return tau
 
     # Parameters and initial conditions
     J = np.diag([2.0, 2.0, 4.0])
 
     dt = 0.25  # timestep
     hc = 1     # coarse timestep
-    T = 10000.  # total simulation time
+    T = 10000./100  # total simulation time
 
     # Loading
     Wi0 = np.array([0.0, 0.0, 0.625])  # initial body angular velocity
@@ -871,32 +868,50 @@ if __name__ == "__main__":
     # Methods to be analyzed
     Methods = [
         # "dyneq_trap",
-        "IncrSO3_trapm",
+        # "IncrSO3_trap",
+
+        # "IncrSO3_trapm",
         # "IncrSO3_trapm_zeta",
+
+    #   "IncrSO3_SVQ",
+    #   "IncrSO3_VLV",
+
+        "bb_rkmk_trap",
+        "incrso3_akw",
+
         # "IncrSO3_imidm",
-        # "IncrSO3_AKW",
-        # "rotint_nmb",
-        # "liemid_Newmark",
-        # "IncrSO3_LIEMIDEA",
-        "IncrSO3_SVQ",
-        "IncrSO3_VLV"
+
+
+
+        "kb_e",
+        "IncrSO3_imid",
+
+    #   "IncrSO3_LIEMIDEA",
+
+        # Broken
+#       "bb_rkmk_trap_wdexp",
+#       "liemid_Newmark",
+#       "rotint_nmb",
+        # "incrso3_mleok",
+        # "incrso3_swc2",
     ]
 
     for method in Methods:
-        try:
+        if True:
             step = getattr(sys.modules[__name__], method.lower())
 
             start_time = time.time()
             print(method)
-            ttNMB, _, _, _, HNMB = integrate(dt, hc, T, J, Wi0, Gi0, Gm, step, 
+            ttNMB, _, _, _, HNMB = integrate(dt, hc, T, J, Wi0, Gi0, Gm, step,
                                              Loading, potential)
             end_time = time.time()
             print(f"Elapsed time: {end_time - start_time} seconds")
-        
-            plt.plot(ttNMB, HNMB - HNMB[0], label=method[8:])
+
+            plt.plot(ttNMB, HNMB - HNMB[0],  label=method[8:])
+        try:
             pass
-        except Exception as e: 
+        except Exception as e:
             print(e)
-    
+
     plt.legend()
     plt.show()
