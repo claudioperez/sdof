@@ -1,3 +1,10 @@
+$$
+\newcommand{\dt}{\Delta t \,}
+\newcommand{\VelocL}{\bm{w}}
+\newcommand{\VelocR}{\bm{\omega}}
+\newcommand{\DisplR}{\bm{\Lambda}}
+$$
+
 ## Explicit
 
 ![alt text](./images/image-4.png)
@@ -7,11 +14,12 @@
 ![alt text](./images/image-7.png)
 
 ### SVQ-VLN (ELN)
+
 $$
 \left\{\begin{aligned}
 \boldsymbol{\Omega}_{k+\frac{1}{2}} & =\boldsymbol{\Omega}_k+\frac{h}{2} \mathbf{J}^{-1}\left(\mathbf{J} \boldsymbol{\Omega}_k \times \boldsymbol{\Omega}_k+\boldsymbol{\tau}\left(\mathbf{Q}_k\right)\right) \\
-\mathbf{Q}_{k+1} & =\mathbf{Q}_k \operatorname{cay}\left(h \boldsymbol{\Omega}_{k+\frac{1}{2}}\right), \\
-\boldsymbol{\Omega}_{k+1} & =\boldsymbol{\Omega}_{k+\frac{1}{2}}+\frac{h}{2} \mathbf{J}^{-1}\left(\mathbf{J} \boldsymbol{\Omega}_{k+1} \times \boldsymbol{\Omega}_{k+1}+\tau\left(\mathbf{Q}_{k+1}\right)\right)
+\mathbf{Q}_{k+1} & =\mathbf{Q}_k \operatorname{cay}\left(\dt \boldsymbol{\Omega}_{k+\frac{1}{2}}\right), \\
+\boldsymbol{\Omega}_{k+1} & =\boldsymbol{\Omega}_{k+\frac{1}{2}}+\tfrac{1}{2} \dt \mathbf{J}^{-1}\left(\mathbf{J} \boldsymbol{\Omega}_{k+1} \times \boldsymbol{\Omega}_{k+1}+\tau\left(\mathbf{Q}_{k+1}\right)\right)
 \end{aligned}\right.
 $$
 
@@ -26,27 +34,28 @@ $$
 
 ### TRAP
 
-![alt text](image-3.png)
+![alt text](images/image-3.png)
 
+![alt text](images/SW.png)
 
-![alt text](./images/SW.png)
+![alt text](images/image.png)
 
-![alt text](image.png)
+![alt text](images/image-1.png)
 
-![alt text](image-1.png)
-
-![](image-1.png)
+![](images/image-1.png)
 
 ### `RKMK`
 
-![alt text](image-7.png)
+![alt text](images/image-7.png)
 
 ### `LIEMID`
-![alt text](image-6.png)
+
+![alt text](images/image-6.png)
 
 ### `LIEMID[I]` (`IMIDM`)
-![alt text](image-4.png)
-![alt text](image-5.png)
+
+![alt text](images/image-4.png)
+![alt text](images/image-5.png)
 
 RKMK with tableau:
 $$
@@ -66,12 +75,12 @@ $$
 
 ### `RKMK-TRAP`
 
-![alt text](image-2.png)
+![alt text](images/image-2.png)
 
 $$
 \left\{\begin{array}{l}
 \boldsymbol{\omega}_{k+\frac{1}{2}}=\boldsymbol{\omega}_k+\frac{h}{2} \boldsymbol{J}^{-1}\left(\tau\left(\mathbf{R}_k\right)-\boldsymbol{\omega}_{k+\frac{1}{2}} \times \mathbf{J} \boldsymbol{\omega}_{k+\frac{1}{2}}\right) \\
-\mathbf{R}_{k+1}=\mathbf{R}_k \operatorname{cay}\left(h \boldsymbol{\omega}_{k+\frac{1}{2}}\right) \\
+\mathbf{R}_{k+1}=\mathbf{R}_k \operatorname{cay}\left(\dt  \boldsymbol{\omega}_{k+\frac{1}{2}}\right) \\
 \boldsymbol{\omega}_{k+1}=\boldsymbol{\omega}_{k+\frac{1}{2}}+\frac{h}{2} \mathbf{J}^{-1}\left(\tau\left(\mathbf{R}_{k+1}\right)-\boldsymbol{\omega}_{k+\frac{1}{2}} \times \mathbf{J} \boldsymbol{\omega}_{k+\frac{1}{2}}\right)
 \end{array}\right.
 $$
@@ -87,7 +96,7 @@ $$
 $$
 Solve:
 $$
-f(\boldsymbol{\omega})=-\boldsymbol{\omega}+\boldsymbol{\omega}_{k+\frac{1}{2}}+\frac{h}{2}\left[(\mathbf{J} \boldsymbol{\omega}) \times \boldsymbol{\omega}-\frac{h}{2}\left(\boldsymbol{\omega}^T \mathbf{J} \boldsymbol{\omega}\right) \boldsymbol{\omega}+\tau(\mathbf{R})\right]
+f(\boldsymbol{\omega})=-\boldsymbol{\omega}+\boldsymbol{\omega}_{k+\frac{1}{2}}+\frac{h}{2}\left[(\mathbf{J} \boldsymbol{\omega}) \times \boldsymbol{\omega}-\tfrac{1}{2} \dt \left(\boldsymbol{\omega}^{T} \mathbf{J} \boldsymbol{\omega}\right) \boldsymbol{\omega}+\tau(\mathbf{R})\right]
 $$
 with Jacobian:
 $$
