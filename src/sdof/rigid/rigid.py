@@ -7,10 +7,12 @@
 # Claudio Perez
 #
 """
-[1] Simo JC, Wong KK. Unconditionally stable algorithms for the orthogonal group that exactly preserve energy and momentum. International Journal for Numerical Methods in Engineering 1991;
+[1] Simo JC, Wong KK. Unconditionally stable algorithms for the orthogonal group that exactly preserve energy and momentum.
+    International Journal for Numerical Methods in Engineering 1991;
 [2] Iserles A, Munthe-Kaas HZ, Nørsett SP, Zanna A. Lie-group methods. Acta Numerica 2000; 9:215-365.
 [3] Krysl P. Dynamically equivalent implicit algorithms for the integration of rigid body rotations
-[4] Hairer E, Nørsett SP, Wanner G. Solving Ordinary Differential Equations I. Nonstiff Problems (revised 2nd edn). Springer Series in Computational Mathematics, vol 8. Springer: Berlin, 1993.
+[4] Hairer E, Nørsett SP, Wanner G. Solving Ordinary Differential Equations I. Nonstiff Problems (revised 2nd edn).
+    Springer Series in Computational Mathematics, vol 8. Springer: Berlin, 1993.
 [5] Munthe-Kaas H. Runge-Kutta methods on Lie groups. British Information Technology 1998; 38(1):92-111.
 """
 import numpy as np
@@ -713,6 +715,7 @@ def incrso3_trapm_zeta(t0, p0, w0, R0, dt, J, Loading, state):
 
     return Pin, Omegan, Rn, None
 
+
 def incrso3_trapm     (t0, p0, w0, R0, dt, J, Loading, state):
     """
     Trapezoidal rule with momentum conservation integrator constructor.
@@ -823,6 +826,7 @@ def liemid_newmark    (t0, p0, w0, R0, dt, J, Loading, state, maxiter=10):
 
     return J@Omegan, Omegan, Rn, state
 
+
 def rotint_nmb        (t0, p0, w0, R0, dt, J, Loading, state):
     """
     Krysl P, Endres L
@@ -845,7 +849,7 @@ def rotint_nmb        (t0, p0, w0, R0, dt, J, Loading, state):
     Returns:
     tuple: (P1, Omegan, Rn, state)
     """
-    tol =  100 * np.finfo(float).eps
+    tol =  100 * EPS
 
     Alphan1 = np.linalg.solve(J, Loading.Torque(t0, R0) - np.cross(w0, J@w0))
 
@@ -854,15 +858,15 @@ def rotint_nmb        (t0, p0, w0, R0, dt, J, Loading, state):
 
     # calculate effective loads at t_n
     M0 = Loading.Torque(t0 + dt, Rn)
-    Alphan = solve_Alpha(J, M0, dt, Alphan1, w0, tol)
+    Alphan = _solve_nmb(J, M0, dt, Alphan1, w0, tol)
 
     # update velocity
     Omegan = w0 + dt*0.5 * (Alphan1 + Alphan)
-    P1 = np.dot(J, Omegan)
+    P1 = J@Omegan
 
     return P1, Omegan, Rn, None
 
-def solve_Alpha(J, M0, dt, Alphan1, w0, tol, maxiter=100):
+def _solve_nmb(J, M0, dt, Alphan1, w0, tol, maxiter=100):
     """
     Solve for Alpha using Newton's method.
 
@@ -901,7 +905,7 @@ def integrate(J, dt, hc, T, wi, R0, Gm, step, Loading, potential):
     Gm (np.array): Gm matrix
     step (function): step function to be used in the simulation
     potential (function): potential function
-    Loading (np.array): Loading 
+    Loading (np.array): Loading
 
     Returns:
     tuple: (t, g, p, U, E)
@@ -959,7 +963,7 @@ if __name__ == "__main__":
         # Potential Energy
         dm = np.sqrt(2*(3 - np.trace(Gm@G)))
         de = np.sqrt(2*(3 - np.trace(G)))
-        V = (de - 1.0)**2 - alpha/dm; 
+        V = (de - 1.0)**2 - alpha/dm
         return V
 
     def potentialtorque(t, G):
@@ -1052,3 +1056,4 @@ if __name__ == "__main__":
 
     plt.legend()
     plt.show()
+
