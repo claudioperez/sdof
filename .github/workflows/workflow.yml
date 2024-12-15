@@ -3,7 +3,7 @@ name: Install OpenSees on Push to Master
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   test-pip-install:
