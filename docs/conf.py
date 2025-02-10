@@ -26,7 +26,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.mathjax',
     'sphinx.ext.githubpages',
-    'nbsphinx',
+#   'nbsphinx',
     'sphinx_design',
     'myst_parser',
     'sphinx_c_autodoc',
