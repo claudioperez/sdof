@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    
+    - name: Install pandoc
+      uses: pandoc/actions/setup@v1
+
     - uses: actions/checkout@v4
 
     - name: Build HTML
