@@ -1,159 +1,241 @@
-# `veux`
+# `sdof`
 
-<img align="left" src="https://stairlab.github.io/opensees-gallery/examples/shellframe/ShellFrame.png" width="350px" alt="SEES Logo">
+<img align="left" src="https://raw.githubusercontent.com/claudioperez/sdof/master/docs/assets/spectrum.svg" width="250px" alt="SDOF logo">
 
-
-**Highly efficient and portable finite element visualization framework**
+Parallel integration of single degree-of-freedom systems.
 
 <br>
-
 
 <div style="align:center">
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13367076.svg)](https://doi.org/10.5281/zenodo.13367076)
-[![Latest PyPI version](https://img.shields.io/pypi/v/veux?logo=pypi)](https://pypi.python.org/pypi/veux)
+[![Latest PyPI version](https://img.shields.io/pypi/v/sdof?logo=pypi&style=for-the-badge)](https://pypi.python.org/pypi/sdof)
+<span class="badge-npmversion"><a href="https://npmjs.org/package/sdof" title="View this project on NPM"><img src="https://img.shields.io/npm/v/sdof.svg?logo=npm&style=for-the-badge" alt="NPM version" /></a></span>
 
 </div>
 
-`veux` is a finite element rendering library that leverages modern 
-web technologies to produce sharable, efficient, and detailed renderings.
+-------------------------------------------------
+
+This package solves scalar differential equations of the form
+
+$$
+m \ddot{u} + c \dot{u} + k u = f(t)
+$$
+
+Integration is carried out using a Generalized - $\alpha$ integrator that
+is implemented under the hood in highly optimized multi-threaded C code. 
+
+Generalized - $\alpha$ is an implicit method that allows for high frequency energy
+dissipation and second order accuracy. With the right selection of parameters,
+the method can be specialized to the Hibert-Hughes-Taylor (HHT), or Newmark
+families of integration schemes.
+
+<hr />
 
 
--------------------------------------------------------------------- 
 
-<br>
+## Python API
 
-`veux` is a finite element rendering library that leverages modern 
-web technologies to produce sharable, efficient, and detailed renderings.
-Unlike most tools that only provide temporary visualization, `veux` generates
-persistent 3D models that can be stored in files, shared with colleagues, and
-viewed with any standard 3D model viewer. This means anyone can interact with
-the renderings without needing to install specialized software or even Python.
-Simply open the 3D object with your computer’s 3D viewer (e.g., 3D Viewer on
-Windows) or load it into a free online viewer in like [gltf-viewer](https://gltf-viewer.donmccurdy.com/).
+```python
+import numpy as np
+from sdof import integrate, peaks, spectrum
 
-Documentation is currently under development.
-
-## Features
-
-- **Detailed** Render frames with extruded cross sections
-- **Persistence**: Save your finite element visualizations as persistent 3D models that can be revisited and analyzed at any time.
-- **Portability**: Share your models effortlessly with colleagues, enabling seamless collaboration and review.
-- **Accessibility**: View and interact with the models using any standard 3D model viewer, eliminating the need for specialized software or Python installation.
-- **Versatility**: A wide selection of rendering backends and output file types, including 
-  optimized 3D web formats like `.glb`. Generated 3D models can be loaded directly into programs like PowerPoint and animated.
-- Correctly render models that treat both `y` or `z` as the
-  vertical coordinate.
-
--------------------------------------------------------------------- 
-
-## Gallery
+k  = 10.0
+c  = 0.1592
+m  = 0.2533
+f  = np.sin(np.linspace(0, 5*np.pi, 100))
+dt = 5*np.pi/100
 
 
-|                   |                   |
-| :---------------: | :---------------: |
-| ![][glry-0001]    | ![][glry-0003]    |
-| ![][glry-0002]    | ![][glry-0005]    |
+u, v, a = integrate(f, dt, k, c, m)
 
-
-[glry-0001]: <https://stairlab.github.io/opensees-gallery/gallery/cablestayed02/CableStayed02.png>
-[view-0001]: <https://stairlab.github.io/opensees-gallery/gallery/cablestayed02/CableStayed02.png>
-
-[glry-0002]: <https://stairlab.github.io/opensees-gallery/examples/example7/safeway_hu11201694704832599949.png>
-[view-0002]: <https://stairlab.github.io/opensees-gallery/examples/example7/safeway_hu11201694704832599949.png>
-
-[glry-0003]: <https://stairlab.github.io/opensees-gallery/examples/shellframe/ShellFrame_hu5013315635971397841.png>
-[view-0003]: <https://stairlab.github.io/opensees-gallery/examples/shellframe/ShellFrame_hu5013315635971397841.png>
-
-[glry-0005]: <https://raw.githubusercontent.com/STAIRlab/veux/master/docs/figures/shellframe01.png>
-[view-0005]: <https://raw.githubusercontent.com/STAIRlab/veux/master/docs/figures/shellframe01.png>
-
-## Getting Started
-
-To install `veux` run:
-
-```shell
-pip install veux
+D, V, A = spectrum(f, dt, periods=(0.02, 3.0, 100), damping=[0.02, 0.05])
 ```
 
-### Command Line Interface
+<!--
 
-To create a rendering, execute the following command from the anaconda prompt (after activating the appropriate environment):
 
-```shell
-python -m veux model.json -o model.html
+## Integrator (Adapted from OpenSees docs)
+
+<table>
+<tbody>
+<tr class="odd">
+<td><p><code class="parameter-table-variable">alphaM</code></p></td>
+<td><p>$\alpha_M$ factor</p></td>
+</tr>
+<tr class="even">
+<td><p><code class="parameter-table-variable">alphaF</code></p></td>
+<td><p>$\alpha_F$ factor</p></td>
+</tr>
+<tr class="odd">
+<td><p><code class="parameter-table-variable">gamma</code></p></td>
+<td><p>$\gamma$ factor</p></td>
+</tr>
+<tr class="even">
+<td><p><code class="parameter-table-variable">beta</code></p></td>
+<td><p>$\beta$ factor</p></td>
+</tr>
+</tbody>
+</table>
+
+<ol>
+<li>$\alpha_F$ and
+  $\alpha_M$ are defined differently that in the
+  paper, we use $\alpha_F = (1-\alpha_f)$ and
+  $\alpha_M=(1-\gamma_m)$ where
+  $\alpha_f$ and $\alpha_m$
+  are those used in the paper.</li>
+
+<li>Like Newmark and other implicit schemes, the unconditional
+  stability of this method applies to linear problems. There are no
+  results showing stability of this method over the wide range of
+  nonlinear problems that potentially exist. Experience indicates that the
+  time step for implicit schemes in nonlinear situations can be much
+  greater than those for explicit schemes.</li>
+
+<li>$\alpha_M = 1.0, \alpha_F = 1.0$ produces the Newmark Method.</li>
+<li>$\alpha_M = 1.0$ corresponds to the HHT method.</li>
+<li>The method is second-order accurate provided $\gamma = \dfrac{1}{2} + \alpha_M - \alpha_F$</li>
+<li>The method is unconditionally stable provided $\alpha_M \ge \alpha_F \ge \dfrac{1}{2}, \quad \beta \ge \dfrac{1}{4} +\dfrac{1}{2}(\gamma_M - \gamma_F)$</li>
+
+<li>$\gamma$ and $\beta$
+  are optional. The default values ensure the method is unconditionally
+  stable, second order accurate and high frequency dissipation is
+  maximized.</li>
+</ol>
+<p>The defaults are:</p>
+<dl>
+<dt></dt>
+<dd>
+
+$$\gamma = \dfrac{1}{2} + \gamma_M - \gamma_F$$
+
+</dd>
+</dl>
+<p>and</p>
+<dl>
+<dt></dt>
+<dd>
+
+$$\beta = \dfrac{1}{4}(1 + \gamma_M - \gamma_F)^2$$
+
+</dd>
+</dl>
+
+### Theory
+
+The generalized $\alpha$ method is a one
+step implicit method for solving the transient problem which attempts to
+increase the amount of numerical damping present without degrading the order of
+accuracy. In the HHT method, the same Newmark approximations are used:
+
+<dl>
+<dt></dt>
+<dd>
+
+$$u_{t+\Delta t} = u_t + \Delta t \dot u_t + [(0.5 - \beta)
+\Delta t^2] \ddot u_t + [\beta \Delta t^2] \ddot u_{t+\Delta t}$$
+
+</dd>
+</dl>
+<dl>
+<dt></dt>
+<dd>
+
+$$\dot u_{t+\Delta t} = \dot u_t + [(1-\gamma)\Delta t] \ddot
+u_t + [\gamma \Delta t ] \ddot u_{t+\Delta t} $$
+
+</dd>
+</dl>
+<p>but the time-discrete momentum equation is modified:</p>
+
+$$R_{t + \alpha_M \Delta t} = F_{t+\Delta t}^{\mathrm{ext}} - M \ddot
+u_{t + \alpha_M \Delta t} - C \dot u_{t+\alpha_F \Delta t} -
+F^{\mathrm{int}}(u_{t + \alpha_F \Delta t})
+$$
+
+where the displacements and velocities at the intermediate point are
+given by:
+
+$$u_{t+ \alpha_F \Delta t} = (1 - \alpha_F) u_t + \alpha_F
+u_{t + \Delta t}$$
+
+$$\dot u_{t+\alpha_F \Delta t} = (1-\alpha_F) \dot u_t +
+\alpha_F \dot u_{t + \Delta t}$$
+
+$$\ddot u_{t+\alpha_M \Delta t} = (1-\alpha_M) \ddot u_t +
+\alpha_M \ddot u_{t + \Delta t}$$
+
+<p>Following the methods outlined for Newmarks method, linearization of
+the nonlinear momentum equation results in the following linear
+equations:</p>
+
+$$K_{t+\Delta t}^{*i} d u_{t+\Delta t}^{i+1} = R_{t+\Delta
+t}^i$$
+
+$$K_{t+\Delta t}^{*i} = \alpha_F K_t + \alpha_F \frac{\gamma}{\beta \Delta t} C_t + \alpha_M\frac{1}{\beta \Delta t^2}M$$
+
+<p>and</p>
+
+$$R_{t+\Delta t}^i = F_{t + \Delta t}^{\mathrm{ext}} - F(u_{t + \alpha
+F \Delta t}^{i-1})^{\mathrm{int}} - C \dot u_{t+\alpha F \Delta t}^{i-1} - M
+\ddot u_{t+ \alpha M \Delta t}^{i-1}$$
+
+The linear equations are used to solve for 
+
+$$u_{t+\alpha_F \Delta t}, \dot u_{t + \alpha_F \Delta t} \ddot u_{t+ \alpha M \Delta t}$$
+
+Once convergence has been achieved the displacements,
+velocities and accelerations at time $t + \Delta t$ can be computed.
+
+## Compiling
+
+The main integrator is implemented in standard C and can be compiled
+as either a Python extension, or Javascript library (via WASM).
+
+### Python
+
+```
+pip install .
 ```
 
-where `model.json` is a JSON file generated from executing the following OpenSees command:
+### Javascript
 
-```tcl
-print -JSON model.json
-```
+- Install `emscripten` from [here](https://emscripten.org/)
+- run `make`. This creates the following files:
+  - `dist/fsdof.wasm` - Web assembly - compiled library,
+  - `dist/fsdof.js` - interface to binary `fsdof.wasm`
 
-If you omit the `-o <file.html>` portion, it will plot immediately in a new
-window. You can also use a `.png` extension to save a static image file, as
-opposed to the interactive html.
-
-> **Note** Printing depends on the JSON output of a model. Several materials and
-> elements in the OpenSeesPy and upstream OpenSees implementations do not
-> correctly print to JSON. For the most reliable results, use the
-> [`opensees`](https://pypi.org/project/opensees) package.
-
-By default, the rendering treats the $y$ coordinate as vertical.
-In order to manually control this behavior, pass the option 
-`--vert 3` to render model $z$ vertically, or `--vert 2` to render model $y$ vertically.
-
-If the [`opensees`](https://pypi.org/project/opensees) package is installed,
-you can directly render a Tcl script without first printing to JSON, 
-by just passing a Tcl script instead of the JSON file:
-
-```shell
-python -m veux model.tcl -o model.html
-```
-
-To plot an elevation (`elev`) plan (`plan`) or section (`sect`) view, run:
-
-```shell
-python -m veux model.json --view elev
-```
-
-and add `-o <file.extension>` as appropriate.
-
-To see the help page run
-
-```shell
-python -m veux --help
-```
+- to test, you can use Python to start an HTTP server in the current directory
+  as follows:
+  ```shell
+  python -m http.server .
+  ```
 
 
-<br>
+## References
 
+<p>J. Chung, G.M.Hubert. "A Time Integration Algorithm for Structural
+   Dynamics with Improved Numerical Dissipation: The
+   Generalized - $\alpha$ Method" ASME Journal of
+   Applied Mechanics, 60, 371:375, 1993.</p>
 
+<hr />
 
-## Related Links
+<p>Code Developed by: <span style="color:blue">fmk</span></p>
 
-See also
-
-- [`opensees`](https://github.com/claudioperez/opensees)
-- [`osmg`](https://pypi.org/project/osmg)
-- [`mdof`](https://pypi.org/project/mdof)
-- [`sdof`](https://pypi.org/project/sdof)
-
-
-The `veux` packages was used to generate figures for the following publications:
-
-- *On nonlinear geometric transformations of finite elements* [doi: 10.1002/nme.7506](https://doi.org/10.1002/nme.7506)
-
-<!-- 
-Similar packages for OpenSees rendering include:
-
-- [`vfo`](https://vfo.readthedocs.io/en/latest/)
-- [`opsvis`](https://opsvis.readthedocs.io/en/latest/index.html)
-
-Other
-
-- [`fapp`](https://github.com/wcfrobert/fapp) 
 -->
+
+## See Also
+
+- [`mdof`](https://pypi.org/project/mdof)
+- [`opensees`](https://pypi.org/project/opensees)
+
+### Similar
+
+- https://github.com/eng-tools/eqsig
+- https://github.com/vibrationtoolbox/vibration_toolbox
+- https://github.com/anismhd/SDoF
+
 
 ## Support
 
@@ -163,24 +245,23 @@ Other
   <td>
     <a href="https://peer.berkeley.edu">
     <img src="https://raw.githubusercontent.com/claudioperez/sdof/master/docs/assets/peer-black-300.png"
-         alt="PEER Logo" width="100"/>
+         alt="PEER Logo" width="200"/>
     </a>
   </td>
 
   <td>
     <a href="https://dot.ca.gov/">
     <img src="https://raw.githubusercontent.com/claudioperez/sdof/master/docs/assets/Caltrans.svg.png"
-         alt="Caltrans Logo" width="100"/>
+         alt="Caltrans Logo" width="200"/>
     </a>
   </td>
 
   <td>
-    <a href="https://stairlab.berkeley.edu/software/">
-    <img src="https://raw.githubusercontent.com/claudioperez/sdof/master/docs/assets/stairlab.svg"
-         alt="STAIRlab Logo" width="100"/>
+    <a href="https://peer.berkeley.edu">
+    <img src="https://raw.githubusercontent.com/claudioperez/sdof/master/docs/assets/brace2_logo-new3_ungrouped.svg"
+         alt="BRACE2 Logo" width="200"/>
     </a>
   </td>
  
  </tr>
 </table>
-
