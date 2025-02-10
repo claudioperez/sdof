@@ -129,9 +129,10 @@ Hibert-Hughes-Taylor (HHT), or Newmark families of integration schemes.
    :caption: Contents:
 
    library/index.rst
-   theory/index
    examples/index.rst
 
+..
+   theory/index
 
 
 Indices and tables
