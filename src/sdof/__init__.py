@@ -149,15 +149,15 @@ except Exception as e:
 
 
 def integrate_0(f, dt,
-              k      : float,
-              c      : float = 0.0,
-              m      : float = 1.0,
-              u0=0.0, v0=0.0,
-              out  =  None,
-              alpha_m: float = 1.0,
-              alpha_f: float = 1.0,
-              beta   : float = 0.25,
-              gamma  : float = 0.50
+                k      : float,
+                c      : float = 0.0,
+                m      : float = 1.0,
+                u0=0.0, v0=0.0,
+                out  =  None,
+                alpha_m: float = 1.0,
+                alpha_f: float = 1.0,
+                beta   : float = 0.25,
+                gamma  : float = 0.50
     ):
 
     if out is None:
@@ -404,7 +404,7 @@ class sdof:
 
     def impulse(self, t, u0=None, v0=None):
         wd = self.w*np.emath.sqrt(1-self.zeta**2)
-        return 1/(m*wd)*np.exp(-self.zeta*self.w*t)*np.sin(wd*t), None, None
+        return 1/(self.m*wd)*np.exp(-self.zeta*self.w*t)*np.sin(wd*t), None, None
 
     def transfer(self, w):
         k = self.k
@@ -418,13 +418,13 @@ class sdof:
         wd = wn*np.sqrt(1-zeta**2)
 
         b = w/wn
-        G = (F/K)*(1.0/( (1-b)**2+(2.0*zeta*b**2) ))
+        G = (F/self.k)*(1.0/( (1-b)**2 + (2.0*zeta*b**2) ))
         particular = G*( (1-b**2)*np.sin(w*t) - 2*nw*b*np.cos(w*t) )
         #
         #
         A = u0 + 2*zeta*b*G
         B = (v0 + G*w*(b**2-1) + A*zeta*wn)/wd
-        homogeneous = (A*np.cos(wd*t)+B*np.sin(wd*t))*np.exp(-zeta*wn*t)
+        homogeneous = (A*np.cos(wd*t) + B*np.sin(wd*t))*np.exp(-zeta*wn*t)
 
         return particular + homogeneous, None, None
 
@@ -452,6 +452,7 @@ class sdof:
             a2 = ( v0 + ( zeta + np.sqrt(zeta**2 - 1))*w*u0) / (2*w*np.sqrt(zeta**2 - 1))
             a3 = np.sqrt(zeta*zeta - 1)
             u  = np.exp(-zeta*w*t)*(a1*np.exp(-w*a3*t) + a2*np.exp(w*a3*t))
+
         return u, None, None
 
 

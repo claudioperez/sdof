@@ -1,13 +1,11 @@
 <!doctype html>
 <html lang=en>
-
 <head>
   <meta charset=utf-8>
   <meta name=description content="{{ description }}">
   <meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
   <meta http-equiv=x-ua-compatible content="ie=edge">
   <title>{{ project }}</title>
-  <!--  -->
   {%- import "static/webpack-macros.html" as _webpack with context %}
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "{{ default_mode }}";
@@ -23,12 +21,6 @@
   <link rel="stylesheet" href=https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css>
   <link rel="stylesheet" type=text/css
     href="https://numpy.org/css/theme-css/fresh/core.min.3997f86943b5337a6aab5eac5003a41b9a03e1159a7e779d8e99f5c1353ad503.css">
-  <!--
-  <link rel="stylesheet" href="{{ pathto('_static/css', 1) }}/theme-css/code-highlight.css.min.60358f6aca833402d029f1625f9d78ac9331cb988429c4541f68207cfe3894ed.css" >
-  <link rel="stylesheet" href="{{ pathto('_static/css', 1) }}/theme-css/notices.css.min.a1ba05c782ca3a59361d6e284f0c2e1ff14e5a17a87057974212c60aa30fed2c.css" >
-  <link rel="stylesheet" href="{{ pathto('_static/css', 1) }}/theme-css/posts.css.min.6d27826ef3e7467b2bc97db6a0068283b47dddb32f6bf29504911aea6c237dd7.css" >
-  <link rel="stylesheet" href="{{ pathto('_static/css', 1) }}/theme-css/shortcuts.css.min.66eb490f98d06a7f1980356f649d586f140b68294e9aa3600404f393ce50dacb.css" >
-  -->
   <link rel="stylesheet"
     href="{{ pathto('_static/css', 1) }}/theme-css/content.css.min.04e1e257bae2de28e38445f3f5d76e28317dc313cb7ead5536bcb52baccf91f9.css">
   <link rel="stylesheet"
@@ -307,12 +299,6 @@
       <div class=uikit-tab-wrapper>
         <ul class="uk-flex-center uk-nav" uk-tab>
           <li class="uk-active"><a href=#>Other libraries</a></li>
-          {% if False %}
-          <li><a href=#>Scientific Domains</a></li>
-          <li><a href=#>Data Science</a></li>
-          <li><a href=#>Machine Learning</a></li>
-          <li><a href=#>Visualization</a></li>
-          {% endif %}
         </ul>
         <ul id=tabs-content class="uk-switcher uk-margin">
           <li class=array-libraries>
@@ -328,298 +314,33 @@
               </tr>
               <tr>
                 <td style=text-align:center>
-                  <a href="https://github.com/claudioperez/opensees">
+                  <a href="https://xara.so">
                     <img class=first-column-layout
-                         src="{{ pathto('_static/images', 1) }}/content_images/brace/opensees.jpg" alt="opensees"></a></td>
-                <td class=full-center-text><a href="https://pypi.org/project/opensees" />opensees</a></td>
+                         src="{{ pathto('_static/images', 1) }}/content_images/brace/opensees.jpg" alt="xara"></a></td>
+                <td class=full-center-text><a href="https://xara.so" />xara</a></td>
                 <td class=left-text>Direct and idiomatic bindings the 
                   <a href="https://github.com/STAIRLab/OpenSeesRT">OpenSeesRT</a> finite element analysis kernel.</td>
               </tr>
               <tr>
                 <td style=text-align:center><img class=first-column-layout
-                    src="{{ pathto('_static/images', 1) }}/content_images/brace/sdof.svg" alt="sdof"></td>
+                    src="{{ pathto('_static/images', 1) }}/content_images/brace/sdof.svg" alt="sdof logo"></td>
                 <td class=full-center-text><a href="https://pypi.org/project/sdof" />sdof</a></td>
                 <td class=left-text>Lightning-fast integration of single degree-of-freedom systems.</td>
               </tr>
               <tr>
-                <td style=text-align:center><img class=first-column-layout
-                    src="{{ pathto('_static/images', 1) }}/content_images/brace/mdof.svg" alt="mdof"></td>
+                <td style=text-align:center><img class="first-column-layout"
+                    src="{{ pathto('_static/images', 1) }}/content_images/brace/mdof.svg" alt="mdof logo"></td>
                 <td class=full-center-text><a href="https://pypi.org/project/mdof">mdof</a></td>
                 <td class=left-text>Fast and friendly structural system identification.</td>
               </tr>
               <tr>
-                <td style=text-align:center><img class=first-column-layout
-                    src="{{ pathto('_static/images', 1) }}/content_images/brace/sees.png" alt="sees"></td>
-                <td class=full-center-text><a href="https://pypi.org/project/sees">sees</a></td>
-                <td class=left-text>...</td>
+                <td style=text-align:center><img class="first-column-layout"
+                    src="{{ pathto('_static/images', 1) }}/content_images/brace/sees.png" alt="veux logo"></td>
+                <td class=full-center-text><a href="https://pypi.org/project/veux">veux</a></td>
+                <td class=left-text>Visualization library for OpenSees and xara</td>
               </tr>
             </table>
           </li>
-          {% if False %}
-          <li class=scientific-domains>
-            <p>Nearly every scientist working in Python draws on the power of sdof.</p>
-            <p>sdof brings the computational power of languages like C and Fortran to Python, a language much easier to
-              learn and use. With this power comes simplicity: a solution in sdof is often clear and elegant.</p>
-            <table>
-              <tr class=highlight-th>
-                <td class=bold-text>Quantum Computing</td>
-                <td class=bold-text>Statistical Computing</td>
-                <td class=bold-text>Signal Processing</td>
-                <td class=bold-text>Image Processing</td>
-                <td class=bold-text>Graphs and Networks</td>
-                <td class=bold-text>Astronomy</td>
-                <td class=bold-text>Cognitive Psychology</td>
-              </tr>
-              <tr>
-                <td><img class=cell-layout
-                    src="{{ pathto('_static', 1) }}/images/content_images/sc_dom_img/quantum_computing.svg"
-                    alt="A computer chip."></td>
-                <td><img class=cell-layout
-                    src="{{ pathto('_static', 1) }}/images/content_images/sc_dom_img/statistical_computing.svg"
-                    alt="A line graph with the line moving up."></td>
-                <td><img class=cell-layout
-                    src="{{ pathto('_static', 1) }}/images/content_images/sc_dom_img/signal_processing.svg"
-                    alt="A bar chart with positive and negative values."></td>
-                <td><img class=cell-layout
-                    src="{{ pathto('_static', 1) }}/images/content_images/sc_dom_img/image_processing.svg"
-                    alt="An photograph of the mountains."></td>
-                <td><img class=cell-layout src="{{ pathto('_static', 1) }}/images/content_images/sc_dom_img/sd6.svg"
-                    alt="A simple graph."></td>
-                <td><img class=cell-layout
-                    src="{{ pathto('_static', 1) }}/images/content_images/sc_dom_img/astronomy_processes.svg"
-                    alt="A telescope."></td>
-                <td><img class=cell-layout
-                    src="{{ pathto('_static', 1) }}/images/content_images/sc_dom_img/cognitive_psychology.svg"
-                    alt="A human head with gears."></td>
-              </tr>
-              <tr>
-                <td class=center-text><a href=http://qutip.org>QuTiP</a></td>
-                <td class=center-text><a href=https://pandas.pydata.org>Pandas</a></td>
-                <td class=center-text><a href=https://www.scipy.org>SciPy</a></td>
-                <td class=center-text><a href=https://scikit-image.org>Scikit-image</a></td>
-                <td class=center-text><a href=https://networkx.org>NetworkX</a></td>
-                <td class=center-text><a href=https://www.astropy.org>AstroPy</a></td>
-                <td class=center-text><a href=https://www.psychopy.org>PsychoPy</a></td>
-              </tr>
-              <tr>
-                <td class=center-text><a href=https://pyquil-docs.rigetti.com/en/stable>PyQuil</a></td>
-                <td class=center-text><a href=https://github.com/statsmodels/statsmodels>statsmodels</a></td>
-                <td class=center-text><a href=https://pywavelets.readthedocs.io>PyWavelets</a></td>
-                <td class=center-text><a href=https://opencv.org>OpenCV</a></td>
-                <td class=center-text><a href=https://graph-tool.skewed.de />graph-tool</a></td>
-                <td class=center-text><a href=https://github.com/sunpy/sunpy>SunPy</a></td>
-                <td class=center-text></td>
-              </tr>
-              <tr>
-                <td class=center-text><a href=https://qiskit.org>Qiskit</a></td>
-                <td class=center-text><a href=https://xarray.pydata.org/en/stable />Xarray</a></td>
-                <td class=center-text><a href=https://python-control.org>python-control</a></td>
-                <td class=center-text><a href=https://mahotas.rtfd.io />Mahotas</a></td>
-                <td class=center-text><a href=https://igraph.org/python />igraph</a></td>
-                <td class=center-text><a href=https://github.com/spacepy/spacepy>SpacePy</a></td>
-                <td class=center-text></td>
-              </tr>
-              <tr>
-                <td class=center-text><a href=https://pennylane.ai>PennyLane</a></td>
-                <td class=center-text><a href=https://github.com/mwaskom/seaborn>Seaborn</a></td>
-                <td class=lastrow-center-text></td>
-                <td class=lastrow-center-text></td>
-                <td class=center-text><a href=https://pygsp.rtfd.io>PyGSP</a></td>
-                <td class=lastrow-center-text></td>
-                <td class=lastrow-center-text></td>
-              </tr>
-              <tr class=highlight-th>
-                <td class=bold-text>Bioinformatics</td>
-                <td class=bold-text>Bayesian Inference</td>
-                <td class=bold-text>Mathematical Analysis</td>
-                <td class=bold-text>Chemistry</td>
-                <td class=bold-text>Geoscience</td>
-                <td class=bold-text>Geographic Processing</td>
-                <td class=bold-text>Architecture & Engineering</td>
-              </tr>
-              <tr>
-                <td><img class=cell-layout
-                    src="{{ pathto('_static/', 1) }}/images/content_images/sc_dom_img/bioinformatics.svg"
-                    alt="A strand of DNA."></td>
-                <td><img class=cell-layout
-                    src="{{ pathto('_static/', 1) }}/images/content_images/sc_dom_img/bayesian_inference.svg"
-                    alt="A graph with a bell-shaped curve."></td>
-                <td><img class=cell-layout
-                    src="{{ pathto('_static/', 1) }}/images/content_images/sc_dom_img/mathematical_analysis.svg"
-                    alt="Four mathematical symbols."></td>
-                <td><img class=cell-layout
-                    src="{{ pathto('_static/', 1) }}/images/content_images/sc_dom_img/chemistry.svg" alt="A test tube.">
-                </td>
-                <td><img class=cell-layout
-                    src="{{ pathto('_static/', 1) }}/images/content_images/sc_dom_img/geoscience.svg" alt="The Earth.">
-                </td>
-                <td><img class=cell-layout src="{{ pathto('_static/', 1) }}/images/content_images/sc_dom_img/GIS.svg"
-                    alt="A map."></td>
-                <td><img class=cell-layout
-                    src="{{ pathto('_static/', 1) }}/images/content_images/sc_dom_img/robotics.svg"
-                    alt="A microprocessor development board."></td>
-              </tr>
-              <tr>
-                <td class=center-text><a href=https://biopython.org>BioPython</a></td>
-                <td class=center-text><a href=https://pystan.readthedocs.io/en/latest />PyStan</a></td>
-                <td class=center-text><a href=https://www.scipy.org>SciPy</a></td>
-                <td class=center-text><a href=https://cantera.org />Cantera</a></td>
-                <td class=center-text><a href=https://pangeo.io />Pangeo</a></td>
-                <td class=center-text><a href=https://shapely.readthedocs.io>Shapely</a></td>
-                <td class=center-text><a href=https://compas.dev />COMPAS</a></td>
-              </tr>
-              <tr>
-                <td class=center-text><a href=http://scikit-bio.org>Scikit-Bio</a></td>
-                <td class=center-text><a href=https://docs.pymc.io>PyMC3</a></td>
-                <td class=center-text><a href=https://www.sympy.org>SymPy</a></td>
-                <td class=center-text><a href=https://www.mdanalysis.org />MDAnalysis</a></td>
-                <td class=center-text><a href=https://simpeg.xyz />Simpeg</a></td>
-                <td class=center-text><a href=https://geopandas.org />GeoPandas</a></td>
-                <td class=center-text><a href=https://cityenergyanalyst.com />City Energy Analyst</a></td>
-              </tr>
-              <tr>
-                <td class=center-text><a href=https://github.com/openvax/pyensembl>PyEnsembl</a></td>
-                <td class=center-text><a href=https://arviz-devs.github.io/arviz />ArviZ</a></td>
-                <td class=center-text><a href=https://github.com/cvxgrp/cvxpy>cvxpy</a></td>
-                <td class=center-text><a href=https://github.com/rdkit/rdkit>RDKit</a></td>
-                <td class=center-text><a href=https://github.com/obspy/obspy/wiki>ObsPy</a></td>
-                <td class=center-text><a href=https://python-visualization.github.io/folium>Folium</a></td>
-                <td class=center-text><a href=https://nortikin.github.io/sverchok />Sverchok</a></td>
-              </tr>
-              <tr>
-                <td class=lastrow-center-text><a href=http://etetoolkit.org />ETE</a></td>
-                <td class=lastrow-center-text><a href=https://emcee.readthedocs.io />emcee</a></td>
-                <td class=lastrow-center-text><a href=https://fenicsproject.org />FEniCS</a></td>
-                <td class=lastrow-center-text><a href=https://www.pybamm.org>PyBaMM</a></td>
-                <td class=lastrow-center-text><a href=https://www.fatiando.org />Fatiando a Terra</a></td>
-                <td class=lastrow-center-text></td>
-                <td class=lastrow-center-text></td>
-              </tr>
-            </table>
-          </li>
-          <li class=data-science>
-            <div class=grid-container>
-              <div><a href=/images/content_images/ds-landscape.png target=_blank><img
-                    src="{{ pathto('_static/images', 1) }}/content_images/ds-landscape.png"
-                    alt="Diagram of Python Libraries. The five catagories are 'Extract, Transform, Load', 'Data Exploration', 'Data Modeling', 'Data Evaluation' and 'Data Presentation'."
-                    align=left></a></div>
-              <div>
-                <p>sdof lies at the core of a rich ecosystem of data science libraries. A typical exploratory data
-                  science workflow might look like:
-                <ul class=content-tab>
-                  <li><b>Extract, Transform, Load: </b><a href=https://pandas.pydata.org>Pandas</a>, <a
-                      href=https://intake.readthedocs.io>Intake</a>, <a
-                      href=https://pyjanitor.readthedocs.io />PyJanitor</a></li>
-                  <li><b>Exploratory analysis: </b><a href=https://jupyter.org>Jupyter</a>, <a
-                      href=https://seaborn.pydata.org>Seaborn</a>, <a href=https://matplotlib.org>Matplotlib</a>, <a
-                      href=https://altair-viz.github.io>Altair</a></li>
-                  <li><b>Model and evaluate: </b><a href=https://scikit-learn.org>scikit-learn</a>, <a
-                      href=https://www.statsmodels.org/stable/index.html>statsmodels</a>, <a
-                      href=https://docs.pymc.io>PyMC3</a>, <a href=https://spacy.io>spaCy</a></li>
-                  <li><b>Report in a dashboard: </b><a href=https://plotly.com/dash>Dash</a>, <a
-                      href=https://panel.holoviz.org>Panel</a>, <a
-                      href=https://github.com/voila-dashboards/voila>Voila</a></li>
-                </ul>
-                </p>
-              </div>
-            </div>
-            <div class=grid-container>
-              <div>
-                <p></p>
-                <p>For high data volumes, <a href=https://dask.org>Dask</a> and <a href=https://ray.io />Ray</a> are
-                  designed to scale. Stable deployments rely on data versioning (<a href=https://dvc.org>DVC</a>),
-                  experiment tracking (<a href=https://mlflow.org>MLFlow</a>), and workflow automation (<a
-                    href=https://airflow.apache.org>Airflow</a>, <a href=https://dagster.io>Dagster</a> and <a
-                    href=https://www.prefect.io>Prefect</a>).</p>
-                </p>
-              </div>
-              <div><img src="{{ pathto('_static/images', 1) }}/content_images/data-science.png"
-                  alt="Diagram of three overlapping circles. The circles are labeled 'Mathematics', 'Computer Science' and 'Domain Expertise'. In the middle of the diagram, which has the three circles overlapping it, is an area labeled 'Data Science'."
-                  align=centre width=75%></a></div>
-            </div>
-          </li>
-          <li class=machine-learning>
-            <div class=grid-container>
-              <div class=animation-holder><a
-                  href=https://ai.googleblog.com/2016/12/open-sourcing-embedding-projector-tool.html><img
-                    src="{{ pathto('_static/images', 1) }}/content_images/ml_img/tensorflow-ml-anim.gif"
-                    alt="An animated gif showing a three-dimensional graph of embeddings made in Tensorflow."
-                    align=middle class=animation-img></a>
-                <p><i style=font-size:80%><a
-                      href=https://ai.googleblog.com/2016/12/open-sourcing-embedding-projector-tool.html>Source: Google
-                      AI Blog</a></i></p>
-              </div>
-              <div>
-                <p>sdof forms the basis of powerful machine learning libraries like <a
-                    href=https://scikit-learn.org>scikit-learn</a> and <a href=https://www.scipy.org>SciPy</a>. As
-                  machine learning grows, so does the list of libraries built on sdof. <a
-                    href=https://www.tensorflow.org>TensorFlow’s</a> deep learning capabilities have broad applications
-                  — among them speech and image recognition, text-based applications, time-series analysis, and video
-                  detection. <a href=https://pytorch.org>PyTorch</a>, another deep learning library, is popular among
-                  researchers in computer vision and natural language processing. <a
-                    href=https://github.com/apache/incubator-mxnet>MXNet</a> is another AI package, providing blueprints
-                  and templates for deep learning.</p>
-              </div>
-            </div>
-            <div>
-              <div>
-                <p>Statistical techniques called <a
-                    href=https://towardsdatascience.com/ensemble-methods-bagging-boosting-and-stacking-c9214a10a205>ensemble</a>
-                  methods such as binning, bagging, stacking, and boosting are among the ML algorithms implemented by
-                  tools such as <a href=https://github.com/dmlc/xgboost>XGBoost</a>, <a
-                    href=https://lightgbm.readthedocs.io/en/latest />LightGBM</a>, and <a
-                    href=https://catboost.ai>CatBoost</a> — one of the fastest inference engines. <a
-                    href=https://www.scikit-yb.org/en/latest />Yellowbrick</a> and <a
-                    href=https://eli5.readthedocs.io/en/latest />Eli5</a> offer machine learning visualizations.</p>
-              </div>
-            </div>
-          </li>
-          <li class=visualization>
-            <div class=grid-container>
-              <div class=visualization-images>
-                <div class=image-grid>
-                  <div><a href=https://www.fusioncharts.com/blog/best-python-data-visualization-libraries><img
-                        src="{{ pathto('_static/images', 1) }}/content_images/v_matplotlib.png"
-                        alt="A streamplot made in matplotlib" align=middle></a></div>
-                  <div><a href=https://github.com/yhat/ggpy><img
-                        src="{{ pathto('_static/images', 1) }}/content_images/v_ggpy.png"
-                        alt="A scatter-plot graph made in ggpy" align=middle></a></div>
-                  <div><a href=https://www.journaldev.com/19692/python-plotly-tutorial><img
-                        src="{{ pathto('_static/images', 1) }}/content_images/v_plotly.png"
-                        alt="A box-plot made in plotly" align=middle></a></div>
-                  <div><a href=https://altair-viz.github.io/gallery/streamgraph.html><img
-                        src="{{ pathto('_static/images', 1) }}/content_images/v_altair.png"
-                        alt="A streamgraph made iair" align=middle></a></div>
-                  <div><a href=https://seaborn.pydata.org><img
-                        src="{{ pathto('_static/images', 1) }}/content_images/v_seaborn.png"
-                        alt='A pairplot of two types of graph, a plot-graph and a frequency graph made in seaborn"'
-                        align=middle></a></div>
-                  <div><a href=https://docs.pyvista.org/examples/index.html><img
-                        src="{{ pathto('_static/images', 1) }}/content_images/v_pyvista.png"
-                        alt="A 3D volume rendering made in PyVista." align=middle></a></div>
-                  <div><a href=https://napari.org><img
-                        src="{{ pathto('_static/images', 1) }}/content_images/v_napari.png"
-                        alt="A multi-dimensionan image made in napari." align=middle></a></div>
-                  <div><a href=https://vispy.org/gallery/index.html><img
-                        src="{{ pathto('_static/images', 1) }}/content_images/v_vispy.png"
-                        alt="A Voronoi diagram made in vispy." align=middle></a></div>
-                </div>
-              </div>
-              <div>
-                <p>sdof is an essential component in the burgeoning <a
-                    href=https://pyviz.org/overviews/index.html>Python visualization landscape</a>, which includes <a
-                    href=https://matplotlib.org>Matplotlib</a>, <a href=https://seaborn.pydata.org>Seaborn</a>, <a
-                    href=https://plot.ly>Plotly</a>, <a href=https://altair-viz.github.io>Altair</a>, <a
-                    href=https://docs.bokeh.org/en/latest />Bokeh</a>, <a href=https://holoviz.org>Holoviz</a>, <a
-                    href=http://vispy.org>Vispy</a>, <a href=https://github.com/napari/napari>Napari</a>, and <a
-                    href=https://github.com/pyvista/pyvista>PyVista</a>, to name a few.</p>
-                <p>sdof&rsquo;s accelerated processing of large arrays allows researchers to visualize datasets far
-                  larger than native Python could handle.</p>
-              </div>
-              <div></div>
-            </div>
-          </li>
-          {% endif %}
         </ul> 
       </div>
     </div>
@@ -675,7 +396,7 @@
               </svg></a>
             </div>
           </nav>
-          <div class=copyright>&copy; 2023 . All rights reserved.</div>
+          <div class=copyright>&copy; 2025 . All rights reserved.</div>
         </div>
       </div>
     </div>
@@ -686,5 +407,4 @@
   <script type=text/javascript>setupShortcuts(maxLevel=2)</script>
   <script defer data-domain=numpy.org src=https://views.scientific-python.org/js/script.js></script>
 </body>
-
 </html>

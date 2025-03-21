@@ -231,36 +231,36 @@ def incrso3_akw       (t0, p0, w0, R0, dt, J, Loading, state):
     """
     # akw_mid 
 
-    def slv(J, t0, dt, R0, H0, Loading):
-        maxiter = 25
-        tol = 100 * np.finfo(float).eps
-
-        H1 = H0
-        M0 = Loading.Torque(t0, R0)
-        iter = 0
-
-        while True:
-            Hx = H1
-            wa = np.linalg.solve(J, (H1 + H0) / 2)
-            Rn = R0 @ CaySO3(dt * wa)
-            M1 = Loading.Torque(t0 + dt, Rn)
-            H1 = H0 + dt * HatSO3(J @ wa) @ wa + dt / 2 * (M1 + M0)
-            iter += 1
-            if iter > maxiter:
-                if np.max(np.abs(H1 - Hx)) > 1e-12:
-                    print(f"Warning: {__file__} - Failed to converge: ||residual||={np.linalg.norm(H1)}")
-                break
-            if np.linalg.norm(H1 - Hx) < tol:
-                break
-
-        return H1
-
     H0 = J @ w0
-    H1 = slv(J, t0, dt, R0, H0, Loading)
+    H1 = _solve_akw(J, t0, dt, R0, H0, Loading)
     wa = np.linalg.solve(J, (H1 + H0) / 2)
     R1 = R0 @ CaySO3(dt * wa)
     w1 = np.linalg.solve(J, H1)
     return H1, w1, R1, None
+
+def _solve_akw(J, t0, dt, R0, H0, Loading):
+    maxiter = 25
+    tol = 100 * np.finfo(float).eps
+
+    H1 = H0
+    M0 = Loading.Torque(t0, R0)
+    iter = 0
+
+    while True:
+        Hx = H1
+        wa = np.linalg.solve(J, (H1 + H0) / 2)
+        Rn = R0 @ CaySO3(dt * wa)
+        M1 = Loading.Torque(t0 + dt, Rn)
+        H1 = H0 + dt * np.cross(J@wa,  wa) + dt / 2 * (M1 + M0)
+        iter += 1
+        if iter > maxiter:
+            if np.max(np.abs(H1 - Hx)) > 1e-12:
+                warnings.warn(f"Warning: {__file__} - Failed to converge: ||residual||={np.linalg.norm(H1)}")
+            break
+        if np.linalg.norm(H1 - Hx) < tol:
+            break
+
+    return H1
 
 def incrso3_imid      (t0, p0, w0, R0, dt, J, Loading, state):
     """
