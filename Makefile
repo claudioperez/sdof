@@ -46,7 +46,7 @@ thread: src/_spectrum.c src/_integrate.c
 #
 publish:
 	cp -r _build/html/* site/
-	git add site && git commit -m'cmp - rebuild site' && git subtree push --prefix site/ brace gh-pages
+	git add site && git commit -m'cmp - rebuild site' && git subtree push --prefix site/ origin gh-pages
 		 
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
