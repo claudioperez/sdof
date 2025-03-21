@@ -1,3 +1,5 @@
+# Rotations
+
 1. Define the updated configuration via the exponential map as:
 
    $$

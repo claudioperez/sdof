@@ -1,3 +1,11 @@
+#===----------------------------------------------------------------------===#
+#
+#         STAIRLab -- STructural Artificial Intelligence Laboratory
+#
+#===----------------------------------------------------------------------===#
+#
+# Claudio Perez
+#
 """
 # Response Spectrum
 elceltro | sdof $dt

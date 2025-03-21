@@ -19,3 +19,9 @@ Library
    :undoc-members:
    :show-inheritance:
 
+
+.. automodule:: sdof.plasticity
+   :members: NonlinearPlasticity
+   :undoc-members:
+   :show-inheritance:
+

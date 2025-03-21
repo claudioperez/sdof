@@ -10,8 +10,8 @@
   <!--  -->
   {%- import "static/webpack-macros.html" as _webpack with context %}
   <script data-cfasync="false">
-    document.documentElement.dataset.mode = localStorage.getItem("mode") || "{{ default_mode }}";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    // document.documentElement.dataset.mode = localStorage.getItem("mode") || "{{ default_mode }}";
+    // document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
   {{ _webpack.head_pre_assets() }}
   {{ _webpack.head_pre_icons() }}
@@ -104,17 +104,6 @@
           <span aria-hidden=true></span></a></div>
       <div id=navbar-menu class="navbar-menu is-static">
         <div class=navbar-end>
-          {% if False %}
-          <a href="/install.html" class="navbar-item is-secondary">Install</a>
-          <a href=https://numpy.org/doc/stable class="navbar-item is-secondary">Documentation</a>
-          <div class="navbar-item has-dropdown is-hoverable"><a aria-label="Select language"
-            class=navbar-link>English</a>
-            <div class=navbar-dropdown>
-              <a href=/pt/ class=navbar-item>Português</a>
-              <a href=/ja/ class=navbar-item>日本語 (Japanese)</a>
-            </div>
-          </div>
-          {% endif %}
           <ul class="navbar-item bd-navbar-elements " style="display: flex; flex-direction: row;">
             {{ generate_header_nav_html(n_links_before_dropdown=theme_header_links_before_dropdown) }}
           </ul>
@@ -122,31 +111,6 @@
       </div>
     </div>
   </nav>
-
-  <!--
-    <nav id=navbar-clone class="navbar navbar-nav is-fresh is-transparent" role=navigation aria-label="main navigation">
-      <div class="container is-max-widescreen">
-        <div class=navbar-brand>
-          <a class=navbar-item href="/"><img class=navbar-logo src="/_static/images/logo.svg" >
-            <div class=navbar-logo-text></div>
-          </a>
-          <a role=button class=navbar-burger aria-label=menu aria-expanded=false data-target=cloned-navbar-menu><span aria-hidden=true></span>
-      <span aria-hidden=true></span>
-      <span aria-hidden=true></span></a></div>
-        <div id=cloned-navbar-menu class="navbar-menu is-fixed">
-    <div class="navbar-header-items navbar-end">
-          <ul class="navbar-item bd-navbar-elements navbar-nav">
-    {{ generate_header_nav_html(n_links_before_dropdown=theme_header_links_before_dropdown) }}
-          </ul>
-      <a href=/install class="navbar-item is-secondary">Install</a>
-      <a href=https://numpy.org/doc/stable class="navbar-item is-secondary">Documentation</a>
-      <a href=/contribute class="navbar-item is-secondary">Contribute</a>
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a aria-label="Select language" class=navbar-link>English</a><div class=navbar-dropdown><a href=/pt/ class=navbar-item>Português</a>
-        <a href=/ja/ class=navbar-item>日本語 (Japanese)</a>
-    </div></div></div></div></div>
-  </nav>
-  -->
 
   <section class=hero>
     <div class=hero-container>
@@ -167,67 +131,12 @@
 
   <div class="news-container">
     <div class="news-title">
-      {% if False %}
-      <a href=/news>numpy.org is now available in Japanese and Portuguese</a>
-      {% endif %}
     </div>
   </div>
 
-  {% if False %}
-  <section class=keyfeatures>
-    <div class="container is-max-widescreen">
-      <div class=keyfeatures-box-container>
-        <div class="keyfeatures-box-content keyfeatures-underline">
-          <p>
-          <div class=keyfeatures-box-title>Powerful N-dimensional arrays</div>
-          <div class=keyfeatures-box-text>Fast and versatile, the sdof vectorization, indexing, and broadcasting
-            concepts are the de-facto standards of array computing today.</div>
-          </p>
-        </div>
-        <div class="keyfeatures-box-content keyfeatures-underline">
-          <p>
-          <div class=keyfeatures-box-title>Numerical computing tools</div>
-          <div class=keyfeatures-box-text>sdof offers comprehensive mathematical functions, random number generators,
-            linear algebra routines, Fourier transforms, and more.</div>
-          </p>
-        </div>
-        <div class="keyfeatures-box-content keyfeatures-underline">
-          <p>
-          <div class=keyfeatures-box-title>Open source</div>
-          <div class=keyfeatures-box-text>Distributed under a liberal <a
-              href=https://github.com/numpy/numpy/blob/main/LICENSE.txt>BSD license</a>, sdof is developed and
-            maintained <a href=https://github.com/numpy/numpy>publicly on GitHub</a> by a vibrant, responsive, and
-            diverse <a href=/community>community</a>.</div>
-          </p>
-        </div>
-        <div class="keyfeatures-box-content keyfeatures-underline">
-          <p>
-          <div class=keyfeatures-box-title>Interoperable</div>
-          <div class=keyfeatures-box-text>sdof supports a wide range of hardware and computing platforms, and plays well
-            with distributed, GPU, and sparse array libraries.</div>
-          </p>
-        </div>
-        <div class="keyfeatures-box-content keyfeatures-underline">
-          <p>
-          <div class=keyfeatures-box-title>Performant</div>
-          <div class=keyfeatures-box-text>The core of sdof is well-optimized C code. Enjoy the flexibility of Python
-            with the speed of compiled code.</div>
-          </p>
-        </div>
-        <div class="keyfeatures-box-content keyfeatures-underline">
-          <p>
-          <div class=keyfeatures-box-title>Easy to use</div>
-          <div class=keyfeatures-box-text>sdof&rsquo;s high level syntax makes it accessible and productive for
-            programmers from any background or experience level.</div>
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-  {% endif %}
 
   {% if False %}
-  <div class=hero-right>
+  <div class="hero-right">
     <!--
   <div class=numpy-shell-canvas>
     <div class=numpy-shell-container>
@@ -283,22 +192,6 @@
           <div class=casestudies-box-text>{{ example.description }}</div>
         </a>
         {% endfor %}
-        {% if False %}
-        <a class="casestudies-box-content casestudies-underline"
-          href="{{ pathto('examples', 1) }}/{{project}}-0002/index.html">
-          <div class=casestudies-box-title>Parallel Spectra</div><img
-            src="{{ pathto('_static/../_images', 1) }}/{{ project }}-0002.png"
-            alt="Two orbs orbiting each other. They are displacing gravity around them.">
-          <div class=casestudies-box-text>...</div>
-        </a>
-        <a class="casestudies-box-content casestudies-underline"
-           href="{{pathto('examples',1)}}/examples/{{project}}-0003/index.html">
-          <div class=casestudies-box-title>Javascript</div><img
-            src="{{ pathto('_static/../_images', 1) }}/{{ project }}-0003.png" alt="Cricket ball on green field.">
-          <div class=casestudies-box-text>
-          </div>
-        </a>
-        {% endif %}
   </section>
 
   <section class=tabs-section>
@@ -307,18 +200,9 @@
       <div class=uikit-tab-wrapper>
         <ul class="uk-flex-center uk-nav" uk-tab>
           <li class="uk-active"><a href=#>Other libraries</a></li>
-          {% if False %}
-          <li><a href=#>Scientific Domains</a></li>
-          <li><a href=#>Data Science</a></li>
-          <li><a href=#>Machine Learning</a></li>
-          <li><a href=#>Visualization</a></li>
-          {% endif %}
         </ul>
         <ul id=tabs-content class="uk-switcher uk-margin">
           <li class=array-libraries>
-            {% if False %}
-            <p>...</p>
-            {% endif %}
             <table>
               <tr class=highlight-th>
                 <td class=bold-text></td>
@@ -327,10 +211,13 @@
                 <!-- </td> -->
               </tr>
               <tr>
-                <td style=text-align:center><img class=first-column-layout
-                    src="{{ pathto('_static/images', 1) }}/content_images/brace/opensees.jpg" alt="opensees"></td>
+                <td style=text-align:center>
+                  <a href="https://github.com/claudioperez/opensees">
+                    <img class=first-column-layout
+                         src="{{ pathto('_static/images', 1) }}/content_images/brace/opensees.jpg" alt="opensees"></a></td>
                 <td class=full-center-text><a href="https://pypi.org/project/opensees" />opensees</a></td>
-                <td class=left-text>Direct and idiomatic bindings to OpenSees.</td>
+                <td class=left-text>Direct and idiomatic bindings the 
+                  <a href="https://github.com/STAIRLab/OpenSeesRT">OpenSeesRT</a> finite element analysis kernel.</td>
               </tr>
               <tr>
                 <td style=text-align:center><img class=first-column-layout
@@ -347,8 +234,8 @@
               <tr>
                 <td style=text-align:center><img class=first-column-layout
                     src="{{ pathto('_static/images', 1) }}/content_images/brace/sees.png" alt="sees"></td>
-                <td class=full-center-text><a href="https://pypi.org/project/sees">sees</a></td>
-                <td class=left-text>...</td>
+                <td class=full-center-text><a href="https://veux.io/">veux</a></td>
+                <td class=left-text>Web-first finite element post-processing for OpenSees.</td>
               </tr>
             </table>
           </li>

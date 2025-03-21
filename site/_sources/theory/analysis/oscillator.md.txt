@@ -1,0 +1,256 @@
+Consider the damped harmonic oscillator with input given by an external driving force $f(t)$,
+
+$$
+m\ddot{u} + c\dot{u} + k u = f(t)
+$$
+
+$$
+\ddot{u} - 2\alpha \dot{u}+\omega_0^2 u=f
+$$
+
+$$
+\begin{aligned}
+\mathrm{L}
+ &= m\partial^2 + c \partial + k \\
+ &= \partial^2 + c/m \partial  + \omega^2
+\end{aligned}
+$$
+$c/m = 2\gamma = 2 \omega \zeta$
+
+$\gamma=\zeta\omega = c/(2m)$
+
+$c=2\gamma m=2\zeta\omega m$
+
+|          | $\omega$ | $k$ | $c$ | $\gamma$ | $\zeta$ |
+|----------|--------------------------|-----------------|-------------|----|----|
+| $\zeta$  | $\frac{c}{2 \sqrt{m k}}$ | $c/(2\omega m)$ | $ \gamma/\omega$
+| $\gamma$ | $c/(2m)$                 | $2\omega\zeta$
+| $c$      |  | | $2m\gamma $ | | $2m\omega \zeta $ |
+
+$\omega m = m\sqrt{k/m} = \sqrt{km}$
+
+
+## Transition
+
+$$
+m\ddot{u} + c\dot{u} + k u = f(t)
+$$
+
+Let $\mathbf{x} = (u, \dot{u})$, 
+
+$$
+\begin{aligned}
+\dot{\mathbf{x}}(t) = \begin{pmatrix}
+\dot{u} \\ \ddot{u}
+\end{pmatrix} &= \begin{bmatrix}
+0  & 1 \\
+-\frac{k}{m} & - \frac{c}{m}
+\end{bmatrix} \mathbf{x}(t)
++ \begin{bmatrix}
+0 \\ \frac{1}{m}
+\end{bmatrix} f(t) \\
+&=\mathbf{A}\mathbf{x}(t) + \mathbf{f}(t)
+\end{aligned}
+$$
+
+The state space representation of the homogeneous problem is:
+$$
+\left[\begin{array}{l}
+\dot{u} \\
+\ddot{u}
+\end{array}\right]=\left[\begin{array}{cc}
+0 & 1 \\
+-\frac{k}{m} & -\frac{c}{m}
+\end{array}\right]\left[\begin{array}{l}
+u \\ \dot{u}
+\end{array}\right] = \underbrace{
+\left[\begin{array}{cc}
+0 & 1 \\
+-\omega_n^2 & -2 \omega_n 
+\end{array}\right]}_{\triangleq \mathbf{A}}\left[\begin{array}{l}
+u \\ \dot{u}
+\end{array}\right]
+$$
+An eigendecomposition of $\mathbf{A}$ follows in the standard manner
+by requiring
+$\det\left(\mathbf{A} - \lambda\mathbf{1}\right) = 0$
+, furnishing the following characteristic polynomial with roots $\lambda_i$:
+$$
+\begin{aligned}
+\lambda\left(\lambda+\frac{c}{m}\right)+\frac{k}{m} &=0 \\
+\lambda\left(\lambda-2 \xi \omega_n\right)+\omega_n^2 &=0 \\
+\lambda^2+2 \xi \omega_n \lambda+\omega_n^2 &=0 \\
+\end{aligned}
+\quad \implies \quad
+\begin{aligned}
+\lambda&=-2 \xi \omega_n \pm \frac{\sqrt{4 \xi_n^2 \omega_n^2-4 \omega_n^2}}{2} \\
+&=-\xi \omega_n \pm \omega_n^2 \sqrt{\xi^2-1} \\
+&=\boxed{-\xi \omega_n \pm i \omega_n \sqrt{1-\xi^2}}
+\end{aligned}
+$$
+where $\omega_n=\sqrt{k/m}$ and $\zeta=\frac{c}{2 \sqrt{m k}}$ The eigendecomposition is then:
+$$
+\begin{aligned}
+\mathbf{A} &= \bm{\Phi}\bm{\Lambda}\bm{\Phi}^{-1} \\
+&= 
+\left[\begin{array}{cc}
+1 & 1 \\
+\alpha+\beta i & \alpha-\beta i
+\end{array}\right]\left[\begin{array}{cc}
+\alpha+\beta i & \\
+ & \alpha-\beta i
+\end{array}\right]
+\frac{1}{-2 \beta i}\left[\begin{array}{cc}
+\alpha-\beta i & -1 \\
+-\alpha-\beta i & 1
+\end{array}\right] \\
+&=
+\frac{1}{-2 \beta i}\begin{bmatrix}
+0 & -(\alpha+\beta i) + (\alpha-\beta i) \\
+\left(\alpha^2+\beta^2\right) 2\beta i  & -(\alpha+\beta i) (\alpha+\beta i)+(\alpha-\beta i) (\alpha-\beta i)
+\end{bmatrix}
+\end{aligned}
+$$
+where $\alpha=-\zeta \omega_n$ and $\beta = \omega_n \sqrt{1-\xi^2}$ so that $\lambda = \alpha \pm \beta i$.
+$$
+\begin{aligned}
+e^{\mathbf{A}t} &= 
+\frac{1}{-2 \beta i}\left[\begin{array}{cc}
+1 & 1 \\
+\alpha+\beta i & \alpha-\beta i
+\end{array}\right]\left[\begin{array}{cc}
+e^{\left(\alpha+\beta i\right) t} & \\
+ & e^{\left(\alpha-\beta i\right) t}
+\end{array}\right]\left[\begin{array}{cc}
+\alpha-\beta i & -1 \\
+-\alpha-\beta i & 1
+\end{array}\right]\left[\begin{array}{l}
+u_0 \\ \dot{u}_0
+\end{array}\right] \\
+%
+&= \frac{1}{-2 \beta_1}\left[\begin{array}{cc}
+1 & 1 \\
+\alpha+\beta i & \alpha-\beta i
+\end{array}\right]\left[\begin{array}{cc}
+\left(\alpha-\beta i\right) e^{\left(\alpha+\beta i\right) t} & -e^{(\alpha+\beta i) t} \\
+\left(-\alpha-\beta i\right) e^{(\alpha-\beta i) t} & e^{\left(\alpha-\beta i\right) t}
+\end{array}\right]\left[\begin{array}{l}
+u_0 \\ \dot{u}_0
+\end{array}\right] \\
+%
+&= \frac{1}{-2 \beta i}\left[\begin{array}{cc}
+(\alpha-\beta i) e^{(\alpha+\beta i) t}-(\alpha+\beta i) e^{(\alpha-\beta i) t} & -e^{(\alpha+\beta i) t}+e^{(\alpha-\beta i) t} \\
+\left(\alpha^2+\beta^2\right) e^{(\alpha+\beta i) t}-\left(\alpha^2+\beta^2\right) e^{(\alpha-\beta i) t} & -(\alpha+\beta i) e^{(\alpha+\beta i) t}+(\alpha-\beta i) e^{(\alpha-\beta i) t}
+\end{array}\right]
+\left[\begin{array}{l} 
+u_0 \\ \dot{u}_0
+\end{array}\right] \\
+%
+&= \frac{1}{-2 \beta i} e^{\alpha t}\left[\begin{array}{ll}
+(\alpha-\beta i) e^{\beta i t}-(\alpha+\beta i) e^{-\beta i t} & -\left(e^{\beta i t}-e^{-\beta i t}\right) \\
+\left(\alpha^2+\beta^2\right)\left(e^{\beta i t}-e^{-\beta i t}\right) & -(\alpha+\beta i) e^{\beta i t}+(\alpha-\beta i) e^{-\beta i t}
+\end{array}\right]\left[\begin{array}{l}
+u_0 \\ \dot{u}_0
+\end{array}\right] \\
+%
+&= e^{\alpha t}\left[\begin{array}{cc}
+\frac{-\alpha}{2 \beta i}\left(e^{\beta i t}-e^{-\beta i}\right)+\frac{1}{2}\left(e^{\beta i t}+e^{-\beta i t}\right) & \frac{1}{2 \beta i}\left(e^{\beta i t}-e^{-\beta i t}\right) \\
+\frac{\alpha^2 + \beta^2}{-2 \beta i}\left(e^{\beta i t}-e^{-\beta i t}\right) & \frac{\alpha}{2 \beta i}\left(e^{\beta i t}-e^{-\beta i t}\right)+\frac{1}{2}\left(e^{\beta t}+e^{-\beta i}\right)
+\end{array}\right]\left[\begin{array}{l}
+u_0 \\ \dot{u}_0
+\end{array}\right] \\
+%
+&= e^{\alpha t}\left[\begin{array}{cc}
+\frac{-\alpha}{\beta} \sin \beta t+\cos \beta t & \frac{1}{\beta} \sin \beta t \\
+\frac{-\left(\alpha^2+\beta^2\right)}{\beta} \sin \beta t & \frac{\alpha}{\beta} \sin \beta t+\cos \beta t
+\end{array}\right]\left[\begin{array}{l}
+u_0 \\ \dot{u}_0
+\end{array}\right]
+\end{aligned}
+$$
+
+It follows that
+$$
+\mathbf{x}(t) = \bm{\chi}(t, 0)\mathbf{x}(0) + \int_0^t \bm{\chi}(t,\tau)\mathbf{B}\mathbf{f}(\tau)\, d\tau
+$$
+where
+$$
+\bm{\chi}(t, \tau) = e^{\alpha (t-\tau)}\left[\begin{array}{cc}
+\frac{-\alpha}{\beta} \sin (\beta (t-\tau))+\cos (\beta (t-\tau)) & \frac{1}{\beta} \sin (\beta (t-\tau)) \\
+\frac{-\left(\alpha^2+\beta^2\right)}{\beta} \sin (\beta (t-\tau)) & \frac{\alpha}{\beta} \sin (\beta (t-\tau))+\cos (\beta (t-\tau))
+\end{array}\right]
+$$
+
+Remarks
+
+- Note that if $\zeta=0$, then $\alpha = 0$ and $\beta = \omega_n$, and $\bm{\Phi}$ above reduces to the classical rotation matrix:
+  $$
+  \bm{\Phi}(t, 0) = \left[\begin{array}{cc}
+  \cos \beta t & \frac{1}{\beta} \sin \beta t \\
+  -\beta \sin \beta t & \cos \beta t
+  \end{array}\right]
+  $$
+- at $t=\tau$ for any $\tau$, $\bm{\chi}(\tau, \tau) = \bm{1}$
+
+
+- Expanding furnishes:
+  $$
+  \begin{aligned}
+  \chi_{11}(t_i+\Delta t, t_i) &=e^{-\zeta \omega \Delta t_i}\left(\frac{\zeta}{\sqrt{1-\zeta^2}} \sin \omega_d \Delta t_i+\cos \omega_d \Delta t_i\right) \\
+  \chi_{12}(t_i+\Delta t, t_i) &=\frac{e^{-\zeta \omega \Delta t_i}}{\omega_d} \sin \omega_d \Delta t_i \\
+  \chi_{21}(t_i+\Delta t, t_i) &=-\frac{\omega}{\sqrt{1-\zeta^2}} e^{-\zeta \omega \Delta t_i} \sin \omega_d \Delta t_i \\
+  \chi_{22}(t_i+\Delta t, t_i) &=e^{-\zeta \omega \Delta t_i}\left(\cos \omega_d \Delta t_i-\frac{\zeta}{\sqrt{1-\zeta^2}} \sin \omega_d \Delta t_i\right)
+  \end{aligned}
+  $$
+
+------
+
+Consider a linear excitation on the interval $t_i \leq t \leq t_{i+1}$:
+$$
+\ddot{u}+2 \zeta \omega_n \dot{u}+\omega_n^2 u=-a_i-\frac{\Delta a_i}{\Delta t}\left(t-t_i\right) 
+$$
+where
+$$
+\Delta t=t_{i+1}-t_i
+\quad\text{ and }\quad
+\Delta a_i=a_{i+1}-a_i .
+$$
+The general solution is given by:
+$$
+\begin{gathered}
+u=e^{-\zeta \omega_n\left(t-t_i\right)}\left[C_1 \sin \omega_d\left(t-t_i\right)+C_2 \cos \omega_d\left(t-t_i\right)\right] 
+-\frac{a_i}{\omega_n^2}+\frac{\Delta a_i}{\Delta t}\left(\frac{2 \zeta}{\omega_n^3} -\frac{1}{\omega_n^2} \left(t-t_i\right)\right)
+\end{gathered}
+$$
+with free parameters $C_1$ and $C_2$.
+Setting $u=u_i$ and $\dot{u}=\dot{u}_i$ at $t=t_i$ and solving for $C_1$ and $C_2$, it can be shown that
+$$
+\begin{aligned}
+& C_1=\frac{1}{\omega_d}\left(\zeta \omega u_i+\dot{u}_i-\frac{2 \zeta^2-1}{\omega^2} \frac{\Delta a_i}{\Delta t}+\frac{\zeta}{\omega} a_i\right) \\
+& C_2=u_i-\frac{2 \zeta}{\omega^3} \frac{\Delta a_i}{\Delta t}+\frac{a_i}{\omega^2}
+\end{aligned}
+$$
+Let
+$$
+\mathbf{a}_i=\left[\begin{array}{c}
+a_i \\ a_{i+1}
+\end{array}\right]
+$$
+$$
+\mathbf{x}_{i+1}= \bm{\chi}(t_i+\Delta t, t_i) \mathbf{x}(t_i)+ \mathbf{P} \mathbf{a}_i
+$$
+$$
+\begin{aligned}
+b_{11}&= e^{-\zeta \omega \Delta t}\left[\left(\frac{2 \zeta^2-1}{\omega^2 \Delta t}+\frac{\zeta}{\omega}\right) \frac{\sin \omega_d \Delta t}{\omega_d}+\left(\frac{2 \zeta}{\omega^3 \Delta t}+\frac{1}{\omega^2}\right) \cos \omega_d \Delta t\right]
+-\frac{2 \zeta}{\omega^3 \Delta t} \\
+b_{12}&=-e^{-\zeta \omega \Delta t}\left[\left(\frac{2 \zeta^2-1}{\omega^2 \Delta t}\right) \frac{\sin \omega_d \Delta t}{\omega_d}+\frac{2 \zeta}{\omega^3 \Delta t} \cos \omega_d \Delta t\right] 
+    -\frac{1}{\omega^2}+\frac{2 \zeta}{\omega^3 \Delta t} \\
+b_{21}&=e^{-\zeta \omega \Delta t}\left[\left(\frac{2 \zeta^2-1}{\omega^2 \Delta t}+\frac{\zeta}{\omega}\right)\left(\cos \omega_d \Delta t-\frac{\zeta}{\sqrt{1-\zeta^2}} \sin \omega_d \Delta t\right)\right. \\
+& \left.-\left(\frac{2 \zeta}{\omega^3 \Delta t}+\frac{1}{\omega^2}\right)\left(\omega_d \sin \omega_d \Delta t+\zeta \omega \cos \omega_d \Delta t\right)\right] +\frac{1}{\omega^2 \Delta t} \\
+b_{22}&=-e^{-\zeta \omega \Delta t}\left[\frac{2 \zeta^2-1}{\omega^2 \Delta t}\left(\cos \omega_d \Delta t-\frac{\zeta}{\sqrt{1-\zeta^2}} \sin \omega_d \Delta t\right)\right. \\
+&\left.-\frac{2 \zeta}{\omega^3 \Delta t}\left(\omega_d \sin \omega_d \Delta t+\zeta \omega \cos \omega_d \Delta t\right)\right]-\frac{1}{\omega^2 \Delta t}
+\end{aligned}
+$$
+
+
+-----------------

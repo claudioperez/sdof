@@ -1,0 +1,53 @@
+- Instead of computing a strain increment $d e=d L / L_0$ by using the increment of length $d L$ divided by the original length $L_0$, in which case integration provides the linear result $e=\left(L-L_0\right) / L_0-$ the engineering strain,
+- one can define a strain increment as $d \epsilon=d L / L$ by using the increment of length $d L$ and dividing by the current length $L$, so that upon integration one obtains the logarithmic result $\epsilon=\ln \left(L / L_0\right)$ - the true strain.
+
+
+The definition of true strain imbues it with an additivity property not shared by the engineering strain. This can be illustrated with an example. Consider the tension test shown schematically in Fig 10.1. Suppose the length of the specimen at point $\mathrm{C}$ is $L_C$ and at $\mathrm{D}$ is $L_D$ which is less than $L_C$. We can define the total strain at $\mathrm{C}$ and the corresponding plastic strain under the engineering and true definitions:
+$$
+e=\left(L_C-L_0\right) / L_0, \quad \epsilon=\ln \left(L_C / L_0\right), \quad e^p=\left(L_D-L_0\right) / L_0, \quad \epsilon^p=\ln \left(L_D / L_0\right) .
+$$
+
+The strain that is applied to go from point $\mathrm{D}$ to point $\mathrm{C}$ (the elastic strain) can be described under engineering and true definitions as
+$$
+e^e=\left(L_C-L_D\right) / L_D, \quad \epsilon^e=\ln \left(L_C / L_D\right) .
+$$
+
+Observe that
+$$
+\epsilon^e+\epsilon^p=\ln \left(L_C / L_D\right)+\ln \left(L_D / L_0\right)=\ln \left(L_C / L_0\right)=\epsilon,
+$$
+
+while
+$$
+e^e+e^p=\left(L_C-L_D\right) / L_D+\left(L_D-L_0\right) / L_0 \approx e
+$$
+where the approximation is valid only when $e^e \ll 1$ or $e^p \ll 1$. We conclude that in one-dimensional elasto-plasticity the decomposition of strain into elastic and plastic strains comports in an exact sense with the definition of true strain but only in an approximate sense with the definition of engineering strain. However, the approximation will hold in most metals due to the generally low values of yield strains $\sigma_y / E$, which ensure $\left|e^e\right| \ll 1$.
+
+More generally, a specimen undergoing one-dimensional deformation in two successive stages always attains a total true strain equal to the sum of the true strains from each stage. This additivity property does not hold for the engineering strain even though it approximately holds when the strain of one stage is small. We do not extend these conclusions beyond one dimension - the corresponding three-dimensional extension of the true strain (see Chapter 12) only satisfies additivity in certain cases.
+
+A special form for the strength relation $|\sigma|=\mathcal{S}\left(\bar{\epsilon}^p, \dot{\bar{\epsilon}}^p\right)$ under isothermal conditions assumes that the dependence of $\mathcal{S}$ on $\dot{\bar{\epsilon}}^p$ is logarithmic,
+$$
+\mathcal{S}\left(\bar{\epsilon}^p, \dot{\bar{\epsilon}}^p\right)=\underbrace{Y\left(\bar{\epsilon}^p\right)}_{\text {rate-independent }} \times \underbrace{\left(1+C \ln \left(\frac{\dot{\bar{\epsilon}}^p}{\dot{\epsilon}_0}\right)\right)}_{\text {rate-dependent }},
+$$
+with $C>0$ a positive constant, and $\dot{\epsilon}_0>0$ a constant reference strain rate. As compared to the power-law form (10.4.4), a logarithmic dependence of $\mathcal{S}$ on $\dot{\bar{\epsilon}}^p$ allows for a better correlation with experimental data over a wider range of strain rates. When $Y\left(\bar{\epsilon}^p\right)$ is expressed in the following specific form,
+$$
+Y\left(\bar{\epsilon}^p\right)=A+B\left(\bar{\epsilon}^p\right)^n,
+$$
+with the parameter $A$ representing a strength, $B$ a hardening modulus, and $n$ a strainhardening exponent, the strength relation (10.4.10) is known as the Johnson-Cook model (Johnson and Cook, 1983).
+
+$$
+\epsilon = \ln(1 + e) = \int_{L_0}^L \frac{d L}{L}=\ln \frac{L}{L_0}
+$$
+
+$$
+\sigma=\frac{P}{A}=\frac{P}{A_0} \frac{L}{L_0}=s(1+e),
+$$
+
+-----------------
+
+with the consistency condition,
+$$
+\dot{f}=0 \quad \text { when } \quad f=0,
+$$
+
+serving to determine $\dot{\bar{\epsilon}}^p$ whenever it is non-zero.

@@ -1,0 +1,7 @@
+D.1. Model problem: the linear convection-diffusion equation
+
+To illustrate basic ideas, we shall introduce the following model problem for convective-diffusive phenomena:
+$$
+M \dot{v}+\boldsymbol{C v}+\boldsymbol{Z} \boldsymbol{v}=\mathbf{0}
+$$
+where $\boldsymbol{M}$ and $\boldsymbol{C}$ are symmetric and positive definite, and $\boldsymbol{Z}$ is skew-symmetric (i.e., $\boldsymbol{Z}^{\mathrm{T}}=-\boldsymbol{Z}$ ). Equations of this form arise from Galerkin finite-element and central-difference finite-difference discretizations of typical linear convectiondiffusion equations. The $\boldsymbol{C}$-term is to be thought of as arising from diffusion (e.g., viscous effects) and the $Z$-term pertains to convection. In classical-type upwind procedures, the discretized convection operator also includes a positive-definite ('artificial viscosity') term, which may be taken to be subsumed by $\boldsymbol{C}$ in our formalism. Newer, finite-element upwind schemes, based upon Petrov-Galerkin weighted residual methods, (see e.g., [29]) are not included in (1), since, for these cases, all arrays are, ostensibly, non-symmetric. This topic has not reached sufficient maturity at the time of the preparation of this chapter to be adequately considered herein.

@@ -1,0 +1,55 @@
+
+## Stability
+
+
+- A time-integration scheme is said to be consistent if
+  $$
+  \lim _{h \rightarrow 0} \frac{\mathbf{x}_{n+1}-\mathbf{x}_n}{h}=\dot{\mathbf{x}}\left(t_n\right)
+  $$
+  
+  The Newmark time-integration method is consistent
+  $$
+  \lim _{h \rightarrow 0} \frac{\mathbf{x}_{n+1}-\mathbf{x}_n}{h}=\lim _{h \rightarrow 0}\left[\begin{array}{c}
+  (1-\gamma) \ddot{\mathbf{q}}_n+\gamma \ddot{\mathbf{q}}_{n+1} \\
+  \dot{\mathbf{q}}_n+\left(\frac{1}{2}-\beta\right) h \ddot{\mathbf{q}}_n+\beta h \ddot{\mathbf{q}}_{n+1}
+  \end{array}\right]=\left[\begin{array}{c}
+  \ddot{\mathbf{q}}_n \\
+  \dot{\mathbf{q}}_n
+  \end{array}\right]
+ $$
+
+
+--------
+
+$$
+\mathbf{x}_{n+1}=\mathbf{A}(h) \mathbf{x}_n+\mathbf{g}_{n+1}(h)
+$$
+
+where $\mathbf{A}$ is the amplification matrix associated with the integration operator
+$$
+\begin{gathered}
+\mathbf{A}(h)=\mathbf{H}_1^{-1}(h) \mathbf{H}_0(h), \quad \mathbf{g}_{n+1}=\mathbf{H}_1^{-1}(h) \mathbf{b}_{n+1}(h) \\
+\end{gathered}
+$$
+$$
+\begin{gathered}
+\mathbf{H}_1=\left[\begin{array}{cc}
+\mathbf{M}+\gamma h \mathbf{C} & \gamma h \mathbf{K} \\
+\beta h^2 \mathbf{C} & \mathbf{M}+\beta h^2 \mathbf{K}
+\end{array}\right] \\
+\mathbf{H}_0=-\left[\begin{array}{cc}
+-\mathbf{M}+(1-\gamma) h \mathbf{C} & (1-\gamma) h \mathbf{K} \\
+\left(\frac{1}{2}-\beta\right) h^2 \mathbf{C}-h \mathbf{M} & -\mathbf{M}+\left(\frac{1}{2}-\beta\right) h^2 \mathbf{K}
+\end{array}\right]
+\end{gathered}
+$$
+$$
+\mathbf{b}_{n+1}=\left[\begin{array}{c}
+(1-\gamma) h \mathbf{p}_n+\gamma h \mathbf{p}_{n+1} \\
+\left(\frac{1}{2}-\beta\right) h^2 \mathbf{p}_n+\beta h^2 \mathbf{p}_{n+1}
+\end{array}\right],
+$$
+
+## References
+
+- https://web.stanford.edu/group/frg/course_work/AA242B/CA-AA242B-Ch7.pdf

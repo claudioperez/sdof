@@ -1,0 +1,22 @@
+# Integration
+
+- Greens function $g(t,\tau)$, impulse response $h(t)$
+
+  $$
+  u(t) = u_h(t) + \int_{-\infty}^{\infty} g_0(t, \tau) f(\tau) d \tau
+  $$
+
+- Transition function $\Phi$ and fundamental solution $U(t)$
+  $$
+  \mathbf{x}(t)=\boldsymbol{\Phi}\left(t, t_0\right) \mathbf{x}\left(t_0\right)+\int_{t_0}^t \boldsymbol{\Phi}(t, \tau) \mathbf{B}(\tau) \mathbf{f}(\tau) d \tau
+  $$
+- Single-step
+  $$
+  x(t) = x(t_0) + \int_{t_0}^t \dot{x}(u,\tau) \,d\tau 
+  $$
+
+- Transfer function $H(s)$, frequency response $H(\omega)$
+  
+
+--------
+

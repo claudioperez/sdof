@@ -1,0 +1,49 @@
+# Analysis
+
+Consider the IVP for a constant coefficient, $m$-th order inhomogeneous ODE with homogeneous boundary:
+$$
+\left\{
+\begin{aligned}
+& \mathrm{L} u=f \\
+& \partial_t^j u(0)=0, \quad 0 \leq j \leq m-1
+\end{aligned}
+\right.
+$$
+where the differential operator $\mathrm{L}$ is a linear combination of time derivatives $\partial_t^{(m)}$:
+$$
+\mathrm{L} \triangleq \sum^m_{j=0} a_j(t) D_t^{(j)},
+\quad a_m \neq 0 .
+$$
+
+
+- Greens function $g(t,\tau)$, impulse response $h(t)$
+
+  $$
+  u(t) = u_h(t) + \int_{-\infty}^{\infty} g_0(t, \tau) f(\tau) d \tau
+  $$
+
+- Transition function $\Phi$ and fundamental solution $U(t)$
+  $$
+  \mathbf{x}(t)=\boldsymbol{\Phi}\left(t, t_0\right) \mathbf{x}\left(t_0\right)+\int_{t_0}^t \boldsymbol{\Phi}(t, \tau) \mathbf{B}(\tau) \mathbf{f}(\tau) d \tau
+  $$
+- Transfer function $H(s)$, frequency response $H(\omega)$
+
+
+-------------------
+
+The solution to the IVP has the forms:
+
+$$
+\begin{aligned}
+u &= u^h|_{i,f} + u^f \\ 
+  &= u^e|_{i} + u^*|_{f}
+\end{aligned}
+$$
+
+$\mathbf{x} = (u, \dot{u}, ...)$
+$$
+u^e|_{i} = \Phi_{u}(t,t_0)\,\mathbf{x}(t_0)
+$$
+
+--------
+

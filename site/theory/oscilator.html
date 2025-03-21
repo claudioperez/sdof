@@ -1,0 +1,708 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Duhamel &#8212; sdof</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/peer.css?v=6235cf1b" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/css/shell.css.min.5ee5a6b8d8faedbb5157b1bfb4d9be5b2482bbe4e40af84575a92ae6ab028842.css?v=77841b74" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/css/vars-override.css.min.ff70feeb43b75e041c44e6aba96a0979ee53f0e959cb0ecf8f4e00c2ec6c9494.css?v=0571797e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/css/tabs.css.min.2774227fab8d6dfd0b5b1c8f06b5abafeaf3d6247bec4efda87ac5a587b3d2bc.css?v=46696a9d" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/css/mailchimp.css.min.81c28937ed202cb4f9a0783641e5f436902980a188f0a90a2fe9ec66cd0af677.css?v=1137ca8f" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/css/casestudies.css.min.6bba5e8b00dd9f04d2fef2e38dd0a840baa2dd8a473df4c24c5913558e805609.css?v=162d6c55" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script src="../_static/documentation_options.js?v=5c79bd3c"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'theory/oscilator';</script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">sdof</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../library/index.html">
+                        Library
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="index.html">
+                        Theory
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../examples/index.html">
+                        Examples
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/BRACE2/sdof" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../library/index.html">
+                        Library
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="index.html">
+                        Theory
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../examples/index.html">
+                        Examples
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/BRACE2/sdof" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Duhamel</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <ul class="simple">
+<li><p>Greens function <span class="math notranslate nohighlight">\(G(t,\tau)\)</span>, impulse response <span class="math notranslate nohighlight">\(h(t)\)</span></p></li>
+<li><p>Transition function <span class="math notranslate nohighlight">\(\Phi\)</span> and fundamental solution <span class="math notranslate nohighlight">\(U(t)\)</span></p></li>
+<li><p>Transfer function <span class="math notranslate nohighlight">\(H(s)\)</span>, frequency response <span class="math notranslate nohighlight">\(H(\omega)\)</span></p></li>
+<li><p>Newmark</p></li>
+</ul>
+<hr class="docutils" />
+<hr class="docutils" />
+<p>The transfer function <span class="math notranslate nohighlight">\(H\)</span> is the Laplace transform of the impulse response.
+The transfer function provides a complete mathematical representation of the system’s behavior.</p>
+<p>The frequency response is the Fourier transform of the impulse response.</p>
+<p>The frequency response is a special case of the Laplace transfer function where the transients are assumed to be completely dissipated, leaving the steady state sinusoidal response.</p>
+<p>The frequency response and transfer function are equivalent when the real part <span class="math notranslate nohighlight">\(\sigma\)</span>  of the  transfer function’s complex variable <span class="math notranslate nohighlight">\(s=\sigma+j \omega\)</span> is zero.
+A frequency response describes a linear time-invariant (LTI) system.</p>
+<p>A system with non-zero initial conditions is not LTI because its output has a component which only depends on the initial conditions and which is independent of the input signal. Consequently, a system with non-zero initial conditions cannot fully be described by a frequency response. If you assume zero initial conditions, then such a system (if otherwise LTI) can be described by a frequency response.</p>
+<ul class="simple">
+<li><p>complex exponentials are eigenfunctions of LTI systems.</p></li>
+</ul>
+<section id="duhamel">
+<h1>Duhamel<a class="headerlink" href="#duhamel" title="Link to this heading">#</a></h1>
+<p>A Green’s function, <span class="math notranslate nohighlight">\(g(t, \tau)\)</span>, of a linear differential operator <span class="math notranslate nohighlight">\(\mathrm{L}=\mathrm{L}(t)\)</span> acting on distributions over a subset of the Euclidean space <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span>, at a point <span class="math notranslate nohighlight">\(s\)</span>, is any solution of
+$<span class="math notranslate nohighlight">\(
+\mathrm{L} g(t, \tau)=\delta(\tau - t).
+\)</span>$</p>
+<p>Loosely speaking, if such a function <span class="math notranslate nohighlight">\(g\)</span> can be found for the operator <span class="math notranslate nohighlight">\(\mathrm{L}\)</span>, then, if we multiply the equation (1) for the Green’s function by <span class="math notranslate nohighlight">\(f(s)\)</span>, and then integrate with respect to <span class="math notranslate nohighlight">\(\tau\)</span>, we obtain,
+$<span class="math notranslate nohighlight">\(
+\int \mathrm{L} g(t, \tau) f(s) d \tau = \int \delta(x=t-\tau) f(\tau) d \tau = f(t) .
+\)</span>$</p>
+<p>Because the operator <span class="math notranslate nohighlight">\(\mathrm{L}=\mathrm{L}(t)\)</span> is linear and acts only on the variable <span class="math notranslate nohighlight">\(t\)</span> (and not on the variable of integration <span class="math notranslate nohighlight">\(s\)</span> ), one may take the operator <span class="math notranslate nohighlight">\(\mathrm{L}\)</span> outside of the integration, yielding
+$<span class="math notranslate nohighlight">\(
+\mathrm{L}\left(\int g(t, \tau) f(\tau) d \tau\right)=f(t) .
+\)</span><span class="math notranslate nohighlight">\(
+The solution is then
+\)</span><span class="math notranslate nohighlight">\(
+u(t)=u_0(t) + \int g(t, \tau) f(\tau) d \tau
+\)</span>$</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The Green’s function as used in physics is usually defined with the opposite sign, instead. That is,
+<span class="math notranslate nohighlight">\(\mathrm{L} g(t, \tau)=\delta(t-\tau)\)</span>.</p></li>
+<li><p>This can be thought of as an expansion of <span class="math notranslate nohighlight">\(f\)</span> according to a Dirac delta function basis (projecting <span class="math notranslate nohighlight">\(f\)</span> over <span class="math notranslate nohighlight">\(\delta(x-s)\)</span>; and a superposition of the solution on each projection. Such an integral equation is known as a Fredholm integral equation, the study of which constitutes Fredholm theory.</p></li>
+</ul>
+</div></blockquote>
+<ul>
+<li><p>If the operator is translation invariant, that is, when <span class="math notranslate nohighlight">\(\mathrm{L}\)</span> has constant coefficients with respect to <span class="math notranslate nohighlight">\(t\)</span>, then the Green’s function can be taken to be a convolution kernel, that is,
+$<span class="math notranslate nohighlight">\(
+G(t, s)=G(t-s) .
+\)</span>$</p>
+<p><strong>In this case, Green’s function is the same as the impulse response of linear time-invariant system theory.</strong></p>
+</li>
+<li><p>a fundamental solution for a linear partial differential operator <span class="math notranslate nohighlight">\(L\)</span> is a formulation in the language of distribution theory of the older idea of a Green’s function (although unlike Green’s functions, fundamental solutions do not address boundary conditions).</p></li>
+<li><p>the fundamental solution matrix <span class="math notranslate nohighlight">\(\mathbf{U}(t)\)</span>  satisfies <span class="math notranslate nohighlight">\(\dot{\mathbf{U}}(t)=\mathbf{A}(t) \mathbf{U}(t)\)</span> with initial condition <span class="math notranslate nohighlight">\(\mathbf{U}\left(t_0\right)=I\)</span></p></li>
+<li><p>The fundamental solution is not uniquely determined. If <span class="math notranslate nohighlight">\(U\)</span> is a fundamental solution and <span class="math notranslate nohighlight">\(v\)</span> is any solution to the homogeneous equation <span class="math notranslate nohighlight">\(L(v)=0\)</span>, then <span class="math notranslate nohighlight">\(U+v\)</span> is also a fundamental solution.</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+x(t)=\int_{-\infty}^{\infty} d \tau G\left(t, \tau\right) \frac{f\left(\tau\right)}{m}
+\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+m\partial^2 + c \partial + k \\
+\partial^2 + c/m \partial  + \omega^2
+\end{split}\]</div>
+<p><span class="math notranslate nohighlight">\(c/m = 2\gamma = 2 \omega \zeta\)</span> so <span class="math notranslate nohighlight">\(\zeta = \gamma/\omega\)</span></p>
+<p>Greens functions (with Heaviside function denoted by <span class="math notranslate nohighlight">\(\Theta\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{array}{l|l}
+\begin{array}{ll}
+\partial_t^2+2 \gamma \partial_t+\omega_0^2 \\
+\text { where } \gamma&lt;\omega_0
+\end{array} &amp; \Theta(t) e^{-\gamma t} \frac{\sin (\omega t)}{\omega} \text { with } \omega=\sqrt{\omega_0^2-\gamma^2} \\
+%
+\hline \begin{array}{l}
+\partial_t^2+2 \gamma \partial_t+\omega_0^2 \\
+\text { where } \gamma&gt;\omega_0
+\end{array} &amp; \Theta(t) e^{-\gamma t} \frac{\sinh (\omega t)}{\omega} \text { with } \omega=\sqrt{\gamma^2-\omega_0^2} \\
+%
+\hline 
+\begin{array}{l}
+\partial_t^2+2 \gamma \partial_t+\omega_0^2 \\
+\text { where } \gamma=\omega_0
+\end{array} &amp; \Theta(t) e^{-\gamma t} t
+\end{array}
+\end{split}\]</div>
+<hr class="docutils" />
+<p>Consider a damped harmonic oscillator with input given by an external driving force <span class="math notranslate nohighlight">\(f(t)\)</span>,
+$<span class="math notranslate nohighlight">\(
+\ddot{u} + 2\gamma \dot{u}+\omega_0^2 u=f
+\)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\(
+\left[\frac{\partial^2}{\partial t^2}+2 \gamma \frac{\partial}{\partial t}+\omega_0^2\right] G\left(t, \tau\right)=\delta\left(t-\tau\right)
+\)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\(
+\begin{aligned}
+G(\omega,\tau)&amp;=\int_{-\infty}^{\infty}  e^{i \omega t} g\left(t, \tau\right) d t \\
+\end{aligned}
+\)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\(
+\left[-\omega^2-2 i \gamma \omega+\omega_0^2\right] G\left(\omega, \tau\right)=\int_{-\infty}^{\infty} e^{i \omega t} \delta\left(t-\tau\right) d t  =e^{i \omega \tau}
+\)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\(
+G\left(\omega, \tau\right)=\frac{e^{i \omega \tau}}{-\omega_0^2 + \omega^2 + 2 i \gamma \omega}
+\)</span><span class="math notranslate nohighlight">\(
+\)</span><span class="math notranslate nohighlight">\(
+\begin{aligned}
+g\left(t, \tau\right)
+&amp; =\Theta\left(t-\tau\right) e^{-\gamma\left(t-\tau\right)} \times \begin{cases}\frac{1}{\sqrt{\omega_0^2-\gamma^2}} \sin \left[\sqrt{\omega_0^2-\gamma^2}\left(t-\tau\right)\right], &amp; \gamma&lt;\omega_0, \\
+\frac{1}{\sqrt{\gamma^2-\omega_0^2}} \sinh \left[\sqrt{\gamma^2-\omega_0^2}\left(t-\tau\right)\right], &amp; \gamma&gt;\omega_0 .\end{cases}
+\end{aligned}
+\)</span><span class="math notranslate nohighlight">\(
+The first thing to notice is that the Green's function depends on \)</span>t<span class="math notranslate nohighlight">\( and \)</span>\tau<span class="math notranslate nohighlight">\( only in the combination \)</span>t-\tau<span class="math notranslate nohighlight">\(. This makes sense: the response of the oscillator to the force pulse should only depend on the time elapsed since the pulse. We can exploit this property by re-defining the frequency-domain Green's function as
+\)</span><span class="math notranslate nohighlight">\(
+G(\omega)=\int_{-\infty}^{\infty} d t e^{i \omega\left(t-\tau\right)} G\left(t-\tau\right)
+\)</span><span class="math notranslate nohighlight">\(
+which then obeys
+\)</span><span class="math notranslate nohighlight">\(
+\left[-\omega^2-2 i \gamma \omega+\omega_0^2\right] G(\omega)=1 .
+\)</span><span class="math notranslate nohighlight">\(
+so
+\)</span><span class="math notranslate nohighlight">\(
+H(\omega)=\frac{{Y}(\omega)}{{F}(\omega)}=\frac{1}{\omega_0^2-\omega^2 + 2 i \gamma \omega} .
+\)</span><span class="math notranslate nohighlight">\(
+For a system with an arbitrary initial displacement, \)</span>u_0<span class="math notranslate nohighlight">\(, and arbitrary initial velocity, \)</span>\dot{u}_0<span class="math notranslate nohighlight">\(, Eq. 9 should be generalized as follows:
+\)</span><span class="math notranslate nohighlight">\(
+Y(\omega)=H(\omega)\left[F(\omega)+m\left(2 \zeta p+i \omega\right) u_0 +m \dot{u}_0\right] \ldots \ldots \ldots \ldots \ldots \ldots \ldots \ldots
+\)</span>$</p>
+<p>From this representation, we see that for small <span class="math notranslate nohighlight">\(\gamma\)</span> the Fourier transform <span class="math notranslate nohighlight">\({H}(\omega)\)</span> of the linear response function yields a pronounced maximum (“Resonance”) at the frequency <span class="math notranslate nohighlight">\(\omega \approx \omega_0\)</span>.</p>
+</section>
+<section id="transition">
+<h1>Transition<a class="headerlink" href="#transition" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p>The state transition matrix satisfies the differential equation <span class="math notranslate nohighlight">\(\frac{\partial \boldsymbol{\Phi}\left(t, t_0\right)}{\partial t}=\mathbf{A}(t) \mathbf{\Phi}\left(t, t_0\right)\)</span> with initial conditions <span class="math notranslate nohighlight">\(\boldsymbol{\Phi}\left(t_0, t_0\right)=I\)</span></p></li>
+<li><p>In the time-invariant case, we can define <span class="math notranslate nohighlight">\(\boldsymbol{\Phi}\)</span>, using the matrix exponential, as <span class="math notranslate nohighlight">\(\boldsymbol{\Phi}\left(t, t_0\right)=e^{\mathbf{A}\left(t-t_0\right)}\)</span></p></li>
+<li><p>One can show that a matrix-valued function <span class="math notranslate nohighlight">\(\Psi\)</span> is a fundamental matrix of <span class="math notranslate nohighlight">\(\dot{\mathbf{x}}(t)=A(t) \mathbf{x}(t)\)</span> if and only if <span class="math notranslate nohighlight">\(\dot{\Psi}(t)=A(t) \Psi(t)\)</span> and <span class="math notranslate nohighlight">\(\Psi\)</span> is a non-singular matrix for all <span class="math notranslate nohighlight">\(t .{ }^{[2]}\)</span></p></li>
+</ul>
+<hr class="docutils" />
+<div class="math notranslate nohighlight">
+\[
+m\ddot{u} + c\dot{u} + k y = f(t)
+\]</div>
+<p>Let <span class="math notranslate nohighlight">\(x = (y, m\dot{u})\)</span>, so</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\dot{x} = \begin{pmatrix}
+\dot{u} \\
+\ddot{u}
+\end{pmatrix} = \begin{bmatrix}
+0 &amp; \frac{1}{m} \\
+-\frac{k}{m} &amp; - \frac{c}{m}
+\end{bmatrix} x
+\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[
+x(t) = x(t_0) + \int_{t_0}^t \dot{x}(x,\tau) \,d\tau 
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{x}(t)=U(t) U^{-1}\left(t_0\right) \mathbf{x}_0+U(t)\int_{t_0}^{t} U^{-1}(\tau) \mathbf{b}(\tau) d \tau
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{x}(t)=\boldsymbol{\Phi}\left(t, t_0\right) \mathbf{x}\left(t_0\right)+\int_{t_0}^t \boldsymbol{\Phi}(t, \tau) \mathbf{B}(\tau) \mathbf{u}(\tau) d \tau
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{\Phi}(t, \tau) \equiv \mathbf{U}(t) \mathbf{U}^{-1}(\tau)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{y}_p(k)=\mathcal{O}_p \boldsymbol{x}(k)+\mathcal{T}_p \boldsymbol{u}_p(k)
+\]</div>
+<hr class="docutils" />
+</section>
+<section id="laplace">
+<h1>Laplace<a class="headerlink" href="#laplace" title="Link to this heading">#</a></h1>
+<div class="math notranslate nohighlight">
+\[
+Y(s) = H(s) F(s)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+H(s)=\frac{Y(s)}{F(s)}=\frac{\mathcal{L}\{y(t)\}}{\mathcal{L}\{f(t)\}}
+\]</div>
+<p>The eigenfunction property of exponentials is very useful for both analysis and insight into LTI systems. The one-sided Laplace transform
+$<span class="math notranslate nohighlight">\(
+H(s) \stackrel{\text { def }}{=} \mathcal{L}\{h(t)\} \stackrel{\text { def }}{=} \int_0^{\infty} h(t) e^{-s t} \mathrm{~d} t
+\)</span><span class="math notranslate nohighlight">\(
+is exactly the way to get the eigenvalues from the impulse response. Of particular interest are pure sinusoids (i.e., exponential functions of the form \)</span>e^{j \omega t}<span class="math notranslate nohighlight">\( where \)</span>\omega \in \mathbb{R}<span class="math notranslate nohighlight">\( and \)</span>j \stackrel{\text { def }}{=} \sqrt{-1})<span class="math notranslate nohighlight">\(. The Fourier transform \)</span>H(j \omega)=\mathcal{F}{h(t)}<span class="math notranslate nohighlight">\( gives the eigenvalues for pure complex sinusoids. Both of \)</span>H(s)<span class="math notranslate nohighlight">\( and \)</span>H(j \omega)$ are called the system function, system response, or transfer function.</p>
+</section>
+<section id="fourier">
+<h1>Fourier<a class="headerlink" href="#fourier" title="Link to this heading">#</a></h1>
+<div class="math notranslate nohighlight">
+\[
+\phi =  \tan^{-1}\frac{2\zeta \omega / \omega_n}{1 - (\omega/\omega_n)^2} = \tan^{-1} -\frac{\Im H(\omega)}{\Re H(\omega)} 
+\]</div>
+<hr class="docutils" />
+<div class="math notranslate nohighlight">
+\[
+\ddot{x}+2 \zeta \omega \dot{x}+\omega^2 x=-a_i-\frac{\Delta a_i}{\Delta t_i}\left(t-t_i\right) ; \quad t_i \leq t \leq t_{i+1}
+\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{gathered}
+x=e^{-\zeta \omega\left(t-t_i\right)}\left[C_1 \sin \omega \sqrt{1-\zeta^2}\left(t-t_i\right)+C_2 \cos \omega \sqrt{1-\zeta^2}\left(t-t_i\right)\right] \\
+-\frac{a_i}{\omega^2}+\frac{2 \zeta}{\omega^3} \frac{\Delta a_i}{\Delta t_i}-\frac{1}{\omega^2} \frac{\Delta a_i}{\Delta t_i}\left(t-t_i\right)
+\end{gathered}
+\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+\Delta t_i=t_{i+1}-t_i \\
+\Delta a_i=a_{i+1}-a_i
+\end{aligned}
+\end{split}\]</div>
+<p>in which <span class="math notranslate nohighlight">\(C_1\)</span> and <span class="math notranslate nohighlight">\(C_2\)</span> are constants of integration. Setting <span class="math notranslate nohighlight">\(x=x_i\)</span> and <span class="math notranslate nohighlight">\(\dot{x}=\dot{x}_i\)</span> at <span class="math notranslate nohighlight">\(t=t_i\)</span> and solving for <span class="math notranslate nohighlight">\(C_1\)</span> and <span class="math notranslate nohighlight">\(C_2\)</span>, it can be shown that
+$<span class="math notranslate nohighlight">\(
+\begin{aligned}
+&amp; C_1=\frac{1}{\omega \sqrt{1-\zeta^2}}\left(\zeta \omega x_i+\dot{x}_i-\frac{2 \zeta^2-1}{\omega^2} \frac{\Delta a_i}{\Delta t_i}+\frac{\zeta}{\omega} a_i\right) \\
+&amp; C_2=x_i-\frac{2 \zeta}{\omega^3} \frac{\Delta a_i}{\Delta t_i}+\frac{a_i}{\omega^2}
+\end{aligned}
+\)</span>$</p>
+<div class="math notranslate nohighlight">
+\[
+\bar{x}_{i+1}= \mathbf{A} \bar{x}_i+ \mathbf{B} \bar{a}_i
+\]</div>
+<p>in which
+$<span class="math notranslate nohighlight">\(
+\bar{x}_i=\left\{\begin{array}{c}
+x_i \\
+\dot{x}_i
+\end{array}\right\} \quad \bar{a}_i=\left\{\begin{array}{c}
+a_i \\
+a_{i+1}
+\end{array} \right\}
+\)</span>$</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+&amp; a_{11}=e^{-\zeta \omega \Delta t_i}\left(\frac{\zeta}{\sqrt{1-\zeta^2}} \sin \omega \sqrt{1-\zeta^2} \Delta t_i+\cos \omega \sqrt{1-\zeta^2} \Delta t_i\right) \\
+&amp; a_{12}=\frac{e^{-\zeta \omega \Delta t_i}}{\omega \sqrt{1-\zeta^2}} \sin \omega \sqrt{1-\zeta^2} \Delta t_i \\
+&amp; a_{21}=-\frac{\omega}{\sqrt{1-\zeta^2}} e^{-\zeta \omega \Delta t_i} \sin \omega \sqrt{1-\zeta^2} \Delta t_i \\
+&amp; a_{22}=e^{-\zeta \omega \Delta t_i}\left(\cos \omega \sqrt{1-\zeta^2} \Delta t_i-\frac{\zeta}{\sqrt{1-\zeta^2}} \sin \omega \sqrt{1-\zeta^2} \Delta t_i\right)
+\end{aligned}
+\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+b_{11}&amp;=\mathrm{e}^{-\beta \omega \Delta \mathrm{t}_{\mathrm{i}}}\left[\left(\frac{2 \beta^2-1}{\omega^2 \Delta \mathrm{t}_{\mathrm{i}}}+\frac{\beta}{\omega}\right) \frac{\sin \omega \sqrt{1-\beta^2} \Delta \mathrm{t}_{\mathrm{i}}}{\omega \sqrt{1-\beta^2}}+\left(\frac{2 \beta}{\omega^3 \Delta \mathrm{t}_{\mathrm{i}}}+\frac{1}{\omega^2}\right) \cos \omega \sqrt{1-\beta^2} \Delta \mathrm{t}_{\mathrm{i}}\right] \\
+&amp; -\frac{2 \beta}{\omega^3 \Delta t_i} \\
+b_{12}&amp;=-e^{-\beta \omega \Delta t_i}\left[\left(\frac{2 \beta^2-1}{\omega^2 \Delta t_i}\right) \frac{\sin \omega \sqrt{1-\beta^2} \Delta t_i}{\omega \sqrt{1-\beta^2}}+\frac{2 \beta}{\omega^3 \Delta t_i} \cos \omega \sqrt{1-\beta^2} \Delta t_i\right] \\
+&amp; -\frac{1}{\omega^2}+\frac{2 \beta}{\omega^3 \Delta t_i} \\
+b_{21}&amp;=e^{-\beta \omega \Delta t_i}\left[\left(\frac{2 \beta^2-1}{\omega^2 \Delta t_i}+\frac{\beta}{\omega}\right)\left(\cos \omega \sqrt{1-\beta^2} \Delta t_i-\frac{\beta}{\sqrt{1-\beta^2}} \sin \omega \sqrt{1-\beta^2} \Delta t_i\right)\right. \\
+&amp; \left.-\left(\frac{2 \beta}{\omega^3 \Delta t_i}+\frac{1}{\omega^2}\right)\left(\omega \sqrt{1-\beta^2} \sin \omega \sqrt{1-\beta^2} \Delta t_i+\beta \omega \cos \omega \sqrt{1-\beta^2} \Delta t_i\right)\right] \\
+&amp; +\frac{1}{\omega^2 \Delta t_i} \\
+b_{22}&amp;=-e^{-\beta \omega \Delta t_i}\left[\frac{2 \beta^2-1}{\omega^2 \Delta t_i}\left(\cos \omega \sqrt{1-\beta^2} \Delta t_i-\frac{\beta}{\sqrt{1-\beta^2}} \sin \omega \sqrt{1-\beta^2} \Delta t_i\right)\right. \\
+&amp;\left.-\frac{2 \beta}{\omega^3 \Delta t_i}\left(\omega \sqrt{1-\beta^2} \sin \omega \sqrt{1-\beta^2} \Delta t_i+\beta \omega \cos \omega \sqrt{1-\beta^2} \Delta t_i\right)\right]-\frac{1}{\omega^2 \Delta t_1}
+\end{aligned}
+\end{split}\]</div>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Duhamel</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#transition">Transition</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#laplace">Laplace</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#fourier">Fourier</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023, Claudio M. Perez.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.2.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

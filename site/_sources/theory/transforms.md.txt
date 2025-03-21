@@ -1,0 +1,27 @@
+
+Laplace transforms retain their value in control theory and signal processing because the convergence of a Fourier transform integral within its domain only means that a linear, shift-invariant system described by it is stable or critical. The Laplace one on the other hand will somewhere converge for every impulse response which is at most exponentially growing, because it involves an extra term which can be taken as an exponential regulator.
+
+### Fourier
+
+$$
+\widehat{f}(\xi)=\int_{-\infty}^{\infty} f(x) e^{-i 2 \pi \xi x} d x
+$$
+
+### Laplace
+The Laplace transform of a function $f(t)$, defined for all real numbers $t \geq 0$, is the function $F(s)$, which is a unilateral transform defined by
+$$
+F(s)=\int_0^{\infty} f(t) e^{-s t} d t \quad \text { (Eq.1) }
+$$
+where $s$ is a complex frequency domain parameter
+$$
+s=\sigma+i \omega
+$$
+with real numbers $\sigma$ and $\omega$.
+
+
+### bilateral Laplace transform
+
+If $f(t)$ is a real- or complex-valued function of the real variable $t$ defined for all real numbers, then the two-sided Laplace transform is defined by the integral
+$$
+F(s)=\int_{-\infty}^{\infty} e^{-s t} f(t) d t
+$$

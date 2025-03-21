@@ -2,7 +2,7 @@
 
 <img align="left" src="https://raw.githubusercontent.com/claudioperez/sdof/master/docs/assets/spectrum.svg" width="250px" alt="SDOF logo">
 
-Lightning-fast integration of single degree-of-freedom systems.
+Parallel integration of single degree-of-freedom systems.
 
 <br>
 
@@ -230,6 +230,13 @@ pip install .
 - [`mdof`](https://pypi.org/project/mdof)
 - [`opensees`](https://pypi.org/project/opensees)
 
+### Similar
+
+- https://github.com/eng-tools/eqsig
+- https://github.com/vibrationtoolbox/vibration_toolbox
+- https://github.com/anismhd/SDoF
+
+
 ## Support
 
 <table align="center">
@@ -258,4 +265,3 @@ pip install .
  
  </tr>
 </table>
-

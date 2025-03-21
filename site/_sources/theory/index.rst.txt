@@ -1,98 +1,12 @@
-
 Theory
 ======
 
-The generalized :math:`\alpha` method is a one step implicit method for
-solving the transient problem which attempts to increase the amount of
-numerical damping present without degrading the order of accuracy. In
-the HHT method, the same Newmark approximations are used:
 
-.. math::
+.. toctree::
 
-   u_{t+\Delta t} = u_t + \Delta t \dot \, u_t + (0.5 - \beta)
-   \Delta t^2 \, \ddot u_t + \beta \Delta t^2 \, \ddot u_{t+\Delta t}
+   oscillator
+   alpha
 
-
-.. math::
-
-   \dot u_{t+\Delta t} = \dot u_t + (1-\gamma)\Delta t \, \ddot
-   u_t + \gamma \Delta t \, \ddot u_{t+\Delta t} 
-
-
-
-but the time-discrete momentum equation is modified:
-
-
-.. math::
-
-   R_{t + \alpha_M \Delta t} = F_{t+\Delta t}^{\mathrm{ext}} - M \ddot
-   u_{t + \alpha_M \Delta t} - C \dot u_{t+\alpha_F \Delta t} -
-   F^{\mathrm{int}}(u_{t + \alpha_F \Delta t})
-
-where the displacements and velocities at the intermediate point are
-given by:
-
-.. math::
-
-   u_{t+ \alpha_F \Delta t} = (1 - \alpha_F) \, u_t + \alpha_F \, u_{t + \Delta t}
-
-.. math::
-
-   \,\dot u_{t+\alpha_F \Delta t} = (1-\alpha_F) \,\dot u_t +
-   \alpha_F \,\dot u_{t + \Delta t}
-
-.. math::
-
-   \,\ddot u_{t+\alpha_M \Delta t} = (1-\alpha_M) \,\ddot u_t +
-   \alpha_M \,\ddot u_{t + \Delta t}
-
-
-Following the methods outlined for Newmarks method, linearization of the
-nonlinear momentum equation results in the following linear update equations:
-
-.. math::
-
-   K_{t+\Delta t}^{*i} d u_{t+\Delta t}^{i+1} = R_{t+\Delta t}^i
-
-
-.. math::
-
-   K_{t+\Delta t}^{*i} = \alpha_F K_t + \alpha_F \frac{\gamma}{\beta \Delta t} C_t + \alpha_M\frac{1}{\beta \Delta t^2}M
-
-
-and
-
-.. math::
-
-   R_{t+\Delta t}^i = F_{t + \Delta t}^{\mathrm{ext}} - F(u_{t + \alpha
-   F \Delta t}^{i-1})^{\mathrm{int}} - C \dot u_{t+\alpha F \Delta t}^{i-1} - M
-   \ddot u_{t+ \alpha M \Delta t}^{i-1}
-
-
-The linear equations are used to solve for :math:`u_{t+\alpha_F \Delta t}, \dot u_{t + \alpha_F \Delta t}` and :math:`\ddot u_{t+ \alpha M \Delta t}`
-
-Once convergence has been achieved the displacements, velocities and
-accelerations at time :math:`t + \Delta t` can be computed.
-
-
-References
-----------
-
-.. raw:: html
-
-   <p>
-
-J. Chung, G.M.Hubert. “A Time Integration Algorithm for Structural
-Dynamics with Improved Numerical Dissipation: The Generalized -
-:math:`\alpha` Method” ASME Journal of Applied Mechanics, 60, 371:375,
-1993.
-
-.. raw:: html
-
-   </p>
-
-.. raw:: html
-
-   <hr />
-
-
+..
+   inelasticity/daes
+   inelasticity/odes

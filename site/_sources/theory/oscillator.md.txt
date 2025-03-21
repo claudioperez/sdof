@@ -1,0 +1,18 @@
+
+$$
+m\partial^2 + c \partial + k \\
+\partial^2 + c/m \partial  + \omega^2
+$$
+$c/m = 2\gamma = 2 \omega \zeta$
+
+$\gamma=\zeta\omega = c/(2m)$
+
+$c=2\gamma m=2\zeta\omega m$
+
+|          | $\omega$ | $k$ | $c$ | $\gamma$ | $\zeta$ |
+|----------|--------------------------|-----------------|-------------|----|----|
+| $\zeta$  | $\frac{c}{2 \sqrt{m k}}$ | $c/(2\omega m)$ | $ \gamma/\omega$
+| $\gamma$ | $c/(2m)$                 | $2\omega\zeta$
+| $c$      |  | | $2m\gamma $ | | $2m\omega \zeta $ |
+
+$\omega m = m\sqrt{k/m} = \sqrt{km}$

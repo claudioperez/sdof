@@ -3,7 +3,7 @@
 /*
  * BSD 2-Clause License
  *
- * Copyright (c) 2022-2023, Claudio M. Perez
+ * Copyright (c) 2022-2024, Claudio M. Perez
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -152,7 +152,7 @@ sdof_integrate(struct sdof_alpha* conf,
  */
 SDOF_EXPORT int
 sdof_integrate_plastic(struct sdof_alpha* conf,
-    double M, double C, double K,
+    double M, double C, double K, double Fy,
     double scale, int n, double *p, double dt,
     double *response)
 { 
@@ -182,11 +182,14 @@ sdof_integrate_plastic(struct sdof_alpha* conf,
 
     // Plasticity
     const int maxIter = 10;
-    double up    = 0.0,
-           tol   = 1e-12,
-           Fy    = 7.5,
-           alpha = 0.00,
-           Hkin  = K*alpha/(1.0 - alpha);
+    double b = 0.00,
+           tol   = 1e-12;
+
+    struct {double up, Fy, Hkin;} model = {
+          .up    = 0.0,
+          .Fy    = Fy,
+          .Hkin  = K*b/(1.0 - b)
+    };
 
 
     int i     = 0;
@@ -217,26 +220,26 @@ sdof_integrate_plastic(struct sdof_alpha* conf,
         va += alpha_f*c2*du;
         aa += alpha_m*c3*du;
 
-        // State determination for pa, kT
-        pa = K*(ua - up);
-        double ftrial = fabs(pa - Hkin*up) - Fy;
+        // State determination for pa, Kt
+        pa = K*(ua - model.up);
+        double ftrial = fabs(pa - model.Hkin*model.up) - model.Fy;
 
         if (ftrial <= 0) {
+          // Elastic step
           Kt = K;
 
         } else {
-          double dg = ftrial/(K + Hkin);
+          // plastic strain increment
+          double dup = ftrial/(K + model.Hkin);
 
           if (pa < 0) {
-            pa += dg*K;
-            up -= dg;
+            pa += dup*K;
+            model.up -= dup;
           } else {
-            pa -= dg*K;
-            up += dg;
+            pa -= dup*K;
+            model.up += dup;
           }
-
-          Kt = K*Hkin/(K + Hkin);
-
+          Kt = K*model.Hkin/(K + model.Hkin);
         }
 
         // SOLVE
@@ -381,7 +384,7 @@ sdof_integrate_peaks(struct sdof_alpha* conf,
       double pi = (scale*p[i] - C*va - M*aa - K*u[pres]);
       double du = pi / ki;
 
-      u[pres] += du;
+      u[pres] +=    du;
       v[pres] += c2*du;
       a[pres] += c3*du;
       
