@@ -17,7 +17,7 @@ For svq:
 
 def IncrSO3_LIEMIDEA(t0, p0, W0, R0, dt, J, state, Loading):
     """
-    Implements LIEMID[EA] algorithm proposed in  
+    Implements LIEMID[EA] algorithm proposed in
 
     Krysl, P. [2005].
       Explicit momentum-conserving integrator for dynamics of rigid bodies 
@@ -39,13 +39,13 @@ def IncrSO3_LIEMIDEA(t0, p0, W0, R0, dt, J, state, Loading):
     maxiter = 10          # maximum # of Newton iterations
 
     #... Step 1) Newton Solve ............................................#
-    
+
     TH1 = dt * W0  # initialization
     M0 = Loading.Torque(t0, R0, Loading)  # torque applied at time 0
 
     for j in range(maxiter):
         expx = ExpSO3(-TH1 / 2)
-        
+
         v = 0.5 * dt * expx @ (p0 + 0.5 * dt * M0)
         f = -J @ TH1 + v
 
@@ -71,7 +71,7 @@ def IncrSO3_LIEMIDEA(t0, p0, W0, R0, dt, J, state, Loading):
     W1 = np.linalg.solve(J, P1)
     
     #... Step 4) Newton Solve ............................................#
-    
+
     TH1 = W1  # initialization
 
     for j in range(maxiter):
@@ -82,13 +82,13 @@ def IncrSO3_LIEMIDEA(t0, p0, W0, R0, dt, J, state, Loading):
             break
         elif j == maxiter - 1:
             print('maximum # of iterations exceeded')
-        
-        Jac = -J + 0.5 * Spin(v) @ dExpSO3(-TH1 / 2)
-        
+
+        Jac = -J + 0.5 * HatSO3(v) @ dExpSO3(-TH1 / 2)
+
         # Solve for delta_TH1
         delta_TH1 = np.linalg.solve(Jac, f)
         TH1 = TH1 - delta_TH1
-    
+
     #... Step 5) Explicit Configuration Update ...........................#
     expx = ExpSO3(TH1)
     R1 = R1 @ expx

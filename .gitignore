@@ -9,3 +9,5 @@ dist/
 __pycache__/
 wheelhouse/
 _build
+
+.DS_Store

@@ -29,7 +29,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-import os
+import sys
 import pathlib
 import ctypes
 from ctypes import c_double, c_int, c_bool, CFUNCTYPE, POINTER
@@ -37,11 +37,14 @@ import numpy as np
 from numpy.ctypeslib import ndpointer
 
 # Determine file exention of dynamic libraries for current platform
-if os.name == "nt":
-    so_ext = ".pyd"
+if sys.platform.startswith('win'):
+    so_ext = '.pyd'
+elif sys.platform.startswith('darwin'):
+    so_ext = '.so'
+elif sys.platform.startswith('linux') or sys.platform.startswith('aix'):
+    so_ext = '.so'
 else:
-    import   distutils.ccompiler
-    so_ext = distutils.ccompiler.new_compiler().shared_lib_extension
+    raise RuntimeError(f"Unsupported platform: {sys.platform}")
 
 
 # Declare the layout of the data structures used in

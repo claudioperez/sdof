@@ -1,5 +1,144 @@
 import numpy as np
 
+def _force_function(f, dt, theta=1)->callable:
+
+    if callable(f):
+        return f 
+
+    def f(t):
+        pass
+
+
+def wilson_gem(M, C, K, F, dt, t_end, theta=1.4, u0=0, v0=0):
+    """
+    Implements the Wilson-Theta method for structural dynamics.
+
+    Args:
+        F: Force vector (function of time)
+        u0: Initial displacement vector
+        v0: Initial velocity vector
+        dt: Time step
+        t_end: End time
+        theta: Wilson-Theta parameter (default=1.4)
+
+    Returns:
+        t: Time array
+        u: Displacement array
+        v: Velocity array
+        a: Acceleration array
+    """
+
+    # Time array
+    t  = np.arange(0, t_end + dt, dt)
+    nt = len(t)
+
+    # Initialize displacement, velocity, and acceleration arrays
+    u = np.zeros((nt, len(u0)))
+    v = np.zeros((nt, len(v0)))
+    a = np.zeros((nt, len(v0)))
+
+    # Set initial conditions
+    u[0] = u0
+    v[0] = v0
+    a[0] = np.linalg.solve(M, F(0) - C @ v0 - K @ u0)
+
+    # Effective stiffness matrix
+    K_eff = K + (theta / (dt ** 2)) * M + (theta / dt) * C
+
+    for i in range(len(t) - 1):
+        # Calculate effective force vector
+        F_eff = (
+            F(t[i] + theta * dt)
+            + theta * (F(t[i + 1]) - F(t[i]))
+            + M @ (
+                (theta ** 2 / (dt ** 2)) * u[i]
+                + (theta / dt) * v[i]
+                + (theta - 1) * a[i]
+            )
+            + C @ ((theta / dt) * u[i] + (theta - 1) * v[i] + (theta / 2 - 1) * dt * a[i])
+        )
+
+        # Solve for displacement increment
+        du = np.linalg.solve(K_eff, F_eff)
+
+        # Calculate displacement, velocity, and acceleration at theta * dt
+        u_theta = u[i] + theta * du
+        v_theta = v[i] + (theta * dt) * a[i] + (theta ** 2 / (2 * dt)) * du
+        a_theta = (
+            (theta / (dt ** 2)) * du - (theta / dt) * v[i] - ((theta - 2) / 2) * a[i]
+        )
+
+        # Calculate displacement, velocity, and acceleration at t[i+1]
+        u[i + 1] = u[i] + du
+        v[i + 1] = v[i] + dt * ((1 - theta) * a[i] + theta * a_theta)
+        a[i + 1] = (1 / (theta * dt ** 2)) * du - (1 / (theta * dt)) * v[i] - ((1 - theta) / (2 * theta)) * a[i]
+
+    return u, v, a
+
+
+def wilson_gpt(model, f, dt, theta, t_end,  u0=0, v0=0, a0=None):
+    """
+    Wilson-theta method for SDOF system.
+
+    Parameters:
+    m : float : Mass of the system.
+    c : float : Damping coefficient.
+    k : float : Stiffness coefficient.
+    f : function : External force as a function of time (f(t)).
+    u0 : float : Initial displacement.
+    v0 : float : Initial velocity.
+    a0 : float : Initial acceleration.
+    dt : float : Time step.
+    theta : float : Wilson-theta parameter (typically 1.4 for stability).
+    t_end : float : End time.
+
+    Returns:
+    t : array : Time points.
+    u : array : Displacements at each time step.
+    v : array : Velocities at each time step.
+    a : array : Accelerations at each time step.
+    """
+    k, c, m = model
+
+    # Time steps and initialize arrays
+    n_steps = int(t_end / dt) + 1
+    t = np.linspace(0, t_end, n_steps)
+    u = np.zeros(n_steps)
+    v = np.zeros(n_steps)
+    a = np.zeros(n_steps)
+
+    # Initial conditions
+    u[0], v[0], a[0] = u0, v0, a0
+
+    # Effective time step and constants
+    dt_eff = theta * dt
+    k_eff = m / (dt_eff ** 2) + c / (2 * dt_eff)
+    a_eff = m / (dt_eff ** 2) - c / (2 * dt_eff)
+    b_eff = c / dt_eff - k
+
+    # Time-stepping loop
+    for i in range(1, n_steps):
+        # Effective force
+        p_eff = f(t[i]) + a_eff * u[i-1] + b_eff * v[i-1] + m * a[i-1]
+
+        # Solve for displacement
+        u_theta = p_eff / k_eff
+        u[i] = u[i-1] + theta * (u_theta - u[i-1])
+
+        # Calculate velocity and acceleration
+        v[i] = (u[i] - u[i-1]) / dt_eff
+        a[i] = (v[i] - v[i-1]) / dt
+
+    return t, u, v, a
+
+# Define external force function (e.g., sinusoidal load)
+def external_force(t):
+    return np.sin(2 * np.pi * t)
+
+# Run Wilson-theta method
+u, v, a = wilson_gpt((k, c, m), external_force, dt=dt, theta=theta, t_end=5)
+
+
 def Wilson_theta(model,dt,F,u0=0,v0=0,beta=0.25,gamma=0.5,theta=1.4):
     """
     beta,gamma,theta: parameters.

@@ -265,4 +265,3 @@ pip install .
  
  </tr>
 </table>
-

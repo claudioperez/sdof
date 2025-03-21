@@ -16,22 +16,18 @@ def integrate(self, model, f, u0=0, v0=0, maxiter=10):
     nt = len(f)
     x = np.zeros((nt, 3))
 
-    x[0][0] = u0
-    x[0][1] = v0
-    p, (k, c, m) = evaluate(model, [u0, v0, 0])
-    x[0][2] =  -p/m
+    x[0] = initialize(model, u0, v0)
 
     ip = self.iy
 
     for i in range(nt-1):
         fa = increment(self, i, f)
 
-        xa = predict(self, x[i], self.iy)
+        xa = predict(self, x[i], self.iy, ip)
 
         # Solve
-        p, (k, c, m) = evaluate(model, xa)
-
         for _ in range(maxiter):
+            p, (k, c, m) = evaluate(model, xa)
             ga = p - fa
             Dg = self.ga[2]*m + self.ga[1]*c + self.ga[0]*k
             dy = -ga / Dg
@@ -40,16 +36,18 @@ def integrate(self, model, f, u0=0, v0=0, maxiter=10):
             for r in range(3):
                 xa[r] += self.ga[r]*dy
 
-            p, (k, c, m) = evaluate(model, xa)
-            print(p - fa)
-
 
         x[i+1][:] = advance(self, x[i], xa)
 
     return x.T
 
 
+def initialize(model, u0, v0):
 
+    p, (k, c, m) = evaluate(model, [u0, v0, 0])
+    
+    return u0, v0, -p/m
+    
 def increment(self, i, f):
     fa = (1-self.lam)*f[i] + self.lam*f[i+1]
     return fa

@@ -26,7 +26,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.mathjax',
     'sphinx.ext.githubpages',
-    'nbsphinx',
+#   'nbsphinx',
     'sphinx_design',
     'myst_parser',
     'sphinx_c_autodoc',
@@ -45,11 +45,11 @@ templates_path   = ['_templates']
 exclude_patterns = []
 
 source_suffix = '.rst'
-from sphinxcontrib.pandoc_markdown import MarkdownParser
-source_suffix = [source_suffix, '.md']
-source_parsers = {
-   '.md': MarkdownParser,
-}
+#from sphinxcontrib.pandoc_markdown import MarkdownParser
+# source_suffix = [source_suffix, '.md']
+# source_parsers = {
+#    '.md': MarkdownParser,
+# }
 root_doc = 'index'
 language = 'en'
 
