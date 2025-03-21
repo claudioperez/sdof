@@ -1,6 +1,6 @@
 [project]
 name = "sdof"
-version = "0.0.11"
+version = "0.0.12"
 license = {file = "LICENSE.txt"}
 authors = [
   {name="Claudio M. Perez", email="50180406+claudioperez@users.noreply.github.com"},
@@ -19,7 +19,7 @@ keywords = [
 
 dependencies = [
   "mdof",
-  "sees",
+  "veux",
   "numpy",
   "quakeio",
 ]
@@ -70,4 +70,5 @@ where = ["src"]
 
 [tool.cibuildwheel.linux]
 environment = {CFLAGS="-O3 -mtune=native"}
+
 
