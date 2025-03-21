@@ -69,4 +69,7 @@ where = ["src"]
 
 [tool.cibuildwheel.linux]
 environment = {CFLAGS="-O3 -mtune=native"}
+skip = ["pp*", "*musllinux*", "cp36*", "*i686*", "UNKNOWN*"]
+# manylinux-x86_64-image = "manylinux_2_28"
+manylinux-x86_64-image="manylinux2014"
 
