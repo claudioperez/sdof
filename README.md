@@ -46,7 +46,7 @@ f  = np.sin(np.linspace(0, 5*np.pi, 100))
 dt = 5*np.pi/100
 
 
-u, v, a = integrate(f, dt, k, c, m)
+u, v, a = integrate(f, dt, k=k, c=c, m=m)
 
 D, V, A = spectrum(f, dt, periods=(0.02, 3.0, 100), damping=[0.02, 0.05])
 ```
@@ -257,7 +257,7 @@ pip install .
   </td>
 
   <td>
-    <a href="https://peer.berkeley.edu">
+    <a href="https://stairlab.berkeley.edu">
     <img src="https://raw.githubusercontent.com/claudioperez/sdof/master/docs/assets/brace2_logo-new3_ungrouped.svg"
          alt="BRACE2 Logo" width="200"/>
     </a>
