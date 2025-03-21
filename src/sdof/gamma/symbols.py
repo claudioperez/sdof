@@ -79,15 +79,15 @@ def print_table(method):
             return collocate(Ey, dt, theta, *params)
 
 
-    print("$$\n")
+    print("$$")
     print(r"\begin{array}{l|ccc}")
     for i,Ei in enumerate("uva"):
 
         for j, Ej in enumerate("uva"):
 
-            print(rf"\Gamma_{{ {Ei} {Ej} }} & ", end="")
+            print(rf"\tilde{{\Gamma}}_{{ {Ei} {Ej} }} & ", end="")
 
-            for iy, Ey in enumerate("avu"):
+            for iy, Ey in enumerate("uva"):
                 if iy:
                     print("     & ", end="")
 
@@ -105,8 +105,8 @@ def print_table(method):
     print("\\hline ")
 
     for i,Ei in enumerate("uva"):
-        print(rf"\gamma_{{ {Ei} }} & ", end="")
-        for iy, Ey in enumerate("avu"):
+        print(rf"\tilde{{\gamma}}_{{ {Ei} }} & ", end="")
+        for iy, Ey in enumerate("uva"):
             if iy:
                 print("     & ", end="")
             _, g = create(Ey)

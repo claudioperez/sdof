@@ -1,3 +1,7 @@
+"""
+See also:
+https://www.mathworks.com/matlabcentral/fileexchange/32182-wilson-tita-time-integration-method
+"""
 import numpy as np
 
 def _force_function(f, dt, theta=1)->callable:
